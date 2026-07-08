@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>আস-সুন্নাহ ফাউন্ডেশন · বাংলা এআই সহকারী</title>
+<title>As-Sunnah Foundation · AI Assistant</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- Noto Sans Bengali renders bn-BD conjuncts (যুক্তাক্ষর) + মাত্রা correctly; Instrument Sans stays for Latin. -->
@@ -180,6 +180,31 @@
   .viewport-wrap.hidden { display: none; }
 
   .ctrl-group { display: flex; gap: 8px; }
+
+  /* ── Language switch (EN / বাং) ── */
+  .lang-switch {
+    display: flex;
+    gap: 2px;
+    background: var(--c-surface);
+    border-radius: 100px;
+    padding: 2px;
+    flex-shrink: 0;
+  }
+  .lang-switch button {
+    font-family: var(--font-body);
+    font-size: 10.5px;
+    font-weight: 600;
+    padding: 4px 9px;
+    border: none;
+    border-radius: 100px;
+    background: transparent;
+    color: var(--c-text-dim);
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    letter-spacing: 0.02em;
+  }
+  .lang-switch button.active { background: var(--c-surface-hover); color: var(--c-text-bright); }
+  .lang-switch button:hover:not(.active) { color: var(--c-text); }
 
   /* Three glow layers */
   .viewport-wrap::before,
@@ -541,10 +566,14 @@
 <header>
   <div class="logo">
     <div class="logo-mark"></div>
-    <h1>আস-সুন্নাহ ফাউন্ডেশন</h1>
+    <h1 id="appName">As-Sunnah Foundation</h1>
   </div>
   <span class="model-label">Gemini Flash · Edge bn-BD</span>
-  <div id="status" class="status-pill disconnected">সংযোগ বিচ্ছিন্ন</div>
+  <div id="langSwitch" class="lang-switch">
+    <button type="button" data-lang="en">EN</button>
+    <button type="button" data-lang="bn">বাং</button>
+  </div>
+  <div id="status" class="status-pill disconnected">Disconnected</div>
 </header>
 
 <div class="portal-stack">
@@ -565,24 +594,24 @@
   <!-- Controls -->
   <div class="controls">
     <div class="ctrl-group">
-      <button id="listenToggle" type="button" class="ctrl-btn">শুনুন</button>
-      <button id="cameraToggle" type="button" class="ctrl-btn">ক্যামেরা বন্ধ</button>
+      <button id="listenToggle" type="button" class="ctrl-btn">Listen</button>
+      <button id="cameraToggle" type="button" class="ctrl-btn">Camera Off</button>
     </div>
     <div class="state-indicator">
       <div id="stateDot" class="dot idle"></div>
-      <span id="stateText">প্রস্তুত</span>
+      <span id="stateText">Ready</span>
     </div>
     <span class="on-device-pill">
       <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 11.5a3 3 0 0 1-.4-5.97A4 4 0 0 1 12 6.5a2.5 2.5 0 0 1-.5 5z"/></svg>
-      ক্লাউড এআই
+      <span id="cloudPill">Cloud AI</span>
     </span>
   </div>
 
   <!-- Text composer — type a question (same WS {text} path the gateway already handles) -->
   <form id="composer" class="composer" autocomplete="off">
-    <div id="suggestions" class="suggestions" role="listbox" aria-label="প্রস্তাবিত প্রশ্ন"></div>
-    <input id="textInput" type="text" placeholder="প্রশ্ন লিখুন…" aria-label="প্রশ্ন লিখুন" maxlength="500" />
-    <button id="sendBtn" type="submit">পাঠান</button>
+    <div id="suggestions" class="suggestions" role="listbox" aria-label="Recommended questions"></div>
+    <input id="textInput" type="text" placeholder="Type a question…" aria-label="Type a question" maxlength="500" />
+    <button id="sendBtn" type="submit">Send</button>
   </form>
 </div>
 
@@ -596,7 +625,7 @@ const stateDot = $('stateDot'), stateText = $('stateText');
 const viewportWrap = $('viewportWrap');
 const waveformCanvas = $('waveform');
 const composer = $('composer'), textInput = $('textInput'), sendBtn = $('sendBtn');
-const suggestionsEl = $('suggestions');
+const suggestionsEl = $('suggestions'), langSwitch = $('langSwitch');
 const waveformCtx = waveformCanvas.getContext('2d');
 
 // ── i18n (bn-BD) ──
@@ -627,13 +656,89 @@ const bn = {
   'meta.withCamera': 'ক্যামেরাসহ',
   'meta.llm': 'LLM {n}s',
   'meta.tts': 'TTS {n}s',
+  'app.title': 'আস-সুন্নাহ ফাউন্ডেশন · বাংলা এআই সহকারী',
+  'app.name': 'আস-সুন্নাহ ফাউন্ডেশন',
+  'pill.cloud': 'ক্লাউড এআই',
+  'composer.placeholder': 'প্রশ্ন লিখুন…',
+  'composer.send': 'পাঠান',
+  'suggest.aria': 'প্রস্তাবিত প্রশ্ন',
 };
 
-// t(key[, params]) — look up a bn string; {name} placeholders are filled from params.
+const en = {
+  'status.connected': 'Connected',
+  'status.disconnected': 'Disconnected',
+  'status.processing': 'Processing',
+  'state.loading': 'Loading…',
+  'state.idle': 'Ready',
+  'state.listening': 'Listening',
+  'state.processing': 'Thinking…',
+  'state.speaking': 'Speaking',
+  'camera.on': 'Camera On',
+  'camera.off': 'Camera Off',
+  'listen.on': 'Listening',
+  'listen.off': 'Listen',
+  'perm.camera': 'To use the camera, allow access in your browser — click the camera icon in the address bar and choose "Allow".',
+  'perm.mic': 'To use voice commands, allow microphone access — click the mic icon in the address bar and choose "Allow".',
+  'perm.status.granted': 'Permission granted',
+  'perm.status.denied': 'Permission blocked',
+  'perm.status.prompt': 'Click to request permission',
+  'perm.status.unavailable': 'Unavailable — needs HTTPS or localhost',
+  'perm.allow.mic': '🎤 Allow microphone',
+  'perm.allow.camera': '📷 Allow camera',
+  'meta.withCamera': 'with camera',
+  'meta.llm': 'LLM {n}s',
+  'meta.tts': 'TTS {n}s',
+  'app.title': 'As-Sunnah Foundation · AI Assistant',
+  'app.name': 'As-Sunnah Foundation',
+  'pill.cloud': 'Cloud AI',
+  'composer.placeholder': 'Type a question…',
+  'composer.send': 'Send',
+  'suggest.aria': 'Recommended questions',
+};
+
+const locales = { en, bn };
+let lang = 'en';   // English is the default
+let locale = en;
+
+// t(key[, params]) — look up a string in the active locale ({name} placeholders filled from params).
 function t(key, params) {
-  let s = bn[key] ?? key;
+  let s = locale[key] ?? en[key] ?? key;
   if (params) for (const k in params) s = s.replaceAll(`{${k}}`, params[k]);
   return s;
+}
+
+// Apply the active language to all UI chrome (static + current dynamic state).
+function applyLocale() {
+  document.documentElement.lang = lang;
+  document.title = t('app.title');
+  const set = (id, txt) => { const el = document.getElementById(id); if (el) el.textContent = txt; };
+  set('appName', t('app.name'));
+  set('cloudPill', t('pill.cloud'));
+  textInput.placeholder = t('composer.placeholder');
+  textInput.setAttribute('aria-label', t('composer.placeholder'));
+  sendBtn.textContent = t('composer.send');
+  suggestionsEl.setAttribute('aria-label', t('suggest.aria'));
+  // Reflect current dynamic state in the new language.
+  stateText.textContent = t(`state.${state}`);
+  listenToggle.textContent = voiceEnabled ? t('listen.on') : t('listen.off');
+  cameraToggle.textContent = cameraEnabled ? t('camera.on') : t('camera.off');
+  const scls = statusEl.classList.contains('connected') ? 'connected'
+    : statusEl.classList.contains('processing') ? 'processing' : 'disconnected';
+  statusEl.textContent = t(`status.${scls}`);
+  for (const btn of [listenToggle, cameraToggle]) {
+    const s = btn.classList.contains('perm-granted') ? 'granted'
+      : btn.classList.contains('perm-denied') ? 'denied'
+      : btn.classList.contains('perm-prompt') ? 'prompt' : 'unavailable';
+    btn.title = t(`perm.status.${s}`);
+  }
+  for (const b of langSwitch.querySelectorAll('button')) b.classList.toggle('active', b.dataset.lang === lang);
+}
+
+function setLang(l) {
+  if (!locales[l]) return;
+  lang = l;
+  locale = locales[l];
+  applyLocale();
 }
 
 let ws, micStream, cameraStream, myvad;
@@ -1136,6 +1241,7 @@ function addMessage(role, text, meta) {
 
 cameraToggle.addEventListener('click', () => { cameraEnabled ? disableCamera() : enableCamera(); });
 listenToggle.addEventListener('click', () => { voiceEnabled ? disableListening() : enableListening(); });
+langSwitch.addEventListener('click', (e) => { const b = e.target.closest('button'); if (b && b.dataset.lang) setLang(b.dataset.lang); });
 
 // ── Text composer ── type a question; same {text} WS path the gateway already handles.
 function escapeHtml(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
@@ -1213,6 +1319,7 @@ function init() {
   voiceEnabled = false;
   viewportWrap.classList.add('hidden');
   setState('idle');
+  applyLocale();   // English by default; marks the active language button
 
   // Show live camera/mic permission status on the buttons, and auto-switch a toggle on when its
   // permission is already/becomes granted (reactively on grant/deny).
