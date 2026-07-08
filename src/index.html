@@ -45,17 +45,36 @@
     height: 100vh;
     overflow: hidden;
   }
-  /* Subtle light backdrop — a soft neutral wash + faint glow from the top, fading to white. */
+  /* Subtle light backdrop — a static neutral wash (base) + slowly drifting glow blobs on top. */
   body::before {
     content: '';
     position: fixed;
     inset: 0;
-    z-index: -1;
+    z-index: -2;
     pointer-events: none;
     background:
-      radial-gradient(90% 55% at 50% -12%, rgba(23,23,23,0.06) 0%, transparent 60%),
+      radial-gradient(90% 55% at 50% -12%, rgba(23,23,23,0.05) 0%, transparent 60%),
       linear-gradient(180deg, #f4f4f5 0%, #ffffff 34%);
   }
+  body::after {
+    content: '';
+    position: fixed;
+    inset: -35%;
+    z-index: -1;
+    pointer-events: none;
+    will-change: transform;
+    background:
+      radial-gradient(34% 34% at 28% 22%, rgba(22,163,74,0.13) 0%, transparent 70%),
+      radial-gradient(32% 32% at 72% 14%, rgba(79,70,229,0.13) 0%, transparent 70%),
+      radial-gradient(30% 30% at 58% 46%, rgba(23,23,23,0.06) 0%, transparent 70%);
+    animation: drift 13s ease-in-out infinite alternate;
+  }
+  @keyframes drift {
+    0%   { transform: translate3d(-6%, -4%, 0) rotate(-3deg) scale(1.06); }
+    50%  { transform: translate3d(4%, 3%, 0)   rotate(2deg)  scale(1.16); }
+    100% { transform: translate3d(7%, 5%, 0)   rotate(4deg)  scale(1.10); }
+  }
+  @media (prefers-reduced-motion: reduce) { body::after { animation: none; } }
   a { color: inherit; }
   ::selection { background: rgba(23,23,23,0.1); }
 
