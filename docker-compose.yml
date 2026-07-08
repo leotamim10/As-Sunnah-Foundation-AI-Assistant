@@ -1,0 +1,25 @@
+# Runs the whole stack: browser → Python WS server (web) → Node gateway → Gemini + Azure.
+# Usage:  cp .env.example .env  &&  fill in keys  &&  docker compose up --build
+# Then open http://localhost:8000
+
+services:
+  gateway:
+    build: ./ai-gateway
+    env_file: .env
+    environment:
+      PORT: 8787 # override .env's PORT (which is the web server's port)
+    expose:
+      - "8787" # internal to the compose network; not published to the host
+    restart: unless-stopped
+
+  web:
+    build: ./src
+    env_file: .env
+    environment:
+      GATEWAY_URL: http://gateway:8787 # reach the gateway by service name, not localhost
+      PORT: 8000
+    ports:
+      - "8000:8000" # the browser connects here
+    depends_on:
+      - gateway
+    restart: unless-stopped

@@ -1,0 +1,12 @@
+[project]
+name = "parlor"
+version = "0.1.0"
+description = "Real-time multimodal AI (voice + vision) in Bengali — FastAPI WS server bridged to the Node AI gateway"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.135.3",
+    "httpx>=0.27.0",
+    "uvicorn[standard]>=0.43.0",
+    "websockets>=16.0",
+    "python-dotenv>=1.0.0",
+]

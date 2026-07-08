@@ -1,0 +1,28 @@
+# Secrets — never commit real keys (only .env.example is tracked)
+.env
+.env.*
+!.env.example
+
+# Node
+node_modules/
+dist/
+*.log
+
+# Generated TTS verification samples
+ai-gateway/scripts/samples/
+
+# Generated knowledge base (rebuild with `npm run knowledge:build`)
+ai-gateway/knowledge/knowledge.json
+
+# Embedding-model cache (baked into the Docker image, never committed)
+ai-gateway/models/
+**/.cache/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# OS / editor
+.DS_Store
