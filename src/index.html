@@ -549,6 +549,7 @@ let cameraEnabled = true;
 let audioCtx, currentSource;
 let state = 'loading';
 let ignoreIncomingAudio = false;
+let turnTimer = null;   // fallback: recover to 'listening' if a turn ends without audio
 
 // Streaming audio playback state
 let streamSampleRate = 24000;
@@ -711,23 +712,33 @@ function connect() {
         }
       }
       addMessage('assistant', msg.text, t('meta.llm', { n: msg.llm_time }));
+      // If no audio follows (error reply / empty TTS), don't get stuck in 'processing'.
+      clearTimeout(turnTimer);
+      turnTimer = setTimeout(() => {
+        if (state === 'processing') { setState('listening'); setStatus('connected'); }
+      }, 2500);
     } else if (msg.type === 'audio_start') {
       if (ignoreIncomingAudio) return;
+      clearTimeout(turnTimer); // audio is coming; playback completion restores 'listening'
       streamSampleRate = msg.sample_rate || 24000;
       startStreamPlayback();
     } else if (msg.type === 'audio_chunk') {
       if (ignoreIncomingAudio) return;
       queueAudioChunk(msg.audio);
     } else if (msg.type === 'audio_end') {
+      clearTimeout(turnTimer);
       if (ignoreIncomingAudio) {
         ignoreIncomingAudio = false;
         stopPlayback();
         setState('listening');
+        setStatus('connected');
         return;
       }
       streamTtsTime = msg.tts_time;
       const meta = messagesDiv.querySelector('.msg.assistant:last-child .meta');
       if (meta) meta.textContent += ` · ${t('meta.tts', { n: msg.tts_time })}`;
+      // Terminal safety net: if nothing is (still) playing, return to listening.
+      if (streamSources.length === 0 && state !== 'listening') { setState('listening'); setStatus('connected'); }
     }
   };
 }
