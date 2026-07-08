@@ -54,8 +54,25 @@ cp .env.example .env
 docker compose up --build
 ```
 
-Open **http://localhost:8000**, allow mic + camera, and start talking. The gateway stays internal
-to the compose network; only the web server is published.
+Open **http://localhost:8000** and start talking (or type). The gateway stays internal to the compose
+network; only the web server is published.
+
+> **Camera & mic need a secure context.** Browsers only expose `getUserMedia` over **HTTPS** or
+> `localhost`. On `http://localhost:8000` the mic/camera buttons work; on any other host they won't —
+> use the Local HTTPS setup below. (Text chat works anywhere.)
+
+## Local HTTPS (for camera & mic)
+
+A Caddy reverse-proxy terminates TLS with a self-signed cert and proxies to the web server (WebSockets
+included), so camera/mic get a secure context:
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose.https.yml up -d
+```
+
+Open **https://localhost:8443** and accept the self-signed-cert warning once. Then click **শুনুন**
+(Listen) → allow the mic, or the camera toggle → allow the camera. Plain HTTP on `:8000` still works
+alongside it.
 
 ## Run locally (two terminals)
 

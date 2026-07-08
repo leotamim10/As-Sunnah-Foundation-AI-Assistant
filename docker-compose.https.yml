@@ -1,0 +1,20 @@
+# Opt-in HTTPS for local camera/mic testing (browsers only expose getUserMedia on a secure context).
+# Usage:
+#   docker compose -f docker-compose.yml -f docker-compose.https.yml up -d
+# Then open https://localhost:8443 and accept the self-signed-cert warning once.
+# The plain-HTTP :8000 from the base compose still works too.
+
+services:
+  proxy:
+    image: caddy:2-alpine
+    ports:
+      - "8443:8443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+    depends_on:
+      - web
+    restart: unless-stopped
+
+volumes:
+  caddy_data:
