@@ -483,6 +483,23 @@
     border-color: rgba(74,222,128,0.2);
   }
 
+  /* "Allow" button inside a permission-recommendation message */
+  .allow-btn {
+    margin-top: 8px;
+    font-family: var(--font-body);
+    font-size: 12.5px;
+    font-weight: 600;
+    padding: 7px 14px;
+    border: 1px solid rgba(74,222,128,0.25);
+    border-radius: 8px;
+    background: var(--c-listen-dim);
+    color: var(--c-listen);
+    cursor: pointer;
+    transition: background 0.2s, opacity 0.2s;
+  }
+  .allow-btn:hover { background: rgba(74,222,128,0.2); }
+  .allow-btn:disabled { opacity: 0.5; cursor: default; }
+
   .composer input {
     flex: 1;
     min-width: 0;
@@ -548,8 +565,8 @@
   <!-- Controls -->
   <div class="controls">
     <div class="ctrl-group">
-      <button id="listenToggle" class="ctrl-btn">শুনুন</button>
-      <button id="cameraToggle" class="ctrl-btn">ক্যামেরা বন্ধ</button>
+      <button id="listenToggle" type="button" class="ctrl-btn">শুনুন</button>
+      <button id="cameraToggle" type="button" class="ctrl-btn">ক্যামেরা বন্ধ</button>
     </div>
     <div class="state-indicator">
       <div id="stateDot" class="dot idle"></div>
@@ -605,6 +622,8 @@ const bn = {
   'perm.status.denied': 'অনুমতি বন্ধ',
   'perm.status.prompt': 'ক্লিক করলে অনুমতি চাওয়া হবে',
   'perm.status.unavailable': 'অনুপলব্ধ — HTTPS বা localhost প্রয়োজন',
+  'perm.allow.mic': '🎤 মাইক্রোফোনের অনুমতি দিন',
+  'perm.allow.camera': '📷 ক্যামেরার অনুমতি দিন',
   'meta.withCamera': 'ক্যামেরাসহ',
   'meta.llm': 'LLM {n}s',
   'meta.tts': 'TTS {n}s',
@@ -839,7 +858,24 @@ async function getMedia(constraints, kind) { // kind: 'camera' | 'microphone'
   }
 }
 function recommend(kind) {
-  addMessage('assistant', kind === 'camera' ? t('perm.camera') : t('perm.mic'));
+  // An actionable message: text hint + an "Allow" button that re-requests the device (which pops the
+  // browser's permission prompt when the permission is in the 'prompt' state).
+  const div = document.createElement('div');
+  div.className = 'msg assistant';
+  const p = document.createElement('div');
+  p.textContent = kind === 'camera' ? t('perm.camera') : t('perm.mic');
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'allow-btn';
+  btn.textContent = kind === 'camera' ? t('perm.allow.camera') : t('perm.allow.mic');
+  btn.addEventListener('click', () => {
+    btn.disabled = true;
+    Promise.resolve(kind === 'camera' ? enableCamera() : enableListening()).finally(() => { btn.disabled = false; });
+  });
+  div.appendChild(p);
+  div.appendChild(btn);
+  messagesDiv.appendChild(div);
+  messagesDiv.scrollTop = messagesDiv.scrollHeight;
 }
 
 // ── Permission-status indicators (colored dot on the Camera / Listen buttons) ──
@@ -857,10 +893,14 @@ async function queryPerm(name) { // 'camera' | 'microphone'
   } catch {}
   return null; // insecure context or unsupported (e.g. Firefox) → "unavailable"
 }
-async function bindPerm(btn, name) {
+async function bindPerm(btn, name, enableFn, isOn) {
+  const apply = (state) => {
+    setPermClass(btn, state);
+    if (state === 'granted' && !isOn()) enableFn(); // already/now allowed → switch the toggle on
+  };
   const st = await queryPerm(name);
-  setPermClass(btn, st ? st.state : 'unavailable');
-  if (st) st.onchange = () => setPermClass(btn, st.state); // live-update on grant/deny
+  apply(st ? st.state : 'unavailable');             // on-page-load case
+  if (st) st.onchange = () => apply(st.state);        // allowed later (e.g. via the address bar)
 }
 async function refreshPerm(btn, name) {
   const st = await queryPerm(name);
@@ -895,8 +935,32 @@ async function enableListening() {
   if (!stream) { refreshPerm(listenToggle, 'microphone'); return; }
   micStream = stream;
   micSource = null; // recreated for the analyser on setState('listening')
+  // Permission is granted (we got a stream) → switch the toggle on immediately.
+  voiceEnabled = true;
+  listenToggle.classList.add('active');
+  listenToggle.textContent = t('listen.on');
+  refreshPerm(listenToggle, 'microphone');
+  setState('listening');
+  startVad();
+}
+
+// VAD needs a running AudioContext, which browsers only allow after a user gesture (autoplay policy).
+// If it's suspended (e.g. auto-enabled on page load with no interaction yet), defer the actual VAD
+// start to the first click/keypress — so the toggle can switch on now and detection begins on interaction.
+async function startVad() {
+  if (!voiceEnabled || !micStream) return;
   ensureAudioCtx();
   if (audioCtx.state === 'suspended') { try { await audioCtx.resume(); } catch {} }
+  if (audioCtx.state === 'suspended') {
+    const onGesture = () => {
+      document.removeEventListener('click', onGesture);
+      document.removeEventListener('keydown', onGesture);
+      startVad();
+    };
+    document.addEventListener('click', onGesture, { once: true });
+    document.addEventListener('keydown', onGesture, { once: true });
+    return;
+  }
   try {
     if (!myvad) {
       myvad = await vad.MicVAD.new({
@@ -913,18 +977,10 @@ async function enableListening() {
         baseAssetPath: "https://cdn.jsdelivr.net/npm/@ricky0123/vad-web@0.0.29/dist/",
       });
     }
-    myvad.start();
+    if (voiceEnabled) myvad.start(); // may have been toggled off while VAD was initializing
   } catch (e) {
     console.warn('VAD init failed:', e);
-    disableListening();
-    recommend('microphone');
-    return;
   }
-  voiceEnabled = true;
-  listenToggle.classList.add('active');
-  listenToggle.textContent = t('listen.on');
-  refreshPerm(listenToggle, 'microphone');
-  setState('listening');
 }
 function disableListening() {
   if (myvad) { try { myvad.pause(); } catch {} myvad = null; }
@@ -1158,9 +1214,10 @@ function init() {
   viewportWrap.classList.add('hidden');
   setState('idle');
 
-  // Show live camera/mic permission status on the buttons (updates reactively on grant/deny).
-  bindPerm(listenToggle, 'microphone');
-  bindPerm(cameraToggle, 'camera');
+  // Show live camera/mic permission status on the buttons, and auto-switch a toggle on when its
+  // permission is already/becomes granted (reactively on grant/deny).
+  bindPerm(listenToggle, 'microphone', enableListening, () => voiceEnabled);
+  bindPerm(cameraToggle, 'camera', enableCamera, () => cameraEnabled);
 
   drawWaveform();
   console.log('Ready — camera and voice are opt-in.');
