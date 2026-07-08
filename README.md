@@ -1,4 +1,4 @@
-# Parlor — বাংলা (bn-BD) voice + vision assistant
+# As-Sunnah Foundation AI Assistant
 
 [![Repository](https://img.shields.io/badge/GitHub-As--Sunnah--Foundation--AI--Assistant-181717?logo=github&logoColor=white)](https://github.com/leotamim10/As-Sunnah-Foundation-AI-Assistant)
 [![Node](https://img.shields.io/badge/Node-%E2%89%A520-339933?logo=node.js&logoColor=white)](https://nodejs.org)
