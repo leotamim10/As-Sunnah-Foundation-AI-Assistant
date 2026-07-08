@@ -53,6 +53,17 @@ async def root():
     return HTMLResponse(content=(Path(__file__).parent / "index.html").read_text())
 
 
+@app.get("/suggestions")
+async def suggestions():
+    """Recommended questions (derived from the knowledge base by the gateway)."""
+    try:
+        r = await gateway.get("/suggestions")
+        r.raise_for_status()
+        return r.json()
+    except httpx.HTTPError:
+        return {"questions": []}
+
+
 @app.websocket("/ws")
 async def websocket_endpoint(ws: WebSocket):
     await ws.accept()

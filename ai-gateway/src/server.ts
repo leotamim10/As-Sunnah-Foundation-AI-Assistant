@@ -7,7 +7,7 @@ import { RespondRequest, TtsRequest } from "./contracts.js";
 import { GeminiAdapter, type UnderstandingAdapter } from "./adapters/understanding.js";
 import { AzureBnBDAdapter, FallbackTtsAdapter, type TtsAdapter } from "./adapters/tts.js";
 import { EdgeTtsAdapter } from "./adapters/edge.js";
-import { retrieve } from "./rag/retrieve.js";
+import { retrieve, getSuggestions } from "./rag/retrieve.js";
 
 /* ---------- config ---------- */
 function env(name: string, fallback?: string): string {
@@ -41,6 +41,9 @@ const tts: TtsAdapter = new FallbackTtsAdapter(ttsChain);
 const app = Fastify({ logger: true, bodyLimit: 16 * 1024 * 1024 }); // audio+image base64 can be large
 
 app.get("/health", async () => ({ ok: true as const }));
+
+// Recommended questions, derived from the knowledge base (for the UI's input suggestions).
+app.get("/suggestions", async () => ({ questions: getSuggestions(8) }));
 
 app.post("/respond", async (req, reply) => {
   const parsed = RespondRequest.safeParse(req.body);

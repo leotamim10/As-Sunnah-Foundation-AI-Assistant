@@ -415,6 +415,7 @@
 
   /* ── Text composer ── */
   .composer {
+    position: relative;
     width: 100%;
     max-width: 640px;
     display: flex;
@@ -422,6 +423,45 @@
     padding: 8px 4px 2px;
     flex-shrink: 0;
     z-index: 2;
+  }
+
+  /* Recommended-question popover (above the input) */
+  .suggestions {
+    position: absolute;
+    bottom: calc(100% + 4px);
+    left: 4px;
+    right: 4px;
+    display: none;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 10px;
+    background: rgba(10,10,16,0.97);
+    border: 1px solid rgba(255,255,255,0.09);
+    border-radius: 14px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+    z-index: 6;
+  }
+
+  .suggestions.open { display: flex; }
+
+  .suggestions .chip {
+    font-family: var(--font-body);
+    font-size: 12.5px;
+    line-height: 1.3;
+    padding: 7px 12px;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 100px;
+    background: var(--c-surface);
+    color: var(--c-text);
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+  }
+
+  .suggestions .chip:hover {
+    background: var(--c-listen-dim);
+    color: var(--c-listen);
+    border-color: rgba(74,222,128,0.2);
   }
 
   .composer input {
@@ -501,6 +541,7 @@
 
   <!-- Text composer — type a question (same WS {text} path the gateway already handles) -->
   <form id="composer" class="composer" autocomplete="off">
+    <div id="suggestions" class="suggestions" role="listbox" aria-label="প্রস্তাবিত প্রশ্ন"></div>
     <input id="textInput" type="text" placeholder="প্রশ্ন লিখুন…" aria-label="প্রশ্ন লিখুন" maxlength="500" />
     <button id="sendBtn" type="submit">পাঠান</button>
   </form>
@@ -516,6 +557,7 @@ const stateDot = $('stateDot'), stateText = $('stateText');
 const viewportWrap = $('viewportWrap');
 const waveformCanvas = $('waveform');
 const composer = $('composer'), textInput = $('textInput'), sendBtn = $('sendBtn');
+const suggestionsEl = $('suggestions');
 const waveformCtx = waveformCanvas.getContext('2d');
 
 // ── i18n (bn-BD) ──
@@ -939,6 +981,44 @@ function sendText() {
 }
 
 composer.addEventListener('submit', (e) => { e.preventDefault(); sendText(); });
+
+// ── Recommended questions (fetched from the knowledge base via /suggestions) ──
+function buildSuggestionChips(questions) {
+  suggestionsEl.innerHTML = '';
+  for (const q of questions) {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'chip';
+    b.textContent = q;
+    // mousedown fires before the input's blur, so we can set the value without the popover closing first.
+    b.addEventListener('mousedown', (e) => {
+      e.preventDefault();
+      textInput.value = q;   // set into the prompt (not auto-sent — user can edit or press Enter)
+      hideSuggestions();
+      textInput.focus();
+    });
+    suggestionsEl.appendChild(b);
+  }
+}
+
+function showSuggestions() { if (suggestionsEl.children.length && !textInput.value.trim()) suggestionsEl.classList.add('open'); }
+function hideSuggestions() { suggestionsEl.classList.remove('open'); }
+
+textInput.addEventListener('focus', showSuggestions);
+textInput.addEventListener('input', () => (textInput.value.trim() ? hideSuggestions() : showSuggestions()));
+textInput.addEventListener('blur', () => setTimeout(hideSuggestions, 120));
+textInput.addEventListener('keydown', (e) => { if (e.key === 'Escape') hideSuggestions(); });
+
+async function loadSuggestions() {
+  // Fallback aligns with the KB in case the endpoint is unavailable.
+  let questions = ['দান করার ব্যাংক অ্যাকাউন্ট নম্বর দাও', 'যাকাত কীভাবে দেব?', 'আস-সুন্নাহ ফাউন্ডেশনের অফিস কোথায়?'];
+  try {
+    const r = await fetch('/suggestions');
+    if (r.ok) { const j = await r.json(); if (Array.isArray(j.questions) && j.questions.length) questions = j.questions; }
+  } catch {}
+  buildSuggestionChips(questions);
+}
+loadSuggestions();
 
 // ── Init ──
 async function init() {

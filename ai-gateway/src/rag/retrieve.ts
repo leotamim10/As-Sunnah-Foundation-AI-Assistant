@@ -42,6 +42,27 @@ export interface Retrieved {
   hits: ScoredChunk[];
 }
 
+/**
+ * Recommended questions, derived from the knowledge base itself (so they track the current data).
+ * Exact-fact shortcuts first, then one prompt per distinct Bengali fund/service title.
+ */
+export function getSuggestions(limit = 8): string[] {
+  const store = kb();
+  const fixed = ["দান করার ব্যাংক অ্যাকাউন্ট নম্বর দাও", "আস-সুন্নাহ ফাউন্ডেশনের অফিস কোথায়?"];
+  if (!store) return fixed;
+
+  const seen = new Set<string>();
+  const topics: string[] = [];
+  for (const c of store.chunks) {
+    if (c.lang !== "bn" || c.source !== "product") continue; // funds/services only
+    const title = c.title.trim();
+    if (!title || seen.has(title) || !/[ঀ-৿]/.test(title)) continue; // must contain Bengali
+    seen.add(title);
+    topics.push(`${title} সম্পর্কে বলুন`);
+  }
+  return [...fixed, ...topics].slice(0, limit);
+}
+
 export async function retrieve(question: string, k = 5): Promise<Retrieved> {
   const store = kb();
   const q = question.trim();
