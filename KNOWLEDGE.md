@@ -157,8 +157,9 @@ Today `/respond` does transcription **and** the reply in a single Gemini functio
       Dockerfile splits model-warm (cached) from KB-build (`ARG CACHEBUST`), so a refresh gets fresh data
       without re-downloading the model. Weekly host cron: `0 3 * * 0 cd … && ./scripts/refresh.sh`.
       Ingest is polite: identified User-Agent, only 2 API calls, offline from user queries.
-- [ ] Fill `curated.json` placeholder contact entry with **verified** office/hotline facts. (Bundle only
-      yielded a partial/unverifiable hotline fragment — awaiting a verified number; never commit a guess.)
+- [x] **Curated facts (DONE):** `curated.json` now holds verified high-priority entries — office address +
+      hotline (+8809610-001089), Skill Development Institute, and Madrasatus Sunnah (Dhaka + Debidwar).
+      Quoted verbatim; verified live (address/phone answered exactly). KB now 46 chunks.
 - [x] **Retrieval tests (DONE):** `test/store.test.ts` — fast, model-free unit tests for cosine + topK +
       priority-boost (in the main `npm test`, now 12 passing). `knowledge/eval.ts` (`npm run knowledge:eval`) —
       12 Bengali question→expected-source checks against the real model+KB, reports pass rate + mean rank.
