@@ -382,6 +382,21 @@
     letter-spacing: 0.02em;
   }
 
+  /* Permission-status dot before the label: gray=unavailable, amber=prompt, green=granted, red=denied */
+  .ctrl-btn::before {
+    content: '';
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    margin-right: 7px;
+    vertical-align: middle;
+    background: var(--c-text-dim);
+    transition: background 0.3s;
+  }
+  .ctrl-btn.perm-granted::before { background: var(--c-listen); }
+  .ctrl-btn.perm-prompt::before  { background: var(--c-process); }
+  .ctrl-btn.perm-denied::before  { background: #f87171; }
+
   .ctrl-btn:hover { background: var(--c-surface-hover); color: var(--c-text); }
   .ctrl-btn.active {
     background: var(--c-listen-dim);
@@ -586,6 +601,10 @@ const bn = {
   'listen.off': 'শুনুন',
   'perm.camera': 'ক্যামেরা চালু করতে ব্রাউজারের অনুমতি দিন — অ্যাড্রেস বারের ক্যামেরা আইকনে ক্লিক করে "Allow" দিন।',
   'perm.mic': 'ভয়েস কমান্ড ব্যবহার করতে মাইক্রোফোনের অনুমতি দিন — অ্যাড্রেস বারের মাইক আইকনে ক্লিক করে "Allow" দিন।',
+  'perm.status.granted': 'অনুমতি দেওয়া আছে',
+  'perm.status.denied': 'অনুমতি বন্ধ',
+  'perm.status.prompt': 'ক্লিক করলে অনুমতি চাওয়া হবে',
+  'perm.status.unavailable': 'অনুপলব্ধ — HTTPS বা localhost প্রয়োজন',
   'meta.withCamera': 'ক্যামেরাসহ',
   'meta.llm': 'LLM {n}s',
   'meta.tts': 'TTS {n}s',
@@ -823,10 +842,35 @@ function recommend(kind) {
   addMessage('assistant', kind === 'camera' ? t('perm.camera') : t('perm.mic'));
 }
 
+// ── Permission-status indicators (colored dot on the Camera / Listen buttons) ──
+function setPermClass(btn, state) {
+  const s = ['granted', 'denied', 'prompt'].includes(state) ? state : 'unavailable';
+  btn.classList.remove('perm-granted', 'perm-denied', 'perm-prompt');
+  if (s !== 'unavailable') btn.classList.add(`perm-${s}`);
+  btn.title = t(`perm.status.${s}`);
+}
+async function queryPerm(name) { // 'camera' | 'microphone'
+  try {
+    if (navigator.mediaDevices && navigator.permissions && navigator.permissions.query) {
+      return await navigator.permissions.query({ name });
+    }
+  } catch {}
+  return null; // insecure context or unsupported (e.g. Firefox) → "unavailable"
+}
+async function bindPerm(btn, name) {
+  const st = await queryPerm(name);
+  setPermClass(btn, st ? st.state : 'unavailable');
+  if (st) st.onchange = () => setPermClass(btn, st.state); // live-update on grant/deny
+}
+async function refreshPerm(btn, name) {
+  const st = await queryPerm(name);
+  setPermClass(btn, st ? st.state : 'unavailable');
+}
+
 // ── Camera (opt-in) ──
 async function enableCamera() {
   const stream = await getMedia({ video: { width: 640, height: 480, facingMode: 'user' } }, 'camera');
-  if (!stream) return;
+  if (!stream) { refreshPerm(cameraToggle, 'camera'); return; }
   cameraStream = stream;
   video.srcObject = stream;
   video.style.opacity = 1;
@@ -834,6 +878,7 @@ async function enableCamera() {
   cameraToggle.classList.add('active');
   cameraToggle.textContent = t('camera.on');
   viewportWrap.classList.remove('hidden');
+  refreshPerm(cameraToggle, 'camera');
 }
 function disableCamera() {
   if (cameraStream) { cameraStream.getTracks().forEach(t => t.stop()); cameraStream = null; }
@@ -847,7 +892,7 @@ function disableCamera() {
 // ── Voice / listening (opt-in) ──
 async function enableListening() {
   const stream = await getMedia({ audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true } }, 'microphone');
-  if (!stream) return;
+  if (!stream) { refreshPerm(listenToggle, 'microphone'); return; }
   micStream = stream;
   micSource = null; // recreated for the analyser on setState('listening')
   ensureAudioCtx();
@@ -878,6 +923,7 @@ async function enableListening() {
   voiceEnabled = true;
   listenToggle.classList.add('active');
   listenToggle.textContent = t('listen.on');
+  refreshPerm(listenToggle, 'microphone');
   setState('listening');
 }
 function disableListening() {
@@ -1111,6 +1157,10 @@ function init() {
   voiceEnabled = false;
   viewportWrap.classList.add('hidden');
   setState('idle');
+
+  // Show live camera/mic permission status on the buttons (updates reactively on grant/deny).
+  bindPerm(listenToggle, 'microphone');
+  bindPerm(cameraToggle, 'camera');
 
   drawWaveform();
   console.log('Ready — camera and voice are opt-in.');
