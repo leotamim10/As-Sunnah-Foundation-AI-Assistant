@@ -1,7 +1,8 @@
-# Secrets — never commit real keys (only .env.example is tracked)
+# Secrets — never commit real keys. Only .env is real here; .env.example is the tracked template.
+# NB: avoid a `.env.*` glob — it matches `.env.example`, and glob-based cleaners ignore git's `!` negation
+# and can delete the template (this happened once). List real env files explicitly instead.
 .env
-.env.*
-!.env.example
+.env.local
 
 # Node
 node_modules/
