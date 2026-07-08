@@ -169,12 +169,17 @@ Today `/respond` does transcription **and** the reply in a single Gemini functio
 
 ---
 
-## 7. Open questions
-- [ ] Enumerate the remaining public content endpoints (blog / faq / news / page) from the bundle — `product`
-      + `bank-accounts` are confirmed working; the rest follow the same `POST /v2/public/... {app-key}` shape.
-- [ ] Embeddings: local `multilingual-e5` (card-free, +~200 MB model download) vs Gemini embeddings (1 API,
-      no download). Default: local, to keep the card-free promise.
-- [ ] Commit `knowledge.json` (reproducible, fast cold-start) vs build at container start (fresh, needs egress)?
-- [ ] Confirm using the public app-key for read-only ingest is acceptable to the foundation, or request formal
-      API access — polite, rate-limited use of public content is reasonable, but worth flagging.
+## 7. Open questions — resolved
+
+- [x] **Content endpoints — fully mapped.** Traced every lazy chunk (`blogs-*`, `activities-*`, `notice-*`,
+      `career*`) + all bundles. The ONLY public content endpoints are `product` (+`product/get`),
+      `bank-accounts/list`, `media-gallery/*` (images), and `jobs` (careers). Blog/notice/activities pages are
+      UI-only (no separate public text endpoint — probes 404'd). **The substantive content is fully ingested.**
+      *Optional, low value:* `POST /v2/public/jobs` (career listings — transient) could be added if desired.
+- [x] **Embeddings:** local `multilingual-e5-small` (card-free, 100% on the eval). `EMBED_MODEL` switches it.
+- [x] **`knowledge.json`:** built at Docker-build (reproducible, no runtime download), gitignored.
+- [ ] **External (not code):** confirm the foundation is OK with read-only use of the public app-key, or
+      request formal API access. Use is polite + rate-limited, but this is a decision for the org, not the build.
+
+**Status: the plan (Phases A–C) is fully implemented. No substantive engineering work remains.**
 ```
