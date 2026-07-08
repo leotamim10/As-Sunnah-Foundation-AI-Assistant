@@ -119,23 +119,30 @@
     grid-template-columns: 65% 35%;
   }
 
-  /* ── LEFT: Feature promotion ── */
+  /* ── LEFT: Feature promotion + course flowchart, side by side ── */
   .promo {
     min-height: 0;
     overflow-y: auto;
-    padding: 32px;
-    background: transparent;   /* show the page backdrop; the promo card floats on it */
+    padding: 28px;
+    background: transparent;   /* show the page backdrop; the cards float on it */
     border-right: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+    gap: 20px;
+    align-items: start;
   }
-  .promo-card {
-    max-width: 640px;
-    margin: 0 auto;
+  .promo-card, .flow-card {
     background: var(--bg);
     border: 1px solid var(--border);
     border-radius: 14px;
-    overflow: hidden;
     box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    min-width: 0;
   }
+  .promo-card { overflow: hidden; }
+  /* Separate course-flowchart component (its own card, beside the promo) */
+  .flow-card { padding: 20px; align-self: start; }
+  .flow-card-head { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; margin-bottom: 4px; }
+  .flow-card-sub { font-size: 12.5px; color: var(--muted); margin-bottom: 14px; }
   .promo-hero {
     height: 240px;
     position: relative;
@@ -192,6 +199,44 @@
   .btn-secondary { background: var(--bg); color: var(--fg); border-color: var(--border); }
   .btn-secondary:hover { background: var(--surface-2); }
 
+  /* ── Course flowchart (root badge → course nodes → detail) ── */
+  .flow { margin-top: 10px; }
+  .flow-root { display: inline-block; position: relative; }
+  .flow-root::after {  /* short connector from the root down to the branch spine */
+    content: ''; position: absolute; left: 11px; bottom: -8px; width: 1.5px; height: 8px; background: var(--border);
+  }
+  .flow-branch {
+    position: relative; margin: 0 0 0 11px; padding-left: 18px;
+    border-left: 1.5px solid var(--border);
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .flow-item { position: relative; }
+  .flow-item::before {  /* horizontal tick to the spine */
+    content: ''; position: absolute; left: -18px; top: 16px; width: 14px; height: 1.5px; background: var(--border);
+  }
+  .flow-node {
+    font-family: var(--font); font-size: 12.5px; font-weight: 500; text-align: left;
+    width: 100%; display: flex; align-items: center; gap: 8px;
+    padding: 8px 12px; border: 1px solid var(--border); border-radius: 8px;
+    background: var(--bg); color: var(--fg); cursor: pointer; transition: all .15s;
+  }
+  .flow-node::after { content: '+'; margin-left: auto; color: var(--muted-2); font-weight: 600; font-size: 14px; }
+  .flow-node:hover { border-color: var(--muted); }
+  .flow-node[aria-expanded="true"] { border-color: var(--accent); background: var(--accent-bg); color: var(--accent); }
+  .flow-node[aria-expanded="true"]::after { content: '−'; color: var(--accent); }
+  .flow-child { display: none; }
+  .flow-child.open { display: block; }
+  .flow-detail {
+    position: relative; margin: 6px 0 2px 16px; padding: 10px 12px;
+    background: var(--surface); border: 1px solid var(--border); border-left: 2px solid var(--accent); border-radius: 8px;
+  }
+  .flow-detail::before {
+    content: ''; position: absolute; left: -16px; top: 16px; width: 14px; height: 1.5px; background: var(--border);
+  }
+  .flow-desc { font-size: 12.5px; color: var(--muted); line-height: 1.55; }
+  .flow-link { display: inline-block; margin-top: 8px; font-size: 12.5px; font-weight: 600; color: var(--accent); text-decoration: none; }
+  .flow-link:hover { text-decoration: underline; }
+
   /* ── RIGHT: Chat ── */
   .chat {
     min-height: 0;
@@ -203,9 +248,14 @@
     flex-shrink: 0;
     height: 48px;
     display: flex; align-items: center; justify-content: space-between;
+    gap: 10px;
     padding: 0 16px;
     border-bottom: 1px solid var(--border);
   }
+  .chat-title { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; letter-spacing: -0.01em; min-width: 0; }
+  .chat-title svg { width: 17px; height: 17px; color: var(--primary); flex-shrink: 0; }
+  .chat-title span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .chat-head-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
   .state-indicator { display: flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 500; color: var(--muted); }
   .state-indicator .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--glow); transition: background .3s; }
   .state-indicator .dot.listening { animation: pulse 2s ease-in-out infinite; }
@@ -336,16 +386,27 @@
   <!-- LEFT: Feature promotion (65%) — rendered by renderPromo() -->
   <section class="promo">
     <div id="promoCard" class="promo-card"></div>
+    <div id="flowCard" class="flow-card"></div>
   </section>
 
   <!-- RIGHT: Chat (35%) -->
   <aside class="chat">
     <div class="chat-head">
-      <div class="state-indicator">
-        <div id="stateDot" class="dot idle"></div>
-        <span id="stateText">Ready</span>
+      <div class="chat-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M16.3 16.78l4.11-4.11a1 1 0 0 0 0-1.41l-4-4"/>
+          <path d="M7.7 7.22 3.59 11.33a1 1 0 0 0 0 1.41l4 4"/>
+          <line x1="13.84" y1="3.14" x2="10.72" y2="20.86"/>
+        </svg>
+        <span id="chatTitle">AI Assistant</span>
       </div>
-      <div id="status" class="status-pill disconnected">Disconnected</div>
+      <div class="chat-head-right">
+        <div class="state-indicator">
+          <div id="stateDot" class="dot idle"></div>
+          <span id="stateText">Ready</span>
+        </div>
+        <div id="status" class="status-pill disconnected">Disconnected</div>
+      </div>
     </div>
 
     <div id="viewportWrap" class="viewport-wrap hidden">
@@ -385,7 +446,7 @@ const stateDot = $('stateDot'), stateText = $('stateText');
 const viewportWrap = $('viewportWrap');
 const waveformCanvas = $('waveform');
 const composer = $('composer'), textInput = $('textInput'), sendBtn = $('sendBtn');
-const suggestionsEl = $('suggestions'), langSwitch = $('langSwitch'), promoCard = $('promoCard');
+const suggestionsEl = $('suggestions'), langSwitch = $('langSwitch'), promoCard = $('promoCard'), flowCard = $('flowCard');
 const waveformCtx = waveformCanvas.getContext('2d');
 
 // ── i18n (bn-BD) ──
@@ -422,6 +483,7 @@ const bn = {
   'composer.placeholder': 'প্রশ্ন লিখুন…',
   'composer.send': 'পাঠান',
   'suggest.aria': 'প্রস্তাবিত প্রশ্ন',
+  'chat.title': 'এআই সহকারী',
 };
 
 const en = {
@@ -454,6 +516,7 @@ const en = {
   'composer.placeholder': 'Type a question…',
   'composer.send': 'Send',
   'suggest.aria': 'Recommended questions',
+  'chat.title': 'AI Assistant',
 };
 
 const locales = { en, bn };
@@ -473,6 +536,7 @@ function applyLocale() {
   document.title = t('app.title');
   const set = (id, txt) => { const el = document.getElementById(id); if (el) el.textContent = txt; };
   set('appName', t('app.name'));
+  set('chatTitle', t('chat.title'));
   set('cloudPill', t('pill.cloud'));
   textInput.placeholder = t('composer.placeholder');
   textInput.setAttribute('aria-label', t('composer.placeholder'));
@@ -544,6 +608,7 @@ const featureData = {
 };
 // Selecting one of these suggestion chips switches the promo panel to the donation plan (and stays).
 const DONATION_TRIGGERS = new Set(['দান করার ব্যাংক অ্যাকাউন্ট নম্বর দাও', 'সাদকাহ জারিয়াহ তহবিল সম্পর্কে বলুন']);
+const SKILL_COURSES = [{"slug":"small-business-management","en":{"t":"Small Business Management","d":"The primary goal of this course is to enhance the technical skills of educated unemployed individuals and create employment opportunities for them. Upon completion, trained youth are placed in…"},"bn":{"t":"স্মল বিজনেস ম্যানেজমেন্ট","d":"শিক্ষিত বেকারদের কারিগরি দক্ষতা বৃদ্ধি করা এবং তাদের জন্য কর্মসংস্থানের সুযোগ তৈরি করে দেয়া এই কোর্সের প্রধান লক্ষ্য। কোর্স শেষে প্রশিক্ষিত তরুণদের যোগ্যতা অনুযায়ী বিভিন্ন প্রতিষ্ঠানে চাকরির ব্যবস্থা…"}},{"slug":"smart-tailoring-and-fashion-design","en":{"t":"Smart Tailoring & Fashion Design","d":"With the aim of skill development and empowerment of underprivileged women, various types of handicraft and technical training are provided. Upon completion, each participant receives self-reliance…"},"bn":{"t":"স্মার্ট টেইলারিং ও ফ্যাশন ডিজাইন","d":"অসহায় নারীদের দক্ষতা-বৃদ্ধি ও স্বাবলম্বীকরণের লক্ষ্যে নারীদের বিভিন্ন ধরনের হাতের কাজ ও কারিগরি প্রশিক্ষণ দেয়া হচ্ছে। কোর্স শেষে প্রত্যেককে ৩০ থেকে ৫০ হাজার টাকার সমপরিমাণ মূল্যের বিভিন্ন স্বাবলম্বী…"}},{"slug":"the-art-of-sales-and-marketing","en":{"t":"The Art of Sales and Marketing","d":"The primary objective of this course is to advance Bangladesh's business and economic sectors by developing skilled and experienced professionals in sales and marketing."},"bn":{"t":"দি আর্ট অব সেলস এন্ড মার্কেটিং","d":"এই কোর্সের মূল উদ্দেশ্য সেলস ও মার্কেটিংয়ের কর্মক্ষেত্রে দক্ষ ও অভিজ্ঞ জনবল তৈরি করার মাধ্যমে বাংলাদেশের ব্যাবসায়িক ও অর্থনৈতিক খাতে উন্নতি সাধন করা।"}},{"slug":"driving-training","en":{"t":"As-Sunnah Gulzar Bahar Khanam Driving School","d":"Driving training is provided to help unemployed and low-income youth acquire professional driving skills and create self-employment opportunities."},"bn":{"t":"আস-সুন্নাহ গুলজার বাহার খানম ড্রাইভিং স্কুল","d":"বেকার ও নিম্নআয়ের যুবকদের পেশাদার ড্রাইভিং দক্ষতা অর্জনের মাধ্যমে আত্মকর্মসংস্থানের সুযোগ তৈরির জন্য ড্রাইভিং প্রশিক্ষণ দেয়া হচ্ছে।"}},{"slug":"entrepreneurship-in-the-footwear-industry","en":{"t":"Entrepreneurship in the Footwear Industry","d":"Bangladesh's footwear and shoe industry is a promising sector that meets domestic demand while making a significant contribution to international markets. The demand for skilled entrepreneurs and…"},"bn":{"t":"জুতা শিল্পে উদ্যোক্তা তৈরি কোর্স","d":"বাংলাদেশের ফুটওয়্যার ও জুতা শিল্প একটি সম্ভাবনাময় খাত, যা দেশীয় চাহিদা পূরণের পাশাপাশি আন্তর্জাতিক বাজারেও গুরুত্বপূর্ণ অবদান রাখছে। এই খাতে দক্ষ উদ্যোক্তা ও প্রশিক্ষিত মানবসম্পদের চাহিদা দিন দিন…"}},{"slug":"chef-training-and-kitchen-management","en":{"t":"Professional Cooking & Catering Management","d":"The demand for skilled chefs and effective kitchen managers in the hospitality and food industry is growing worldwide, including in Bangladesh. Professional cooking and kitchen management skills are…"},"bn":{"t":"প্রফেশনাল কুকিং অ্যান্ড ক্যাটারিং ম্যানেজমেন্ট","d":"বাংলাদেশসহ বিশ্বব্যাপী আতিথেয়তা ও খাদ্যশিল্পে দক্ষ শেফ ও কার্যকর কিচেন ম্যানেজারের চাহিদা দিন দিন বাড়ছে। হোটেল, রেস্তোরাঁ, ক্যাটারিং সার্ভিস থেকে শুরু করে ব্যক্তিগত উদ্যোগ—সকল ক্ষেত্রেই পেশাদার…"}},{"slug":"the-art-of-content-creation","en":{"t":"The Art of Content Creation","d":"In today's digital age, video content plays an immense role in business promotion and product marketing. While many products in Bangladesh have halal credentials, some entrepreneurs avoid promotional…"},"bn":{"t":"দি আর্ট অব ক্রিয়েশন কোর্স","d":"বর্তমান ডিজিটাল যুগে ব্যবসা-বাণিজ্য ও পণ্যের প্রচারের ক্ষেত্রে ভিডিও কনটেন্টের গুরুত্ব অপরিসীম। বাংলাদেশে অনেক পণ্যের হালাল পরিচিতি থাকলেও, ভিডিওগ্রাফির কিছু ক্ষেত্রে হারাম উপাদান ব্যবহারের কারণে…"}},{"slug":"english-language-program","en":{"t":"English Language Program (ELP)","d":"In today's world, English is not merely a means of communication — it is one of the primary tools for advancing in education, employment, business, and international arenas. Our country has countless…"},"bn":{"t":"ইংলিশ ল্যাঙ্গুয়েজ প্রোগ্রাম (ELP)","d":"বর্তমান বিশ্বে ইংরেজি ভাষা শুধু একটি যোগাযোগের মাধ্যম নয়; এটি শিক্ষা, কর্মসংস্থান, ব্যবসা ও আন্তর্জাতিক অঙ্গনে এগিয়ে যাওয়ার অন্যতম প্রধান হাতিয়ার। আমাদের দেশে অসংখ্য মেধাবী তরুণ রয়েছে, যাদের…"}},{"slug":"english-language-instruction-for-educators","en":{"t":"English Language Instruction Training for Educators (ELITE)","d":"A skilled teacher is not merely a conveyor of knowledge — they are the architect of a learner's thinking, language, and confidence. However, the reality is that in our country, many English language…"},"bn":{"t":"ইংলিশ ল্যাঙ্গুয়েজ ইনস্ট্রাকশন ট্রেনিং ফর এডুকেটরস (ELITE)","d":"একজন দক্ষ শিক্ষক কেবল জ্ঞান বিতরণকারী নন; তিনি শিক্ষার্থীর চিন্তা, ভাষা ও আত্মবিশ্বাস গড়ে তোলার কারিগর। কিন্তু বাস্তবতা হলো, আমাদের দেশে ইংরেজি ভাষা শিক্ষায় অনেক শিক্ষক বিষয়ভিত্তিক জ্ঞান থাকা…"}},{"slug":"nctb-teacher-training-program","en":{"t":"NCTB Teacher Training Program (TTP)","d":"In today's evolving education system, the key challenge is not just teaching in the classroom, but preparing students to be fit for the times. Despite the capability and dedication of teachers in our…"},"bn":{"t":"এনসিটিবি টিচার ট্রেনিং প্রোগ্রাম (TTP)","d":"বর্তমান পরিবর্তনশীল শিক্ষাব্যবস্থায় শ্রেণিকক্ষে শুধু পাঠদান নয়, বরং শিক্ষার্থীদের যুগের উপযোগী করে গড়ে তোলাই মূল চ্যালেঞ্জ। আমাদের দেশের শিক্ষকদের সক্ষমতা ও আন্তরিকতা থাকা সত্ত্বেও আধুনিক শিক্ষাদান…"}},{"slug":"mobile-phone-repair","en":{"t":"Mobile Phone Repair Training","d":"This is an integrated training programme designed to equip the younger generation with skills in mobile phone servicing and repairing. Participants will develop professional expertise in mobile…"},"bn":{"t":"মোবাইল ফোন রিপেয়ার ট্রেনিং","d":"এটি তরুণ প্রজন্মকে মোবাইল সার্ভিসিং এবং রিপেয়ারিং ক্ষেত্রে দক্ষতা অর্জন করার একটি সমন্বিত প্রশিক্ষণ কর্মসূচি। এই কোর্সে শিক্ষার্থীরা মোবাইল ফোনের হার্ডওয়‍্যার ও সফটওয়‍্যার, বিভিন্ন সমস্যা নির্ণয় ও…"}},{"slug":"refrigeration-and-air-conditioning","en":{"t":"Refrigeration & Air Conditioning","d":"This course is an integrated training programme aimed at making the younger generation proficient in refrigeration and air conditioning for both domestic and industrial sectors.\n\nThrough this course…"},"bn":{"t":"রেফ্রিজারেশন এবং এয়ারকন্ডিশনিং","d":"তরুণ প্রজন্মকে গৃহস্থালি ও শিল্প খাতে রেফ্রিজারেশন এবং এয়ার কন্ডিশনিং-এ দক্ষ করে তোলার লক্ষ্যে এই কোর্স একটি সমন্বিত প্রশিক্ষণ কর্মসূচি।\n\nএ কোর্সের মাধ্যমে শিক্ষার্থীরা ফ্রিজ, ডিপ ফ্রিজার, উইন্ডো ও…"}},{"slug":"professional-automotive-technician","en":{"t":"Professional Automotive Technician Training","d":"This course is specially designed for those who want to become skilled automotive technicians starting from scratch.\n\nUpon completion, participants will not only gain proficiency in vehicle…"},"bn":{"t":"প্রফেশনাল অটোমোটিভ টেকনিশিয়ান ট্রেনিং","d":"যারা একেবারে শূন্য থেকে শুরু করে দক্ষ অটোমোটিভ টেকনিশিয়ান হতে চান, তাদের জন্য এই কোর্স বিশেষভাবে ডিজাইন করা হয়েছে।\n\nকোর্স শেষে প্রশিক্ষণার্থীরা শুধু যানবাহনের মেকানিক্যাল ও ইলেকট্রিক্যাল সিস্টেমে…"}},{"slug":"professional-motorcycle-technician","en":{"t":"Professional Motorcycle Technician Training","d":"This course is designed for real-world skill development, with 90% of training conducted through hands-on, workshop-based practice and the remainder through theory and assessment. Participants…"},"bn":{"t":"প্রফেশনাল মোটরসাইকেল টেকনিশিয়ান ট্রেনিং","d":"এই কোর্সটি বাস্তবমুখী দক্ষতা উন্নয়নের জন্য প্রণীত, যেখানে প্রশিক্ষণের ৯০% হাতে-কলমে ওয়ার্কশপভিত্তিক এবং অবশিষ্ট অংশ থিওরি ও মূল্যায়নের মাধ্যমে সম্পন্ন করা হয়। প্রশিক্ষণকালে শিক্ষার্থীরা ওয়ার্কশপ…"}},{"slug":"welding-and-fabrication","en":{"t":"Welding & Fabrication Course","d":"This is an integrated programme for teaching the younger generation high-quality welding skills through hands-on practice."},"bn":{"t":"ওয়েল্ডিং অ্যান্ড ফেব্রিকেশন কোর্স","d":"এটি তরুণ প্রজন্মকে হাতে-কলমে হাই-কোয়ালিটির ওয়েল্ডিং দক্ষতা শেখানোর একটি সমন্বিত কর্মসূচি।"}},{"slug":"electronics-appliance-repair-and-maintenance","en":{"t":"Electronic Appliances Repairing & Maintenance Training Programme","d":"In today's modern age, the use of electronic components is constantly increasing — from households to industrial factories. Due to this enormous demand, a vast employment opportunity has emerged in…"},"bn":{"t":"ইলেকট্রনিক অ্যাপ্লায়েন্সেস রিপেয়ারিং ও মেইনটেন্যান্স ট্রেনিং প্রোগ্রাম","d":"বর্তমান আধুনিক যুগে গৃহস্থালি থেকে শুরু করে শিল্পকারখানা—সবখানেই ইলেকট্রনিক যন্ত্রাংশের ব্যবহার প্রতিনিয়ত বাড়ছে। এই বিপুল চাহিদার কারণে ইলেকট্রনিক অ্যাপ্লায়েন্সেস মেরামত ও রক্ষণাবেক্ষণ (Repairing…"}},{"slug":"professional-automotive-electrician-training","en":{"t":"Professional Automotive Electrician Training","d":"In the modern age, the control and performance of motor vehicles have become entirely dependent on electronics and computerized systems. In a contemporary vehicle, countless sensors, complex…"},"bn":{"t":"প্রফেশনাল অটোমোটিভ ইলেকট্রিশিয়ান ট্রেনিং","d":"আধুনিক যুগে মোটরযানগুলোর নিয়ন্ত্রণ ও কার্যক্ষমতা পুরোপুরি ইলেকট্রনিক্স ও কম্পিউটারাইজড সিস্টেমের ওপর নির্ভরশীল হয়ে পড়েছে। বর্তমানের একটি গাড়িতে ইঞ্জিন কন্ট্রোল থেকে শুরু করে নিরাপত্তা ও আরামদায়ক…"}}];
 let currentFeature = 'skill';
 
 function renderPromo(key) {
@@ -577,7 +642,48 @@ function renderPromo(key) {
         <a class="btn btn-primary" href="${f.href}" target="_blank" rel="noopener">${escapeHtml(cta)} →</a>
       </div>
     </div>`;
+  renderCourseFlow();   // keep the separate flowchart card in sync
 }
+
+// Separate course-flowchart component (its own card beside the promo). Shown only for the skill
+// feature; the root badge branches into course nodes.
+function renderCourseFlow() {
+  if (currentFeature !== 'skill') { flowCard.style.display = 'none'; flowCard.innerHTML = ''; return; }
+  flowCard.style.display = '';
+  const badge = featureData.skill.badge[lang] || featureData.skill.badge.en;
+  const nodes = SKILL_COURSES.map(x =>
+    `<div class="flow-item"><button type="button" class="flow-node" data-slug="${x.slug}" aria-expanded="false">${escapeHtml((x[lang] || x.en).t)}</button><div class="flow-child"></div></div>`
+  ).join('');
+  flowCard.innerHTML = `
+    <div class="flow-card-head">${lang === 'bn' ? 'কোর্সসমূহ' : 'Courses'}</div>
+    <div class="flow-card-sub">${lang === 'bn' ? 'যেকোনো কোর্সে ক্লিক করে বিস্তারিত দেখুন' : 'Click any course for details'}</div>
+    <div class="flow">
+      <div class="flow-root"><span class="badge"><span class="dot-badge"></span>${escapeHtml(badge)}</span></div>
+      <div class="flow-branch">${nodes}</div>
+    </div>`;
+}
+
+// Flowchart interaction (delegated on the flow card — survives re-renders): clicking a course node
+// expands a connected detail node with that course's description + a link to its course page.
+flowCard.addEventListener('click', (e) => {
+  const node = e.target.closest('.flow-node');
+  if (!node) return;
+  const child = node.parentElement.querySelector('.flow-child');
+  if (node.getAttribute('aria-expanded') === 'true') {      // collapse
+    node.setAttribute('aria-expanded', 'false');
+    child.classList.remove('open');
+    child.innerHTML = '';
+    return;
+  }
+  const course = SKILL_COURSES.find(x => x.slug === node.dataset.slug);
+  if (!course) return;
+  const d = course[lang] || course.en;
+  const url = `https://assunnahfoundation.org/activities/skill-development-institute/courses/${course.slug}`;
+  child.innerHTML = `<div class="flow-detail"><p class="flow-desc">${escapeHtml(d.d)}</p>` +
+    `<a class="flow-link" href="${url}" target="_blank" rel="noopener">${lang === 'bn' ? 'কোর্স দেখুন' : 'View course'} →</a></div>`;
+  child.classList.add('open');
+  node.setAttribute('aria-expanded', 'true');
+});
 
 let ws, micStream, cameraStream, myvad;
 let cameraEnabled = false;   // camera is opt-in (off by default)
