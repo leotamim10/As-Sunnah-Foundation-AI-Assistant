@@ -413,6 +413,51 @@
     50% { opacity: 0.4; transform: scale(0.8); }
   }
 
+  /* ── Text composer ── */
+  .composer {
+    width: 100%;
+    max-width: 640px;
+    display: flex;
+    gap: 8px;
+    padding: 8px 4px 2px;
+    flex-shrink: 0;
+    z-index: 2;
+  }
+
+  .composer input {
+    flex: 1;
+    min-width: 0;
+    font-family: var(--font-body);
+    font-size: 13.5px;
+    padding: 10px 14px;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    background: var(--c-surface);
+    color: var(--c-text-bright);
+    outline: none;
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .composer input::placeholder { color: var(--c-text-dim); }
+  .composer input:focus { border-color: var(--c-listen); background: var(--c-surface-hover); }
+
+  .composer button {
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 0 18px;
+    border: 1px solid rgba(74,222,128,0.15);
+    border-radius: 10px;
+    background: var(--c-listen-dim);
+    color: var(--c-listen);
+    cursor: pointer;
+    transition: background 0.2s, opacity 0.2s;
+    white-space: nowrap;
+  }
+
+  .composer button:hover { background: rgba(74,222,128,0.18); }
+  .composer button:disabled { opacity: 0.4; cursor: default; }
+
 </style>
 </head>
 <body>
@@ -422,7 +467,7 @@
     <div class="logo-mark"></div>
     <h1>আস-সুন্নাহ ফাউন্ডেশন</h1>
   </div>
-  <span class="model-label">Gemini Flash · Azure bn-BD</span>
+  <span class="model-label">Gemini Flash · Edge bn-BD</span>
   <div id="status" class="status-pill disconnected">সংযোগ বিচ্ছিন্ন</div>
 </header>
 
@@ -453,6 +498,12 @@
       ক্লাউড এআই
     </span>
   </div>
+
+  <!-- Text composer — type a question (same WS {text} path the gateway already handles) -->
+  <form id="composer" class="composer" autocomplete="off">
+    <input id="textInput" type="text" placeholder="প্রশ্ন লিখুন…" aria-label="প্রশ্ন লিখুন" maxlength="500" />
+    <button id="sendBtn" type="submit">পাঠান</button>
+  </form>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.22.0/dist/ort.min.js"></script>
@@ -464,6 +515,7 @@ const messagesDiv = $('messages'), statusEl = $('status');
 const stateDot = $('stateDot'), stateText = $('stateText');
 const viewportWrap = $('viewportWrap');
 const waveformCanvas = $('waveform');
+const composer = $('composer'), textInput = $('textInput'), sendBtn = $('sendBtn');
 const waveformCtx = waveformCanvas.getContext('2d');
 
 // ── i18n (bn-BD) ──
@@ -851,6 +903,31 @@ cameraToggle.addEventListener('click', () => {
   cameraToggle.textContent = cameraEnabled ? t('camera.on') : t('camera.off');
   video.style.opacity = cameraEnabled ? 1 : 0.3;
 });
+
+// ── Text composer ── type a question; same {text} WS path the gateway already handles.
+function escapeHtml(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+function sendText() {
+  const text = textInput.value.trim();
+  if (!text) return;
+  if (!ws || ws.readyState !== WebSocket.OPEN) return;
+  if (state === 'processing') return; // a turn is already in flight
+
+  // If the assistant is speaking, interrupt it first (same barge-in as voice).
+  if (state === 'speaking') {
+    stopPlayback();
+    ignoreIncomingAudio = true;
+    ws.send(JSON.stringify({ type: 'interrupt' }));
+  }
+
+  textInput.value = '';
+  setState('processing');
+  setStatus('processing');
+  addMessage('user', escapeHtml(text)); // escaped — user text goes through innerHTML in addMessage
+  ws.send(JSON.stringify({ text }));
+}
+
+composer.addEventListener('submit', (e) => { e.preventDefault(); sendText(); });
 
 // ── Init ──
 async function init() {
