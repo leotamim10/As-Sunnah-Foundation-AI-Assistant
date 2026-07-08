@@ -1,0 +1,952 @@
+{
+  "slug": "skill-development-institute",
+  "cardImage": "skill-development-institute",
+  "heroBackground": "skill-development-institute-hero",
+  "routeExtension": "skill-development-institute",
+  "heroImages": [
+    {
+      "src": "skill-development-institute-1",
+      "alt": "skill-development-institute-1",
+      "position": "main"
+    },
+    {
+      "src": "skill-development-institute-2",
+      "alt": "skill-development-institute-2",
+      "position": "small-top"
+    },
+    {
+      "src": "skill-development-institute-3",
+      "alt": "skill-development-institute-3",
+      "position": "medium"
+    },
+    {
+      "src": "skill-development-institute-4",
+      "alt": "skill-development-institute-4",
+      "position": "small-bottom"
+    }
+  ],
+  "en": {
+    "title": "As-Sunnah Skill Development Institute",
+    "description": "An institute for self-development and skill enhancement registered by the National Skill Development Authority.",
+    "content": "<h3>Program Details</h3><p class='editor-paragraph editor-empty'></p><div data-youtube-video=\"\"><iframe class=\"editor-youtube-video\" width=\"640\" height=\"480\" allowfullscreen=\"true\" autoplay=\"false\" disablekbcontrols=\"false\" enableiframeapi=\"false\" endtime=\"0\" ivloadpolicy=\"0\" loop=\"false\" modestbranding=\"true\" origin=\"\" playlist=\"\" src=\"https://www.youtube.com/embed/4-ngh5KB0bQ\" start=\"0\"></iframe></div><p class=\"editor-paragraph editor-empty\"></p><p class='editor-paragraph'>As-Sunnah Skill Development Institute is an institution for self-development and skill enhancement. This affiliate of the As-Sunnah Foundation, registered with the National Skill Development Authority, was established in 2022. Since its inception, it has been working to bring information technology and technical education to all levels of society, with the goal of eliminating unemployment and creating employment opportunities.</p><p class=\"editor-paragraph editor-empty\"></p><p class='editor-paragraph'>The specialty of this institute is that it provides computer, information technology, and various technical training courses in a completely separate environment and with suitable curricula for both men and women. There are also special scholarships for talented and underprivileged students, enabling them to receive training free of charge.</p><p class=\"editor-paragraph editor-empty\"></p><p class='editor-paragraph'>By developing skilled human resources, this institute has already started to solidify its position as an effective tool for alleviating the country's unemployment problem and fostering self-employment.</p>",
+    "features": [
+      {
+        "title": "Project Goals & Objectives",
+        "values": [
+          "Skill Enhancement",
+          "Unemployment Alleviation",
+          "Employment Creation",
+          "Sustainable Poverty Reduction"
+        ]
+      },
+      {
+        "title": "Course Descriptions",
+        "values": [
+          "Small Business Management",
+          "Smart Tailoring and Fashion Design",
+          "The Art of Sales and Marketing",
+          "As-Sunnah Gulzar Bahar Khanam Driving School",
+          "Professional Cooking and Catering Management",
+          "The Art of Creation",
+          "English Language Program (ELP)",
+          "English Language Instruction Training for Educators (ELITE)",
+          "NCTB Teacher Training Program (TTP)",
+          "Mobile Phone Repair Training",
+          "Refrigeration and Air Conditioning",
+          "Professional Automotive Technician Training",
+          "Professional Motorcycle Technician Training",
+          "Welding and Fabrication Course",
+          "Electronic Appliances Repairing and Maintenance Training Program",
+          "Professional Automotive Electrician Training"
+        ]
+      },
+      {
+        "title": "Expenditure Sectors",
+        "values": [
+          "Land purchase for the institute",
+          "Construction of the institute's infrastructure",
+          "Procurement of equipment",
+          "Covering accommodation and food costs for trainees through scholarships",
+          "Management expenses"
+        ]
+      }
+    ],
+    "tagline": "Join the effort to alleviate poverty and create employment.",
+    "courses": [
+      {
+        "slug": "small-business-management",
+        "title": "Small Business Management",
+        "description": "The primary goal of this course is to enhance the technical skills of educated unemployed individuals and create employment opportunities for them. Upon completion, trained youth are placed in various organizations according to their qualifications.",
+        "cardImage": "small-business-management-card",
+        "coverImage": "small-business-management-modal-cover",
+        "courseSubjects": [
+          "Microsoft Office",
+          "Theoretical & Practical Accounting",
+          "Graphic Design",
+          "Meta Marketing",
+          "Video Editing",
+          "English Language",
+          "Generative AI Tools"
+        ],
+        "courseType": ["3 Months | Residential Course | For Men"]
+      },
+      {
+        "slug": "smart-tailoring-and-fashion-design",
+        "title": "Smart Tailoring & Fashion Design",
+        "description": "With the aim of skill development and empowerment of underprivileged women, various types of handicraft and technical training are provided. Upon completion, each participant receives self-reliance materials worth BDT 30,000–50,000.",
+        "cardImage": "smart-tailoring-and-fashion-design-card",
+        "coverImage": "smart-tailoring-and-fashion-design-modal-cover",
+        "courseSubjects": [
+          "Tailoring",
+          "Tie-Dye",
+          "Block-Batik",
+          "Hand Embroidery & Crafting",
+          "Basic Fashion Design",
+          "Basic Business Development"
+        ],
+        "courseType": ["3 Months | Residential Course | For Women"]
+      },
+      {
+        "slug": "the-art-of-sales-and-marketing",
+        "title": "The Art of Sales and Marketing",
+        "description": "The primary objective of this course is to advance Bangladesh's business and economic sectors by developing skilled and experienced professionals in sales and marketing.",
+        "cardImage": "the-art-of-sales-and-marketing-card",
+        "coverImage": "the-art-of-sales-and-marketing-modal-cover",
+        "courseSubjects": [
+          "Communication, Networking & Personal Branding",
+          "Customer Psychology & Persuasion Techniques",
+          "Advertising, Branding & Marketing Strategy",
+          "Fundamentals of Marketing",
+          "Meta Marketing",
+          "Modern Sales & High-Impact Closing Skills",
+          "Hands-on Sales Training in Real Markets",
+          "Job, Business & Career-Ready Professional Skills"
+        ],
+        "courseType": ["3 Months | Residential Course | For Men"]
+      },
+      {
+        "slug": "driving-training",
+        "title": "As-Sunnah Gulzar Bahar Khanam Driving School",
+        "description": "Driving training is provided to help unemployed and low-income youth acquire professional driving skills and create self-employment opportunities.",
+        "cardImage": "driving-training-card",
+        "coverImage": "driving-training-modal-cover",
+        "courseSubjects": [
+          "Theoretical & Practical Driving Training",
+          "Vehicle Parts Identification & Maintenance",
+          "Traffic Laws & Regulations",
+          "60 Hours of Direct Driving Practice & Pre-Driving Inspection",
+          "Emergency Driving & Safety Techniques",
+          "Vehicle Fuel & Routine Checkup Techniques",
+          "Psychological Concepts Related to Driving",
+          "Basic Introduction to Dhaka City Map",
+          "Preparation for Bangladesh Driving License Written, Oral & Practical Exams"
+        ],
+        "courseType": ["15 Days (60 Hours) | Residential Course | For Men"]
+      },
+      {
+        "slug": "entrepreneurship-in-the-footwear-industry",
+        "title": "Entrepreneurship in the Footwear Industry",
+        "description": "Bangladesh's footwear and shoe industry is a promising sector that meets domestic demand while making a significant contribution to international markets. The demand for skilled entrepreneurs and trained human resources in this sector is growing day by day. As-Sunnah Foundation has launched the 'Footwear & Shoe Industry Entrepreneurship Course' to create self-employment and job opportunities for unemployed and motivated youth.",
+        "cardImage": "shoe-making-course-card",
+        "coverImage": "shoe-making-course-modal-cover",
+        "active": false,
+        "courseSubjects": [
+          "Manufacturing Various Types of Shoes Based on Leather and Fabric Classification",
+          "Modern & Traditional Shoe Design",
+          "High-Quality Materials & Technology",
+          "Hands-on Shoe Making Training",
+          "Market Analysis & Business Strategy",
+          "Branding & Marketing",
+          "Setting Up Industry to International Compliance Standards",
+          "Industrial Visit"
+        ],
+        "courseType": ["4 Months | Residential Course | For Men"]
+      },
+      {
+        "slug": "chef-training-and-kitchen-management",
+        "title": "Professional Cooking & Catering Management",
+        "description": "The demand for skilled chefs and effective kitchen managers in the hospitality and food industry is growing worldwide, including in Bangladesh. Professional cooking and kitchen management skills are indispensable across hotels, restaurants, catering services, and personal ventures. To meet this demand and open new employment pathways for unemployed youth, As-Sunnah Foundation has launched the 'Chef Training & Kitchen Management' course.",
+        "cardImage": "chef-training-and-kitchen-management-card",
+        "coverImage": "chef-training-and-kitchen-management-modal-cover",
+        "courseSubjects": [
+          "Fundamental Techniques of Food & Beverage Preparation",
+          "Use & Maintenance of Cooking Equipment & Machinery",
+          "Hygiene, Safety Protocols & Workplace Cleanliness",
+          "Basic Fish & Meat Cutting Methods",
+          "Mother Sauces, Soups & Various Cooking Techniques (Including Heat & Time Control)",
+          "Hands-on Practical Training with 100+ Diverse Recipes",
+          "Plating & Garnishing",
+          "Waste Management & Inventory Control",
+          "Determining Nutritional Value & Preparing Budget Charts",
+          "Real-World Food Product Marketing Experience"
+        ],
+        "courseType": ["3 Months | Residential Course | For Men"]
+      },
+      {
+        "slug": "the-art-of-content-creation",
+        "title": "The Art of Content Creation",
+        "description": "In today's digital age, video content plays an immense role in business promotion and product marketing. While many products in Bangladesh have halal credentials, some entrepreneurs avoid promotional activities due to the use of impermissible elements in videography. We aim to develop a team of skilled and conscious content creators who follow halal principles in product promotion — creators who can produce videos the halal way, create engaging and impactful content, and accurately represent products.\n\nOur goal is to ensure halal video production, create content within Islamic guidelines, highlight the importance of halal certification and branding, and build a trustworthy and values-driven identity for consumers.\n\nThrough these skills, you will not only earn an income but grow into a confident professional — ready to compete in both domestic and international markets.",
+        "cardImage": "the-art-of-content-creation-card",
+        "coverImage": "the-art-of-content-creation-modal-cover",
+        "courseSubjects": [
+          "Script Writing",
+          "Video Direction Techniques",
+          "Cinematography",
+          "Basic Lighting",
+          "Video Editing",
+          "Basic Sound Design",
+          "AI-Powered Content Creation",
+          "Branding",
+          "Documentary & OVC Production",
+          "Story-Based Advertising",
+          "Ad Creation for E-Commerce & F-Commerce"
+        ],
+        "courseType": ["3 Months | Residential Course | For Men"]
+      },
+      {
+        "slug": "english-language-program",
+        "title": "English Language Program (ELP)",
+        "cardImage": "sail-to-success-english-language-card",
+        "coverImage": "sail-to-success-english-language-cover",
+        "description": "In today's world, English is not merely a means of communication — it is one of the primary tools for advancing in education, employment, business, and international arenas. Our country has countless talented youth who, despite having the necessary knowledge and capabilities, miss out on desired opportunities due to a lack of confidence in English — especially in Listening and Speaking.\n\nWith this reality in mind, the 'Sail to Success: English Language Program' was launched to make youth fluent, confident, and effective communicators in English. This course develops all four language skills — Listening, Speaking, Reading, and Writing — in an integrated manner, preparing participants for success in academic, professional, and international contexts. IELTS preparation has also been incorporated to make the course more productive and practical.",
+        "courseSubjects": [
+          "Step-by-step English learning through 4 defined levels from Beginner to Intermediate, following international CEFR standards.",
+          "Integrated and practical development of all four language skills: Listening, Speaking, Reading, and Writing.",
+          "Regular Grammar Classes, Vocabulary Classes, and Speaking Sessions alongside the four skills.",
+          "Real-world practice of English use in daily life, education, and the workplace.",
+          "Practical training in Workplace English, Interview Skills, Presentation Skills, and Formal Communication.",
+          "Language practice through Reading Club, Debate & Speech Competition, and various Interactive Activities.",
+          "Continuous assessment through weekly progress evaluations, monthly exams, and Speaking Tests."
+        ],
+        "courseType": ["4 Months | Residential Course | For Men"]
+      },
+      {
+        "slug": "english-language-instruction-for-educators",
+        "title": "English Language Instruction Training for Educators (ELITE)",
+        "cardImage": "english-language-instruction-for-educators-card",
+        "coverImage": "english-language-instruction-for-educators-cover",
+        "description": "A skilled teacher is not merely a conveyor of knowledge — they are the architect of a learner's thinking, language, and confidence. However, the reality is that in our country, many English language teachers, despite having subject knowledge, are unable to achieve the desired outcomes due to a lack of adequate training in modern teaching methodologies, effective classroom management, and practical application.\n\nTo address this need and gap, the 'English Language Instruction Training for Educators' has been launched. Participants will master student-centred approaches and modern strategies for teaching English, while also having the opportunity to review and improve their own teaching practices. Through a combination of practical teaching practice and professional ethics, this course will help educators become more skilled, confident, and impactful.",
+        "courseType": ["2 Months | Residential Course | For Men"],
+        "courseSubjects": [
+          "Strategies for applying Learner-Centered Teaching and Modern Teaching Methodology.",
+          "Analysis and teaching methods for Grammar, Vocabulary, Pronunciation, and all four Language Skills.",
+          "Effective instructional strategies for developing Listening, Speaking, Reading, and Writing skills.",
+          "Lesson Planning, Material Design, and Classroom Activity preparation.",
+          "Effective Classroom Management and strategies to increase student engagement.",
+          "Methods for building Learner Awareness, understanding Learning Styles, and fostering Learner Autonomy.",
+          "Peer Observation, Demonstration Classes, and Reflective Teaching Practice.",
+          "Practical training through Written Assignments, Teaching Portfolios, and Micro-Teaching.",
+          "Strategies for Professional Development, Self-Evaluation, and Continuous Improvement."
+        ]
+      },
+      {
+        "slug": "nctb-teacher-training-program",
+        "title": "NCTB Teacher Training Program (TTP)",
+        "cardImage": "coming_soon",
+        "coverImage": "nctb-teacher-training-program-cover",
+        "description": "In today's evolving education system, the key challenge is not just teaching in the classroom, but preparing students to be fit for the times. Despite the capability and dedication of teachers in our country, desired learning outcomes are often not achieved due to a lack of proper understanding of modern teaching methods and assessment processes — particularly in competency-based education (CBE), planned lesson design, and technology-integrated active teaching.",
+        "courseType": ["2 Months | Residential Course | For Men"],
+        "courseSubjects": [
+          "Modern Teaching Methods: Practical training in contemporary and effective classroom teaching methods aligned with NCTB guidelines.",
+          "Competency & Outcome-Based Education: Core concepts of Competency-Based Education (CBE) and Outcome-Based Learning (OBL), and their correct application in the classroom.",
+          "Planned Lesson Delivery: Techniques for properly preparing Lesson Plans, setting learning objectives, and successfully implementing them in class.",
+          "Active & Participatory Learning: Ensuring the use of Active Learning, Group Work, Pair Work, and other Participatory Techniques in the classroom.",
+          "Classroom & Time Management: Creating a positive and structured learning environment through effective Classroom Management and Time Management.",
+          "Modern Assessment Methods: Mastering modern Formative and Summative assessment techniques to accurately measure student achievement and progress.",
+          "Technology Integration & Teaching Aids: Effective use of Teaching Aids, ICT Integration, and Digital Learning Resources to enhance the quality of instruction.",
+          "Practical Skills & Continuous Improvement: Direct refinement and development of teaching skills through Micro-Teaching, Peer Observation, and mutual feedback."
+        ]
+      },
+      {
+        "slug": "mobile-phone-repair",
+        "title": "Mobile Phone Repair Training",
+        "cardImage": "mobile-phone-repair-card",
+        "coverImage": "mobile-phone-repair-cover",
+        "description": "This is an integrated training programme designed to equip the younger generation with skills in mobile phone servicing and repairing. Participants will develop professional expertise in mobile hardware and software, fault diagnosis and resolution, customer handling, business strategies, and modern repair technologies — preparing them to excel in the job market and establish their own businesses.",
+        "courseType": ["4 Months | Residential Course | For Men"],
+        "courseSubjects": [
+          "Introduction to Servicing Tools & Their Proper Usage",
+          "Theoretical and Practical Knowledge of Basic Electronics and Motherboard Circuits",
+          "Comprehensive Understanding of Schematic Diagrams",
+          "Section-Based Classes for All Levels (2G/4G/5G)",
+          "Disassembly of Phones from 1G to 4G",
+          "Operating Principles of 5G Mobile Phones & Basic Technical Concepts",
+          "Basic Troubleshooting & Dead Phone Repair",
+          "Software Classes (Flash, Unlock, FRP, Advanced Programming)",
+          "Use of Paid Tools (UMT Dongle, Unlock Tool)",
+          "Practical Classes & Hands-on Training",
+          "1 Month Mandatory Internship & Practical Customer Service",
+          "Special Soft Skill Development Classes for Self-Improvement, Customer Service & Successful Career Building"
+        ]
+      },
+      {
+        "slug": "refrigeration-and-air-conditioning",
+        "title": "Refrigeration & Air Conditioning",
+        "cardImage": "refrigeration-and-air-conditioning-trade-card",
+        "coverImage": "refrigeration-and-air-conditioning-trade-cover",
+        "description": "This course is an integrated training programme aimed at making the younger generation proficient in refrigeration and air conditioning for both domestic and industrial sectors.\n\nThrough this course, participants will gain expertise in servicing, repairing, and installing refrigerators, deep freezers, and window and split-type air conditioners, as well as light engineering work. Students will learn practical skills through hands-on training, safety awareness, and technical diagram analysis using modern methods.\n\nThe course follows a structure of 20% theoretical and 80% practical training, enabling participants to become independently professional with ease.",
+        "courseType": ["3 Months | Residential Course | For Men"],
+        "courseSubjects": [
+          "Performing Technical Calculations Using Mathematical Concepts.",
+          "Following OSH Policies in the Workplace.",
+          "Fundamental Tasks in the Light Engineering Sector.",
+          "Use of Hand Tools, Power Tools & Measuring Instruments.",
+          "Basic Electricity & Electronics.",
+          "Tube Processing, Gas Welding & Brazing.",
+          "Servicing of Compressors, Refrigerators & Deep Freezers.",
+          "Installation & Servicing of Window, Cassette & Split AC Units.",
+          "Practice Working at Heights on Ropes.",
+          "Safety & Emergency Response Practice.",
+          "Islamic Knowledge & Soft Skills"
+        ]
+      },
+      {
+        "slug": "professional-automotive-technician",
+        "title": "Professional Automotive Technician Training",
+        "cardImage": "professional-automotive-technician-card",
+        "coverImage": "professional-automotive-technician-cover",
+        "description": "This course is specially designed for those who want to become skilled automotive technicians starting from scratch.\n\nUpon completion, participants will not only gain proficiency in vehicle mechanical and electrical systems, but will also develop expertise in professional ethics, customer service, and workshop safety — building the confidence needed to enter employment or start their own garage.",
+        "courseType": ["4 Months | Residential Course | For Men"],
+        "courseSubjects": [
+          "Workshop Safety & Tool Usage Guidelines",
+          "Vehicle Types, Body Styles & Engine Location Identification",
+          "Engine Tune-Up, Fuel System, Cooling, Lubrication & EFI",
+          "Brake, Steering & Suspension Servicing",
+          "LPG/CNG Kit Installation & Calibration Basics",
+          "Modern Diagnostics: OBD-II, CAN Bus, ADAS",
+          "Final Project & Capstone Assessment"
+        ]
+      },
+      {
+        "slug": "professional-motorcycle-technician",
+        "title": "Professional Motorcycle Technician Training",
+        "cardImage": "professional-motorcycle-technician-card",
+        "coverImage": "professional-motorcycle-technician-cover",
+        "description": "This course is designed for real-world skill development, with 90% of training conducted through hands-on, workshop-based practice and the remainder through theory and assessment. Participants progressively gain practical experience in workshop safety and tool usage, engine, fuel and electrical systems, servicing, and fault diagnosis.\n\nProblem-solving skills are developed through real-world tasks including carburettor and EFI tuning, suspension and brake servicing. Equal emphasis is placed on professional ethics, safety, and maintaining high standards of customer service.",
+        "courseType": ["4 Months | Residential Course | For Men"],
+        "courseSubjects": [
+          "Workshop Safety & Tool Usage Guidelines",
+          "Motorcycle Fundamentals (Frame, Engine, Various Systems)",
+          "Engine, Fuel System & Transmission Servicing",
+          "Electrical & Charging System Maintenance",
+          "Suspension, Wheel & Brake Maintenance",
+          "Diagnostic Equipment Use & Fault Finding",
+          "Customer Handling & Documentation",
+          "Dismantle, Service, Rebuild & Road Test"
+        ]
+      },
+      {
+        "slug": "welding-and-fabrication",
+        "title": "Welding & Fabrication Course",
+        "cardImage": "welding-and-fabrication-card",
+        "coverImage": "welding-and-fabrication-cover",
+        "description": "This is an integrated programme for teaching the younger generation high-quality welding skills through hands-on practice.",
+        "courseType": ["4 Months | Residential Course | For Men"],
+        "courseSubjects": [
+          "ARC, MIG, TIG, Spot & Gas Welding",
+          "1G – 6G Positional Practicals",
+          "Welding Merit & PPE Usage",
+          "Welding Drawing & Blueprint Analysis",
+          "Mechanical & Gas Merit",
+          "Precision Inspection & Workmanship Practicals",
+          "Safety Awareness",
+          "Interview Skills & Job Preparation",
+          "Basic Islamic Knowledge"
+        ]
+      },
+      {
+        "slug": "electronics-appliance-repair-and-maintenance",
+        "title": "Electronic Appliances Repairing & Maintenance Training Programme",
+        "cardImage": "coming_soon",
+        "coverImage": "electronics-appliance-repair-and-maintenance-cover",
+        "description": "In today's modern age, the use of electronic components is constantly increasing — from households to industrial factories. Due to this enormous demand, a vast employment opportunity has emerged in the electronic appliances repairing and maintenance sector for skilled personnel. However, due to partial or conventional knowledge, many are unable to properly resolve issues with modern and complex devices in this field. In particular, many youth fail to build the desired career due to a lack of practical knowledge in advanced PCB repairing, circuit design, and renewable energy technology.",
+        "courseType": ["4 Months | Residential Course | For Men"],
+        "courseSubjects": [
+          "Basic Electrical & Electronics: Acquiring essential theoretical and practical knowledge in fundamental Electrical & Electronics concepts.",
+          "Circuit & Motor Controlling: Practical skills in Series & Parallel Circuits, Power Supply, Motor Controlling, and Motor Starters.",
+          "Component Testing & Operation: Detailed knowledge of accurately identifying, testing, and understanding the operation of various electronic components.",
+          "Soldering & Advanced PCB Repairing: Practical skills in Soldering, De-soldering, basic circuit repairing, and Advanced PCB repair.",
+          "Circuit Assembly & PCB Design: Techniques for assembling new circuits and designing PCBs using modern technology.",
+          "Power & Solar System Solutions: Installation, fault diagnosis, and repair of IPS, UPS, AVR, and Solar Systems.",
+          "Appliances Repairing & Maintenance: Capability to successfully repair and maintain various electronic appliances used in daily life.",
+          "Basic Computer Education: Acquiring fundamental Basic Computer Skills for professional use.",
+          "Safety & Emergency Response: Practical training in Safety Practices to prevent workplace accidents and rapid Emergency Response."
+        ]
+      },
+      {
+        "slug": "professional-automotive-electrician-training",
+        "title": "Professional Automotive Electrician Training",
+        "cardImage": "coming_soon",
+        "coverImage": "professional-automotive-electrician-training-cover",
+        "description": "In the modern age, the control and performance of motor vehicles have become entirely dependent on electronics and computerized systems. In a contemporary vehicle, countless sensors, complex circuits, and advanced wiring govern everything from engine control to safety and comfortable travel. As a result, the market demand for modern 'automotive electricians' — specialists in vehicle electrical systems — far exceeds that for conventional auto mechanics. However, many youth are unable to enter this promising sector due to a lack of practical knowledge in modern diagnostics and scanner operation.",
+        "courseType": ["4 Months | Residential Course | For Men"],
+        "courseSubjects": [
+          "Necessary Precautions & Safety When Working on Electrical Systems",
+          "Structure of Major Electrical Components & Systems in Modern Motor Vehicles",
+          "Motor Vehicle Electrical Circuit Layout & Wiring Practicals",
+          "Structure, Operation & Troubleshooting of Sensors & Actuators",
+          "Use of Various Testing Instruments for Fault Diagnosis",
+          "Modern Diagnostics: OBD-II Scanner, Fault Codes & Live Data",
+          "Diagnosis & Repair of Electrical Components & Systems"
+        ]
+      }
+    ],
+    "stats": {
+      "title": "Impact Statistics",
+      "table": {
+        "columns": ["Course", "2022", "2023", "2024", "2025"],
+        "rows": [
+          ["Small Business Management", "42", "179", "496", "328 (Ongoing)"],
+          [
+            "Smart Tailoring and Fashion Design",
+            "-",
+            "23",
+            "179",
+            "179 (Ongoing)"
+          ],
+          ["Driving Training", "-", "-", "-", "95 (Ongoing)"],
+          ["The Art of Sales and Marketing", "-", "-", "-", "79 (Ongoing)"],
+          ["Chef and Kitchen Management", "-", "-", "-", "36 (Ongoing)"],
+          ["Language and Leadership", "-", "-", "-", "139 (Ongoing)"],
+          [
+            "Entrepreneurship in the Footwear Industry",
+            "-",
+            "-",
+            "-",
+            "45 (Ongoing)"
+          ],
+          ["The Art of Content Creation", "-", "-", "-", "30 (Ongoing)"]
+        ],
+        "footer": {
+          "label": "Total",
+          "values": ["1750 (Ongoing)"]
+        }
+      }
+    },
+    "upcomingCourses": [
+      {
+        "title": "Plumbing and Pipe Fitting Training",
+        "icon": "PlumbingCourseIcon"
+      },
+      {
+        "title": "Electrical Training",
+        "icon": "ElectricCourseIcon"
+      },
+      {
+        "title": "Masonry Training",
+        "icon": "MasonCourseIcon"
+      },
+      {
+        "title": "Rod Binding Training",
+        "icon": "RodBindingCourseIcon"
+      },
+      {
+        "title": "Tiles Installation Training",
+        "icon": "TilesCourseIcon"
+      },
+      {
+        "title": "Painting Training",
+        "icon": "PaintingCourseIcon"
+      },
+      {
+        "title": "Gardening Training",
+        "icon": "GardeningCourseIcon"
+      },
+      {
+        "title": "Street Food Training",
+        "icon": "StreetFoodCourseIcon"
+      }
+    ],
+    "faq": [
+      {
+        "question": "How can I enroll in a course?",
+        "answer": "Announcements are made on the Facebook page and the website's notice board before each batch begins. Please follow the instructions on the page and the website."
+      }
+    ]
+  },
+  "bn": {
+    "title": "আস-সুন্নাহ স্কিল ডেভেলপমেন্ট ইনস্টিটিউট",
+    "description": "জাতীয় দক্ষতা উন্নয়ন কর্তৃপক্ষ কর্তৃক নিবন্ধিত একটি আত্ম-উন্নয়ন ও দক্ষতা বৃদ্ধিমূলক প্রতিষ্ঠান।",
+    "content": "<h3>কার্যক্রমের বিবরণ</h3><p class='editor-paragraph editor-empty'></p><div data-youtube-video=\"\"><iframe class=\"editor-youtube-video\" width=\"640\" height=\"480\" allowfullscreen=\"true\" autoplay=\"false\" disablekbcontrols=\"false\" enableiframeapi=\"false\" endtime=\"0\" ivloadpolicy=\"0\" loop=\"false\" modestbranding=\"true\" origin=\"\" playlist=\"\" src=\"https://www.youtube.com/embed/4-ngh5KB0bQ\" start=\"0\"></iframe></div><p class=\"editor-paragraph editor-empty\"></p><p class='editor-paragraph'>আস-সুন্নাহ স্কিল ডেভেলপমেন্ট ইনস্টিটিউট একটি আত্ম-উন্নয়ন ও দক্ষতা বৃদ্ধিমূলক প্রতিষ্ঠান। জাতীয় দক্ষতা উন্নয়ন কর্তৃপক্ষ কর্তৃক নিবন্ধিত আস-সুন্নাহ ফাউন্ডেশনের এই অঙ্গপ্রতিষ্ঠানটি ২০২২ সালে প্রতিষ্ঠিত হয়। প্রতিষ্ঠালগ্ন থেকে এটি তথ্যপ্রযুক্তি ও কারিগরি শিক্ষাকে সমাজের সর্বস্তরে পৌঁছে দেয়া, বেকারত্ব দূরীকরণ ও কর্মসংস্থান সৃষ্টির লক্ষ্যে কাজ করে যাচ্ছে।</p><p class=\"editor-paragraph editor-empty\"></p><p class='editor-paragraph'>এই ইনস্টিটিউটের বিশেষত্ব হলো—এখানে নারী ও পুরুষদের জন্য সম্পূর্ণ পৃথক পরিবেশে এবং উপযোগী পাঠক্রমে কম্পিউটার, তথ্যপ্রযুক্তি ও বিভিন্ন কারিগরি প্রশিক্ষণ প্রদান করা হয়। মেধাবী ও অপ্রতুল সুবিধাপ্রাপ্ত শিক্ষার্থীদের জন্য বিশেষ স্কলারশিপের ব্যবস্থাও রয়েছে, যার মাধ্যমে তারা বিনামূল্যে প্রশিক্ষণ গ্রহণ করতে পারে।</p><p class=\"editor-paragraph editor-empty\"></p><p class='editor-paragraph'>এই ইনস্টিটিউট দক্ষ মানবসম্পদ গঠনের মাধ্যমে দেশের বেকার সমস্যা লাঘব এবং আত্মকর্মসংস্থান সৃষ্টির একটি কার্যকর মাধ্যম হিসেবে ইতোমধ্যে নিজেদের অবস্থান সুদৃঢ় করতে শুরু করেছে।</p>",
+    "features": [
+      {
+        "title": "প্রকল্পের লক্ষ্য-উদ্দেশ্য",
+        "values": [
+          "দক্ষতা বৃদ্ধি",
+          "বেকারত্ব দূরীকরণ",
+          "কর্মসংস্থান সৃষ্টি",
+          "স্থায়ী দারিদ্র্য বিমোচন"
+        ]
+      },
+      {
+        "title": "কোর্সের বিবরণ",
+        "values": [
+          "স্মল বিজনেস ম্যানেজমেন্ট",
+          "স্মার্ট টেইলারিং অ্যান্ড ফ্যাশন ডিজাইন",
+          "দি আর্ট অব সেলস অ্যান্ড মার্কেটিং",
+          "আস-সুন্নাহ গুলজার বাহার খানম ড্রাইভিং স্কুল",
+          "প্রফেশনাল কুকিং অ্যান্ড ক্যাটারিং ম্যানেজমেন্ট",
+          "দি আর্ট অব ক্রিয়েশন",
+          "ইংলিশ ল্যাঙ্গুয়েজ প্রোগ্রাম (ELP)",
+          "ইংলিশ ল্যাঙ্গুয়েজ ইনস্ট্রাকশন ট্রেনিং ফর এডুকেটরস (ELITE)",
+          "NCTB Teacher Training Program (TTP)",
+          "মোবাইল ফোন রিপেয়ার ট্রেনিং",
+          "রেফ্রিজারেশন এবং এয়ারকন্ডিশনিং",
+          "প্রফেশনাল অটোমোটিভ টেকনিশিয়ান ট্রেনিং",
+          "প্রফেশনাল মোটরসাইকেল টেকনিশিয়ান ট্রেনিং",
+          "ওয়েল্ডিং অ্যান্ড ফেব্রিকেশন কোর্স",
+          "ইলেকট্রনিক অ্যাপ্লায়েন্সেস রিপেয়ারিং ও মেইনটেন্যান্স ট্রেনিং প্রোগ্রাম",
+          "প্রফেশনাল অটোমোটিভ ইলেকট্রিশিয়ান ট্রেনিং"
+        ]
+      },
+      {
+        "title": "ব্যয়ের খাত",
+        "values": [
+          "ইনস্টিটিউটের জন্য জমি ক্রয়",
+          "ইনস্টিটিউটের অবকাঠামো নির্মাণ",
+          "উপকরণ ক্রয়",
+          "শিক্ষাবৃত্তির মাধ্যমে প্রশিক্ষণার্থীদের আবাসন ও খাবারের ব্যয় নির্বাহ",
+          "ব্যবস্থাপনা ব্যয়"
+        ]
+      }
+    ],
+    "tagline": "দারিদ্র্য বিমোচন ও কর্মসংস্থান তৈরির প্রচেষ্টায় শামিল হোন",
+    "courses": [
+      {
+        "slug": "small-business-management",
+        "title": "স্মল বিজনেস ম্যানেজমেন্ট",
+        "description": "শিক্ষিত বেকারদের কারিগরি দক্ষতা বৃদ্ধি করা এবং তাদের জন্য কর্মসংস্থানের সুযোগ তৈরি করে দেয়া এই কোর্সের প্রধান লক্ষ্য। কোর্স শেষে প্রশিক্ষিত তরুণদের যোগ্যতা অনুযায়ী বিভিন্ন প্রতিষ্ঠানে চাকরির ব্যবস্থা করা হয়।",
+        "cardImage": "small-business-management-card",
+        "coverImage": "small-business-management-modal-cover",
+        "courseSubjects": [
+          "মাইক্রোসফট অফিস",
+          "তাত্ত্বিক ও ব্যবহারিক অ্যাকাউন্টিং",
+          "গ্রাফিক ডিজাইন",
+          "মেটা মার্কেটিং",
+          "ভিডিও এডিটিং",
+          "ইংরেজি ভাষা",
+          "জেনারেটিভ এ আই টুলস"
+        ],
+        "courseType": ["৩ মাসব্যাপী | আবাসিক কোর্স | পুরুষদের জন্য"]
+      },
+      {
+        "slug": "smart-tailoring-and-fashion-design",
+        "title": "স্মার্ট টেইলারিং ও ফ্যাশন ডিজাইন",
+        "description": "অসহায় নারীদের দক্ষতা-বৃদ্ধি ও স্বাবলম্বীকরণের লক্ষ্যে নারীদের বিভিন্ন ধরনের হাতের কাজ ও কারিগরি প্রশিক্ষণ দেয়া হচ্ছে। কোর্স শেষে প্রত্যেককে ৩০ থেকে ৫০ হাজার টাকার সমপরিমাণ মূল্যের বিভিন্ন স্বাবলম্বী উপকরণ প্রদান করা হচ্ছা।",
+        "cardImage": "smart-tailoring-and-fashion-design-card",
+        "coverImage": "smart-tailoring-and-fashion-design-modal-cover",
+        "courseSubjects": [
+          "টেইলারিং",
+          "টাই-ডাই",
+          "ব্লক-বাটিক",
+          "হ্যান্ড এমব্রয়ডারি অ্যান্ড ক্র্যাফটিং",
+          "বেসিক ফ্যাশন ডিজাইন",
+          "বেসিক বিজনেস ডেভেলপমেন্ট"
+        ],
+        "courseType": ["৩ মাসব্যাপী | আবাসিক কোর্স | মহিলাদের জন্য"]
+      },
+      {
+        "slug": "the-art-of-sales-and-marketing",
+        "title": "দি আর্ট অব সেলস এন্ড মার্কেটিং",
+        "description": "এই কোর্সের মূল উদ্দেশ্য সেলস ও মার্কেটিংয়ের কর্মক্ষেত্রে দক্ষ ও অভিজ্ঞ জনবল তৈরি করার মাধ্যমে বাংলাদেশের ব্যাবসায়িক ও অর্থনৈতিক খাতে উন্নতি সাধন করা।",
+        "cardImage": "the-art-of-sales-and-marketing-card",
+        "coverImage": "the-art-of-sales-and-marketing-modal-cover",
+        "courseSubjects": [
+          "কমিউনিকেশন, নেটওয়ার্কিং ও পার্সোনাল ব্র্যান্ডিং",
+          "কাস্টমার সাইকোলজি ও প্রভাব বিস্তারের কৌশল",
+          "বিজ্ঞাপন, ব্র্যান্ডিং ও বিপণন কৌশল",
+          "বাজারজাতকরণের বেসিক জ্ঞান",
+          "মেটা মার্কেটিং",
+          "আধুনিক সেলস ও হাই-ইমপ্যাক্ট ক্লোজিং স্কিলস",
+          "বাস্তব বাজারে বিক্রয়ের হাতে-কলমে প্রশিক্ষণ",
+          "চাকরি, ব্যবসা ও ক্যারিয়ার-রেডি প্রফেশনাল স্কিল"
+        ],
+        "courseType": ["৩ মাসব্যাপী | আবাসিক কোর্স | পুরুষদের জন্য"]
+      },
+      {
+        "slug": "driving-training",
+        "title": "আস-সুন্নাহ গুলজার বাহার খানম ড্রাইভিং স্কুল",
+        "description": "বেকার ও নিম্নআয়ের যুবকদের পেশাদার ড্রাইভিং দক্ষতা অর্জনের মাধ্যমে আত্মকর্মসংস্থানের সুযোগ তৈরির জন্য ড্রাইভিং প্রশিক্ষণ দেয়া হচ্ছে।",
+        "cardImage": "driving-training-card",
+        "coverImage": "driving-training-modal-cover",
+        "courseSubjects": [
+          "গাড়ি চালানোর তাত্ত্বিক ও ব্যবহারিক প্রশিক্ষণ",
+          "গাড়ির যন্ত্রাংশ পরিচিতি ও রক্ষণাবেক্ষণ",
+          "ট্রাফিক আইন ও নিয়ম কানুন",
+          "সরাসরি ৬০ ঘন্টা গাড়ি চালানোর প্রশিক্ষণ ও প্রি-ড্রাইভিং ইন্সপেকশন",
+          "জরুরি পরিস্থিতিতে ড্রাইভিং ও সেফটি কৌশল",
+          "গাড়ির ফুয়েল ও রুটিন চেকআপ কৌশল",
+          "ড্রাইভিং বিষয়ক মনস্তত্বিক ধারণা",
+          "ঢাকা শহরের ম্যাপ বিষয়ক প্রাথমিক ধারণা",
+          "বাংলাদেশ ড্রাইভিং লাইসেন্সের লিখিত, মৌখিক ও ব্যবহারিক পরীক্ষার প্রস্তুতি"
+        ],
+        "courseType": ["১৫ দিন(৬০ ঘন্টা) | আবাসিক কোর্স | পুরুষদের জন্য"]
+      },
+      {
+        "slug": "entrepreneurship-in-the-footwear-industry",
+        "title": "জুতা শিল্পে উদ্যোক্তা তৈরি কোর্স",
+        "description": "বাংলাদেশের ফুটওয়্যার ও জুতা শিল্প একটি সম্ভাবনাময় খাত, যা দেশীয় চাহিদা পূরণের পাশাপাশি আন্তর্জাতিক বাজারেও গুরুত্বপূর্ণ অবদান রাখছে। এই খাতে দক্ষ উদ্যোক্তা ও প্রশিক্ষিত মানবসম্পদের চাহিদা দিন দিন বৃদ্ধি পাচ্ছে। আস-সুন্নাহ ফাউন্ডেশন দেশের বেকার ও উদ্যমী যুবকদের আত্মকর্মসংস্থান ও কর্মসংস্থান সৃষ্টির লক্ষ্যে “ফুটওয়্যার অ্যান্ড জুতা শিল্পে উদ্যোক্তা তৈরি কোর্স” চালু করেছে।",
+        "cardImage": "shoe-making-course-card",
+        "coverImage": "shoe-making-course-modal-cover",
+        "active": false,
+        "courseSubjects": [
+          "চামড়া এবং ফেব্রিক্সের শ্রেণিবিভাগ অনুযায়ী বিভিন্ন ধরনের জুতা তৈরি",
+          "আধুনিক ও ঐতিহ্যবাহী জুতার ডিজাইন",
+          "উচ্চমানের উপকরণ ও প্রযুক্তি",
+          "হাতে-কলমে জুতা তৈরির প্রশিক্ষণ",
+          "বাজার বিশ্লেষণ ও ব্যাবসায়িক কৌশল",
+          "ব্যান্ডিং ও বিপণণ",
+          "আন্তর্জাতিক মানের কমপ্লায়েন্স অনুযায়ী শিল্প স্থাপন",
+          "ইন্ডাস্ট্রিয়াল ভিজিট"
+        ],
+        "courseType": ["৪ মাসব্যাপী | আবাসিক কোর্স | পুরুষদের জন্য"]
+      },
+      {
+        "slug": "chef-training-and-kitchen-management",
+        "title": "প্রফেশনাল কুকিং অ্যান্ড ক্যাটারিং ম্যানেজমেন্ট",
+        "description": "বাংলাদেশসহ বিশ্বব্যাপী আতিথেয়তা ও খাদ্যশিল্পে দক্ষ শেফ ও কার্যকর কিচেন ম্যানেজারের চাহিদা দিন দিন বাড়ছে। হোটেল, রেস্তোরাঁ, ক্যাটারিং সার্ভিস থেকে শুরু করে ব্যক্তিগত উদ্যোগ—সকল ক্ষেত্রেই পেশাদার রান্না ও সুষ্ঠু রান্নাঘর ব্যবস্থাপনার দক্ষতা অপরিহার্য। এই চাহিদা পূরণ ও বেকার যুবকদের জন্য নতুন কর্মসংস্থানের পথ উন্মুক্ত করতে আস-সুন্নাহ ফাউন্ডেশন চালু করেছে “শেফ ট্রেনিং অ্যান্ড কিচেন ম্যানেজমেন্ট” কোর্স।",
+        "cardImage": "chef-training-and-kitchen-management-card",
+        "coverImage": "chef-training-and-kitchen-management-modal-cover",
+        "courseSubjects": [
+          "খাদ্য ও পানীয় প্রস্তুতির মৌলিক কৌশল",
+          "রান্নার সরঞ্জাম, যন্ত্রের ব্যবহার ও মেইনটেন্যান্স",
+          "হাইজিন, সুরক্ষা নীতিমালা ও কর্মস্থল পরিচ্ছন্নতা",
+          "মাছ-মাংস কাটার মৌলিক পদ্ধতি",
+          "মাদার সস, স্যুপ ও বিভিন্ন রান্নার কৌশল (তাপ ও সময় নিয়ন্ত্রণসহ)",
+          "১০০+ বৈচিত্র্যময় রেসিপির হাতে-কলমে প্র্যাক্টিক্যাল প্রশিক্ষণ",
+          "প্লেটিং ও গার্নিশিং",
+          "বর্জ্য ব্যবস্থাপনা ও ইনভেন্টরি নিয়ন্ত্রণ",
+          "খাদ্যের পুষ্টিমূল্য নির্ধারণ ও বাজেট চার্ট প্রস্তুত করা",
+          "খাদ্যপণ্য বিপণনের বাস্তব অভিজ্ঞতা"
+        ],
+        "courseType": ["৩ মাসব্যাপী | আবাসিক কোর্স | পুরুষদের জন্য"]
+      },
+      {
+        "slug": "the-art-of-content-creation",
+        "title": "দি আর্ট অব ক্রিয়েশন কোর্স",
+        "description": "বর্তমান ডিজিটাল যুগে ব্যবসা-বাণিজ্য ও পণ্যের প্রচারের ক্ষেত্রে ভিডিও কনটেন্টের গুরুত্ব অপরিসীম। বাংলাদেশে অনেক পণ্যের হালাল পরিচিতি থাকলেও, ভিডিওগ্রাফির কিছু ক্ষেত্রে হারাম উপাদান ব্যবহারের কারণে অনেক উদ্যোক্তা তাদের প্রচার কার্যক্রম থেকে পিছিয়ে থাকেন। আমরা গড়ে তুলতে চাই এমন একদল দক্ষ ও সচেতন কনটেন্ট ক্রিয়েটর, যারা পণ্যের প্রচারে হালাল নীতি অনুসরণ করে কাজ করবে। যারা হালাল উপায়ে ভিডিও তৈরি করতে পারবে, আকর্ষণীয় ও প্রভাবশালী কনটেন্ট বানাতে পারবে, এবং পণ্যের সঠিক পরিচিতি তুলে ধরতে সক্ষম হবে।\n\nআমাদের লক্ষ্য—হালাল ভিডিও প্রোডাকশন নিশ্চিত করা, ইসলামিক বিধি-নিষেধ মেনে কনটেন্ট তৈরি করা, হালাল সার্টিফিকেশন ও ব্র্যান্ডিংয়ের গুরুত্ব তুলে ধরা এবং গ্রাহকদের কাছে একটি বিশ্বাসযোগ্য ও মূল্যবোধসম্পন্ন পরিচিতি গড়ে তোলা।\n\nএই দক্ষতা অর্জনের মাধ্যমে আপনি আয়-রোজগারের পাশাপাশি নিজেকে গড়ে তুলবেন একজন আত্মবিশ্বাসী প্রতিদ্বন্দ্বী হিসেবে—দেশীয় ও আন্তর্জাতিক বাজারে।",
+        "cardImage": "the-art-of-content-creation-card",
+        "coverImage": "the-art-of-content-creation-modal-cover",
+        "courseSubjects": [
+          "স্ক্রিপ্ট রাইটিং",
+          "ভিডিও পরিচালনার কৌশল",
+          "সিনেমাটোগ্রাফি",
+          "বেসিক লাইটিং",
+          "ভিডিও এডিটিং",
+          "বেসিক সাউন্ড ডিজাইন",
+          "AI-এর মাধ্যমে কনটেন্ট তৈরি",
+          "ব্র্যান্ডিং",
+          "ডকুমেন্টারি ও OVC তৈরি",
+          "গল্প-নির্ভর বিজ্ঞাপন",
+          "ই-কমার্স ও এফ-কমার্সের জন্য বিজ্ঞাপন তৈরি"
+        ],
+        "courseType": ["৩ মাসব্যাপী | আবাসিক কোর্স | পুরুষদের জন্য"]
+      },
+      {
+        "slug": "english-language-program",
+        "title": "ইংলিশ ল্যাঙ্গুয়েজ প্রোগ্রাম (ELP)",
+        "cardImage": "sail-to-success-english-language-card",
+        "coverImage": "sail-to-success-english-language-cover",
+        "description": "বর্তমান বিশ্বে ইংরেজি ভাষা শুধু একটি যোগাযোগের মাধ্যম নয়; এটি শিক্ষা, কর্মসংস্থান, ব্যবসা ও আন্তর্জাতিক অঙ্গনে এগিয়ে যাওয়ার অন্যতম প্রধান হাতিয়ার। আমাদের দেশে অসংখ্য মেধাবী তরুণ রয়েছে, যাদের প্রয়োজনীয় জ্ঞান ও সক্ষমতা থাকা সত্ত্বেও ইংরেজিতে আত্মবিশ্বাসের অভাবে তারা কাঙ্ক্ষিত সুযোগ থেকে বঞ্চিত হচ্ছে। বিশেষ করে Listening ও Speaking–এ দুর্বলতার কারণে অনেকেই নিজের যোগ্যতা যথাযথভাবে উপস্থাপন করতে পারে না।\n\nএই বাস্তবতা বিবেচনায় নিয়ে তরুণদের ইংরেজিতে সাবলীল, আত্মবিশ্বাসী ও কার্যকর যোগাযোগে দক্ষ করে তুলতে চালু করা হয়েছে ‘সেইল টু সাকসেস : ইংলিশ ল্যাঙ্গুয়েজ প্রোগ্রাম’। এই কোর্সে ভাষার চারটি দক্ষতা—Listening, Speaking, Reading ও Writing—সমন্বিতভাবে উন্নয়নের মাধ্যমে প্রশিক্ষণার্থীদের একাডেমিক, পেশাগত ও আন্তর্জাতিক পরিসরে সফলতার জন্য প্রস্তুত করা হয়। একই সঙ্গে IELTS প্রস্তুতির সুযোগ রেখে কোর্সটিকে আরও ফলপ্রসূ ও বাস্তবমুখী করা হয়েছে।",
+        "courseSubjects": [
+          "আন্তর্জাতিক CEFR মানদণ্ড অনুসরণে Beginner থেকে Intermediate পর্যায় পর্যন্ত ৪টি সুনির্দিষ্ট লেভেলের মাধ্যমে ধাপে ধাপে ইংরেজি শেখানো।",
+          "Listening, Speaking, Reading এবং Writing- এই চারটি ভাষা দক্ষতার সমন্বিত ও ব্যবহারিক উন্নয়ন।",
+          "চারটি Skill-এর পাশাপাশি নিয়মিত Grammar Class, Vocabulary Class এবং Speaking Session।",
+          "দৈনন্দিন জীবন, শিক্ষা ও কর্মক্ষেত্রে ইংরেজি ব্যবহারের বাস্তবমুখী অনুশীলন।",
+          "Workplace English, Interview Skills, Presentation Skills এবং Formal Communication-এর ব্যবহারিক প্রশিক্ষণ।",
+          "Reading Club, Debate & Speech Competition এবং বিভিন্ন Interactive Activities-এর মাধ্যমে ভাষা চর্চা।",
+          "সাপ্তাহিক অগ্রগতি মূল্যায়ন, মাসিক পরীক্ষা এবং Speaking Test-এর মাধ্যমে শিক্ষার্থীদের ধারাবাহিক মূল্যায়ন।"
+        ],
+        "courseType": ["৪ মাসব্যাপী | আবাসিক কোর্স | পুরুষদের জন্য"]
+      },
+      {
+        "slug": "english-language-instruction-for-educators",
+        "title": "ইংলিশ ল্যাঙ্গুয়েজ ইনস্ট্রাকশন ট্রেনিং ফর এডুকেটরস (ELITE)",
+        "cardImage": "english-language-instruction-for-educators-card",
+        "coverImage": "english-language-instruction-for-educators-cover",
+        "description": "একজন দক্ষ শিক্ষক কেবল জ্ঞান বিতরণকারী নন; তিনি শিক্ষার্থীর চিন্তা, ভাষা ও আত্মবিশ্বাস গড়ে তোলার কারিগর। কিন্তু বাস্তবতা হলো, আমাদের দেশে ইংরেজি ভাষা শিক্ষায় অনেক শিক্ষক বিষয়ভিত্তিক জ্ঞান থাকা সত্ত্বেও আধুনিক শিক্ষণ পদ্ধতি, কার্যকর ক্লাসরুম ম্যানেজমেন্ট ও ব্যবহারিক প্রয়োগের ক্ষেত্রে পর্যাপ্ত প্রশিক্ষণের অভাবে প্রত্যাশিত ফল অর্জন করতে পারছেন না।\n\nএই চাহিদা ও ঘাটতি পূরণের লক্ষ্যেই চালু করা হয়েছে ‘ইংলিশ ল্যাঙ্গুয়েজ ইনস্ট্রাকশন ট্রেনিং ফর এডুকেটরস’। এই কোর্সে অংশগ্রহণকারী শিক্ষকরা আধুনিক ও শিক্ষার্থী-কেন্দ্রিক পদ্ধতিতে ইংরেজি ভাষা শেখানোর কৌশল রপ্ত করবেন, পাশাপাশি নিজের শিক্ষাদান পদ্ধতি পর্যালোচনা ও উন্নয়নের সুযোগ পাবেন। ব্যবহারিক টিচিং প্র্যাকটিস ও পেশাগত নৈতিকতার সমন্বয়ে এই কোর্স শিক্ষকদের আরও দক্ষ, আত্মবিশ্বাসী ও প্রভাবশালী এডুকেটর হিসেবে গড়ে তুলতে সহায়ক হবে।",
+        "courseType": ["২ মাসব্যাপী | আবাসিক কোর্স | পুরুষদের জন্য"],
+        "courseSubjects": [
+          "Learner-Centered Teaching এবং Modern Teaching Methodology প্রয়োগের কৌশল।",
+          "Grammar, Vocabulary, Pronunciation এবং চারটি Language Skill বিশ্লেষণ ও পাঠদান পদ্ধতি।",
+          "Listening, Speaking, Reading ও Writing দক্ষতা উন্নয়নের কার্যকর শিক্ষণ কৌশল।",
+          "Lesson Planning, Material Design এবং Classroom Activities প্রস্তুতকরণ।",
+          "কার্যকর Classroom Management এবং শিক্ষার্থী সম্পৃক্ততা বৃদ্ধির কৌশল।",
+          "Learner Awareness, Learning Styles এবং Learner Autonomy গড়ে তোলার পদ্ধতি।",
+          "Peer Observation, Demonstration Class এবং Reflective Teaching Practice।",
+          "Written Assignment, Teaching Portfolio এবং Micro-Teaching-এর মাধ্যমে ব্যবহারিক প্রশিক্ষণ।",
+          "Professional Development, Self-Evaluation এবং Continuous Improvement-এর কৌশল।"
+        ]
+      },
+      {
+        "slug": "nctb-teacher-training-program",
+        "title": "এনসিটিবি টিচার ট্রেনিং প্রোগ্রাম (TTP)",
+        "cardImage": "coming_soon",
+        "coverImage": "nctb-teacher-training-program-cover",
+        "description": "বর্তমান পরিবর্তনশীল শিক্ষাব্যবস্থায় শ্রেণিকক্ষে শুধু পাঠদান নয়, বরং শিক্ষার্থীদের যুগের উপযোগী করে গড়ে তোলাই মূল চ্যালেঞ্জ। আমাদের দেশের শিক্ষকদের সক্ষমতা ও আন্তরিকতা থাকা সত্ত্বেও আধুনিক শিক্ষাদান পদ্ধতি ও মূল্যায়ন প্রক্রিয়ার সঠিক ধারণার অভাবে অনেক সময় কাঙ্ক্ষিত শিখনফল অর্জন সম্ভব হয় না। বিশেষ করে যোগ্যতাভিত্তিক শিক্ষা (CBE), পরিকল্পিত পাঠ পরিকল্পনা (Lesson Plan) এবং প্রযুক্তির সমন্বয়ে সক্রিয় শিক্ষাদানের ক্ষেত্রে শিক্ষকদের আরও বেশি দক্ষ ও আত্মবিশ্বাসী করে তোলা প্রয়োজন।",
+        "courseType": ["২ মাসব্যাপী | আবাসিক কোর্স | পুরুষদের জন্য"],
+        "courseSubjects": [
+          "আধুনিক পাঠদান পদ্ধতি: এনসিটিবি (NCTB)-এর গাইডলাইন অনুযায়ী শ্রেণিকক্ষে যুগোপযোগী ও কার্যকর শিক্ষাদান পদ্ধতির বাস্তবমুখী প্রশিক্ষণ।",
+          "যোগ্যতা ও ফলাফলভিত্তিক শিক্ষা: যোগ্যতাভিত্তিক শিক্ষা (Competency-Based Education) এবং ফলাফলভিত্তিক শিক্ষার (Outcome-Based Learning) মূল ধারণা ও শ্রেণিকক্ষে এর সঠিক প্রয়োগ।",
+          "পরিকল্পিত পাঠদান কৌশল: সঠিক পদ্ধতিতে পাঠ পরিকল্পনা (Lesson Plan) প্রণয়ন, শিখনফল নির্ধারণ এবং তা ক্লাসে সফলভাবে বাস্তবায়নের কৌশল।",
+          "সক্রিয় ও অংশগ্রহণমূলক শিক্ষা: শ্রেণিকক্ষে সক্রিয় শিখন (Active Learning), দলীয় কাজ (Group Work), জোড়ায় কাজ (Pair Work) এবং অন্যান্য অংশগ্রহণমূলক পদ্ধতির (Participatory Techniques) ব্যবহার নিশ্চিতকরণ।",
+          "শ্রেণিকক্ষ ও সময় ব্যবস্থাপনা: কার্যকর শ্রেণিকক্ষ ব্যবস্থাপনা (Classroom Management) এবং সময় ব্যবস্থাপনার (Time Management) মাধ্যমে পড়ালেখার একটি ইতিবাচক ও নিয়মতান্ত্রিক পরিবেশ তৈরি।",
+          "আধুনিক মূল্যায়ন পদ্ধতি: শিক্ষার্থীদের মেধা ও অগ্রগতি সঠিকভাবে যাচাইয়ের জন্য গঠনকালীন (Formative) ও সামষ্টিক (Summative) মূল্যায়নের আধুনিক কৌশলসমূহ আয়ত্তকরণ।",
+          "প্রযুক্তির সমন্বয় ও শিক্ষোপকরণ: শিক্ষাদানের মান বাড়াতে বিভিন্ন শিক্ষোপকরণ (Teaching Aids), আইসিটি (ICT Integration) এবং ডিজিটাল লার্নিং রিসোর্সের কার্যকর ব্যবহার।",
+          "ব্যবহারিক দক্ষতা ও ধারাবাহিক উন্নয়ন: মাইক্রো-টিচিং (Micro-Teaching), সহকর্মী পর্যবেক্ষণ (Peer Observation) এবং পারস্পরিক মতামতের মাধ্যমে শিক্ষকদের পাঠদান দক্ষতা প্রত্যক্ষভাবে ঝালাই ও উন্নয়ন।"
+        ]
+      },
+      {
+        "slug": "mobile-phone-repair",
+        "title": "মোবাইল ফোন রিপেয়ার ট্রেনিং",
+        "cardImage": "mobile-phone-repair-card",
+        "coverImage": "mobile-phone-repair-cover",
+        "description": "এটি তরুণ প্রজন্মকে মোবাইল সার্ভিসিং এবং রিপেয়ারিং ক্ষেত্রে দক্ষতা অর্জন করার একটি সমন্বিত প্রশিক্ষণ কর্মসূচি। এই কোর্সে শিক্ষার্থীরা মোবাইল ফোনের হার্ডওয়‍্যার ও সফটওয়‍্যার, বিভিন্ন সমস্যা নির্ণয় ও সমাধান, কাস্টমার হ্যান্ডেলিং এবং ব্যবসায়িক কৌশলসহ আধুনিক রিপেয়ারিং প্রযুক্তি শেখার মাধ্যমে পেশাদার দক্ষতা অর্জন করবে। এসব দক্ষতা শিক্ষার্থীদেরকে চাকরির বাজারে সেরা অবস্থানে পৌঁছাতে এবং নিজস্ব ব্যবসা গড়ে তোলার জন্য প্রস্তুত করবে।",
+        "courseType": ["৪ মাসব্যাপী | আবাসিক কোর্স | পুরুষদের জন্য"],
+        "courseSubjects": [
+          "সার্ভিসিং টুলস পরিচিতি ও এর যথাযথ ব্যবহারবিধি",
+          "বেসিক ইলেকট্রনিক্স এবং মাদারবোর্ড সার্কিট সম্পর্কে তাত্ত্বিক ও ব্যবহারিক ধারণা।",
+          "স্কিম্যাটিক ডায়াগ্রামের আদ্যোপান্ত",
+          "সকল স্তরের সেকশন ভিত্তিক ক্লাস(2G/4G/5G)",
+          "1G থেকে 4G ফোনের ব্যবচ্ছেদ",
+          "5G মোবাইল ফোনের কার্যপ্রণালী এবং এর বেসিক কারিগরি ধারণা",
+          "বেসিক ট্রাবলশুটিং এবং ডেড ফোন রিপেয়ার",
+          "সফটওয়্যার ক্লাস (Flash, Unlock, FRP, Advance programming)",
+          "Paid Tools এর ব্যবহার (UMT Dongle, Unlock tool)",
+          "প্র্যাকটিক্যাল ক্লাস ও হ্যান্ডস-অন ট্রেনিং",
+          "১ মাস বাধ্যতামূলক ইন্টার্নশিপ ও প্রাকটিক্যাল কাস্টমার সার্ভিস",
+          "আত্মউন্নয়ন, গ্রাহক সেবা প্রদান এবং সফল ক্যারিয়ার গঠনের লক্ষ্যে বিশেষ Soft Skill Development ক্লাস"
+        ]
+      },
+      {
+        "slug": "refrigeration-and-air-conditioning",
+        "title": "রেফ্রিজারেশন এবং এয়ারকন্ডিশনিং",
+        "cardImage": "refrigeration-and-air-conditioning-trade-card",
+        "coverImage": "refrigeration-and-air-conditioning-trade-cover",
+        "description": "তরুণ প্রজন্মকে গৃহস্থালি ও শিল্প খাতে রেফ্রিজারেশন এবং এয়ার কন্ডিশনিং-এ দক্ষ করে তোলার লক্ষ্যে এই কোর্স একটি সমন্বিত প্রশিক্ষণ কর্মসূচি।\n\nএ কোর্সের মাধ্যমে শিক্ষার্থীরা ফ্রিজ, ডিপ ফ্রিজার, উইন্ডো ও স্পিট টাইপ এয়ার কন্ডিশনারের সার্ভিসিং, মেরামত, ইনস্টলেশন এবং হালকা ইঞ্জিনিয়ারিং কাজে দক্ষতা অর্জন করবে। হাতে-কলমে প্রশিক্ষণ, নিরাপত্তা সচেতনতা এবং প্রযুক্তিগত চিত্রপট বিশ্লেষণসহ আধুনিক পদ্ধতিতে শিক্ষার্থীরা শিখবে ব্যাবহারিক দক্ষতা।\n\nএখানে ২০% তাত্ত্বিক এবং ৮০% ব্যাবহারিক প্রশিক্ষণ প্রদান করা হয়, যার ফলে প্রশিক্ষণার্থীরা সহজেই পেশাদার হিসেবে আত্মনির্ভরশীল হয়ে উঠতে পারে।",
+        "courseType": ["৩ মাসব্যাপী | আবাসিক কোর্স | পুরুষদের জন্য"],
+        "courseSubjects": [
+          "গাণিতিক ধারণা ব্যবহার করে টেকনিক্যাল হিসাব-নিকাশ সম্পাদন।",
+          "কর্মস্থলে OSH নীতিমালা অনুসরণ।",
+          "লাইট ইঞ্জিনিয়ারিং সেক্টরের মৌলিক কাজ।",
+          "হ্যান্ড টুলস, পাওয়ার টুলস ও মাপযন্ত্র ব্যবহার।",
+          "বেসিক ইলেকট্রিসিটি ও ইলেকট্রনিক্স।",
+          "টিউব প্রসেসিং, গ্যাস ওয়েল্ডিং ও ব্রেজিং।",
+          "কম্প্রেসর, ফ্রিজ ও ডিপ ফ্রিজার সার্ভিসিং।",
+          "উইন্ডো, ক্যাসেট ও স্প্লিট AC ইনস্টলেশন ও সার্ভিসিং।",
+          "রশিতে ঝুলে উচ্চতায় কাজ করার প্রাকটিস।",
+          "সেফটি ও ইমারজেন্সি রেসপন্স প্রাকটিস।",
+          "ইসলামিক জ্ঞান ও সফট স্কিল"
+        ]
+      },
+      {
+        "slug": "professional-automotive-technician",
+        "title": "প্রফেশনাল অটোমোটিভ টেকনিশিয়ান ট্রেনিং",
+        "cardImage": "professional-automotive-technician-card",
+        "coverImage": "professional-automotive-technician-cover",
+        "description": "যারা একেবারে শূন্য থেকে শুরু করে দক্ষ অটোমোটিভ টেকনিশিয়ান হতে চান, তাদের জন্য এই কোর্স বিশেষভাবে ডিজাইন করা হয়েছে।\n\nকোর্স শেষে প্রশিক্ষণার্থীরা শুধু যানবাহনের মেকানিক্যাল ও ইলেকট্রিক্যাল সিস্টেমে দক্ষতা অর্জন করবে না, বরং পেশাগত নৈতিকতা, গ্রাহকসেবা এবং ওয়ার্কশপ নিরাপত্তার মতো বিষয়েও অভিজ্ঞ হবে। এতে করে তারা চাকরিতে প্রবেশ অথবা স্বাধীন গ্যারেজ শুরু করার মতো আত্মবিশ্বাসী হয়ে গড়ে উঠবে।",
+        "courseType": ["৪ মাসব্যাপী | আবাসিক কোর্স | পুরুষদের জন্য"],
+        "courseSubjects": [
+          "ওয়ার্কশপ সেফটি ও টুলস ব্যবহারের নিয়ম",
+          "যানবাহনের ধরন, বডি স্টাইল ও ইঞ্জিন অবস্থান শনাক্তকরণ",
+          "ইঞ্জিন টিউন-আপ, ফুয়েল সিস্টেম, কুলিং, লুব্রিকেশন, EFI",
+          "ব্রেক, স্টিয়ারিং ও সাসপেনশন সার্ভিসিং",
+          "LPG/CNG কিট ইন্সটলেশন ও ক্যালিব্রেশন বেসিকস",
+          "আধুনিক ডায়াগনস্টিকস: OBD-II, CAN Bus, ADAS",
+          "ফাইনাল প্রজেক্ট ও ক্যাপস্টোন মূল্যায়ন"
+        ]
+      },
+      {
+        "slug": "professional-motorcycle-technician",
+        "title": "প্রফেশনাল মোটরসাইকেল টেকনিশিয়ান ট্রেনিং",
+        "cardImage": "professional-motorcycle-technician-card",
+        "coverImage": "professional-motorcycle-technician-cover",
+        "description": "এই কোর্সটি বাস্তবমুখী দক্ষতা উন্নয়নের জন্য প্রণীত, যেখানে প্রশিক্ষণের ৯০% হাতে-কলমে ওয়ার্কশপভিত্তিক এবং অবশিষ্ট অংশ থিওরি ও মূল্যায়নের মাধ্যমে সম্পন্ন করা হয়। প্রশিক্ষণকালে শিক্ষার্থীরা ওয়ার্কশপ সেফটি ও টুলস ব্যবহারের নিয়ম থেকে শুরু করে ইঞ্জিন, ফুয়েল ও ইলেকট্রিক্যাল সিস্টেম, সার্ভিসিং এবং ফল্ট ডায়াগনসিসে ধাপে ধাপে ব্যবহারিক অভিজ্ঞতা অর্জন করে।\n\nএছাড়া কার্বুরেটর ও EFI টিউনিং, সাসপেনশন ও ব্রেক সার্ভিসিংসহ বাস্তব সমস্যাভিত্তিক কাজের মাধ্যমে Problem-Solving দক্ষতা গড়ে তোলা হয়। পাশাপাশি পেশাগত নৈতিকতা, নিরাপত্তা ও গ্রাহকসেবার মান বজায় রাখার বিষয়েও সমান গুরুত্ব দেওয়া হয়েছে।",
+        "courseType": ["৪ মাসব্যাপী | আবাসিক কোর্স | পুরুষদের জন্য"],
+        "courseSubjects": [
+          "ওয়ার্কশপ সেফটি ও টুলস ব্যবহারের নিয়ম",
+          "মোটরসাইকেলের মৌলিক ধারণা (ফ্রেম, ইঞ্জিন, বিভিন্ন সিস্টেম)",
+          "ইঞ্জিন, ফুয়েল সিস্টেম ও ট্রান্সমিশন সার্ভিসিং",
+          "ইলেকট্রিক্যাল ও চার্জিং সিস্টেম মেইনটেন্যান্স",
+          "সাসপেনশন, হুইল ও ব্রেক মেইনটেন্যান্স",
+          "ডায়াগনস্টিক যন্ত্রপাতি ব্যবহার ও ফল্ট ফাইন্ডিং",
+          "কাস্টমার হ্যান্ডলিং ও ডকুমেন্টেশন",
+          "ডিসম্যান্টল, সার্ভিস, রিবিল্ড ও রোড টেস্ট"
+        ]
+      },
+      {
+        "slug": "welding-and-fabrication",
+        "title": "ওয়েল্ডিং অ্যান্ড ফেব্রিকেশন কোর্স",
+        "cardImage": "welding-and-fabrication-card",
+        "coverImage": "welding-and-fabrication-cover",
+        "description": "এটি তরুণ প্রজন্মকে হাতে-কলমে হাই-কোয়ালিটির ওয়েল্ডিং দক্ষতা শেখানোর একটি সমন্বিত কর্মসূচি।",
+        "courseType": ["৪ মাসব্যাপী | আবাসিক কোর্স | পুরুষদের জন্য"],
+        "courseSubjects": [
+          "ARC, MIG, TIG, Spot ও Gas ওয়েল্ডিং",
+          "1G – 6G পজিশনাল প্র্যাকটিক্যাল",
+          "ওয়েল্ডিং মেরিট ও PPE ব্যবহার",
+          "ওয়েল্ডিং ড্রয়িং ও ব্লু-প্রিন্ট বিশ্লেষণ",
+          "মেকানিক্যাল ও গ্যাস মেরিট",
+          "নির্ভুল ইনস্পেকশন ও ওয়ার্কজিপ প্র্যাকটিক্যাল",
+          "নিরাপত্তা সচেতনতা",
+          "ইন্টারভিউ স্কিল ও চাকরির প্রস্তুতি",
+          "মৌলিক ইসলামী জ্ঞান"
+        ]
+      },
+      {
+        "slug": "electronics-appliance-repair-and-maintenance",
+        "title": "ইলেকট্রনিক অ্যাপ্লায়েন্সেস রিপেয়ারিং ও মেইনটেন্যান্স ট্রেনিং প্রোগ্রাম",
+        "cardImage": "coming_soon",
+        "coverImage": "electronics-appliance-repair-and-maintenance-cover",
+        "description": "বর্তমান আধুনিক যুগে গৃহস্থালি থেকে শুরু করে শিল্পকারখানা—সবখানেই ইলেকট্রনিক যন্ত্রাংশের ব্যবহার প্রতিনিয়ত বাড়ছে। এই বিপুল চাহিদার কারণে ইলেকট্রনিক অ্যাপ্লায়েন্সেস মেরামত ও রক্ষণাবেক্ষণ (Repairing and Maintenance) খাতে দক্ষ জনবলের এক বিশাল কর্মসংস্থানের সুযোগ তৈরি হয়েছে। তবে প্রথাগত বা আংশিক জ্ঞানের কারণে অনেকেই এই খাতের আধুনিক ও জটিল ডিভাইসগুলোর সমস্যা সঠিকভাবে সমাধান করতে পারেন না। বিশেষ করে অ্যাডভান্সড পিসিবি রিপেয়ারিং, সার্কিট ডিজাইন এবং নবায়নযোগ্য জ্বালানি প্রযুক্তির সঠিক ব্যবহারিক জ্ঞান না থাকায় অনেক তরুণ কাঙ্ক্ষিত ক্যারিয়ার গড়তে পারছেন না।",
+        "courseType": ["৪ মাসব্যাপী | আবাসিক কোর্স | পুরুষদের জন্য"],
+        "courseSubjects": [
+          "মৌলিক ইলেকট্রিক্যাল ও ইলেকট্রনিক্স: মৌলিক ইলেকট্রিক্যাল ও ইলেকট্রনিক্স (Electrical & Electronics) বিষয়ে প্রয়োজনীয় তাত্ত্বিক ও ব্যবহারিক জ্ঞান অর্জন।",
+          "সার্কিট ও মোটর কন্ট্রোলিং: সিরিজ ও প্যারালাল সার্কিট (Series & Parallel Circuit), পাওয়ার সাপ্লাই, মোটর কন্ট্রোলিং এবং মোটর স্টার্টার সংক্রান্ত যাবতীয় ব্যবহারিক দক্ষতা।",
+          "কম্পোনেন্ট টেস্টিং ও কার্যপ্রণালী: বিভিন্ন ইলেকট্রনিক্স কম্পোনেন্ট (Components) নিখুঁতভাবে শনাক্তকরণ, টেস্টিং এবং এগুলোর কার্যপ্রণালী সম্পর্কে বিস্তারিত ধারণা।",
+          "সোল্ডারিং ও অ্যাডভান্সড পিসিবি রিপেয়ারিং: সোল্ডারিং (Soldering), ডি-সোল্ডারিং, সাধারণ সার্কিট রিপেয়ারিং এবং উন্নত মানের পিসিবি (Advanced PCB) মেরামত করার ব্যবহারিক দক্ষতা।",
+          "সার্কিট অ্যাসেম্বলিং ও পিসিবি ডিজাইন: নতুন সার্কিট অ্যাসেম্বলিং (Circuit Assembly) করা এবং আধুনিক প্রযুক্তির মাধ্যমে পিসিবি (PCB Design) ডিজাইন করার কৌশল।",
+          "পাওয়ার ও সোলার সিস্টেম সলিউশন: আইপিএস (IPS), ইউপিএস (UPS), এভিআর (AVR) এবং সোলার সিস্টেম ইনস্টলেশন, জটিল সমস্যা শনাক্তকরণ ও তা মেরামতের কাজ।",
+          "অ্যাপ্লায়েন্সেস রিপেয়ারিং ও মেইনটেন্যান্স: দৈনন্দিন জীবনে ব্যবহৃত বিভিন্ন ইলেকট্রনিক অ্যাপ্লায়েন্সেস সফলভাবে রিপেয়ারিং ও নিয়মিত রক্ষণাবেক্ষণ (Maintenance) করার সক্ষমতা।",
+          "মৌলিক কম্পিউটার শিক্ষা: পেশাগত কাজের সুবিধার্থে কম্পিউটার চালনার প্রাথমিক ও মৌলিক জ্ঞান (Basic Computer Skills) অর্জন।",
+          "নিরাপত্তা ও জরুরি সাড়াদান: কর্মক্ষেত্রে দুর্ঘটনা এড়াতে সেফটি প্র্যাকটিস (Safety Practice) এবং যেকোনো জরুরি পরিস্থিতিতে দ্রুত সাড়াদানের (Emergency Response) বাস্তবমুখী প্রশিক্ষণ।"
+        ]
+      },
+      {
+        "slug": "professional-automotive-electrician-training",
+        "title": "প্রফেশনাল অটোমোটিভ ইলেকট্রিশিয়ান ট্রেনিং",
+        "cardImage": "coming_soon",
+        "coverImage": "professional-automotive-electrician-training-cover",
+        "description": "আধুনিক যুগে মোটরযানগুলোর নিয়ন্ত্রণ ও কার্যক্ষমতা পুরোপুরি ইলেকট্রনিক্স ও কম্পিউটারাইজড সিস্টেমের ওপর নির্ভরশীল হয়ে পড়েছে। বর্তমানের একটি গাড়িতে ইঞ্জিন কন্ট্রোল থেকে শুরু করে নিরাপত্তা ও আরামদায়ক যাতায়াত—সবকিছুই নিয়ন্ত্রণ করে অসংখ্য সেন্সর, জটিল সার্কিট এবং উন্নত ওয়ারিং। ফলে প্রচলিত অটো-মেকানিকদের চেয়ে বর্তমানে বাজারে আধুনিক ‘অটোমোটিভ ইলেকট্রিশিয়ান’ বা গাড়ির বৈদ্যুতিক বিশেষজ্ঞদের চাহিদা আকাশচুম্বী। তবে সঠিক ও আধুনিক ডায়াগনস্টিকস এবং স্ক্যানার ব্যবহারের ব্যবহারিক জ্ঞান না থাকায় অনেক তরুণ এই সম্ভাবনাময় খাতে যুক্ত হতে পারছে না।",
+        "courseType": ["৪ মাসব্যাপী | আবাসিক কোর্স | পুরুষদের জন্য"],
+        "courseSubjects": [
+          "বৈদ্যুতিক সিস্টেমে কাজের প্রয়োজনীয় সতর্কতা ও নিরাপত্তা",
+          "আধুনিক মোটরযানের প্রধান প্রধান বৈদ্যুতিক যন্ত্রপাতি ও সিস্টেমের গঠন",
+          "মোটরযানের বৈদ্যুতিক সার্কিট লে-আউট ও ওয়ারিং প্র্যাকটিক্যাল",
+          "সেন্সর ও অ্যাকচুয়েটরের গঠন, কার্যপদ্ধতি ও ট্রাবলশুটিং",
+          "ত্রুটি নিরূপণে বিভিন্ন ধরণের টেস্টিং ইন্সট্রুমেন্ট ব্যবহার",
+          "আধুনিক ডায়াগনস্টিকস: OBD-II স্ক্যানার, ফল্ট কোড ও লাইভ ডাটা",
+          "বৈদ্যুতিক যন্ত্রপাতি ও সিস্টেমের ত্রুটি নিরূপণ (Diagnosis) ও মেরামত"
+        ]
+      }
+    ],
+    "stats": {
+      "title": "ইমপ্যাক্ট পরিসংখ্যান",
+      "table": {
+        "columns": ["কোর্স", "২০২২", "২০২৩", "২০২৪", "২০২৫"],
+        "rows": [
+          ["স্মল বিজনেস ম্যানেজমেন্ট", "৪২", "১৭৯", "৪৯৬", "৩২৮ (চলমান)"],
+          [
+            "স্মার্ট টেইলারিং অ্যান্ড ফ্যাশন ডিজাইন",
+            "-",
+            "২৩",
+            "১৭৯",
+            "১৭৯ (চলমান)"
+          ],
+          ["ড্রাইভিং প্রশিক্ষণ", "-", "-", "-", "৯৫ (চলমান)"],
+          ["দি আর্ট অব সেলস অ্যান্ড মার্কেটিং", "-", "-", "-", "৭৯ (চলমান)"],
+          ["শেফ অ্যান্ড কিচেন ম্যানেজমেন্ট", "-", "-", "-", "৩৬ (চলমান)"],
+          ["ল্যাঙ্গুয়েজ অ্যান্ড লিডারশিপ", "-", "-", "-", "১৩৯ (চলমান)"],
+          [
+            "ফুটওয়্যার অ্যান্ড জুতা শিল্পে উদ্যোক্তা তৈরি",
+            "-",
+            "-",
+            "-",
+            "৪৫ (চলমান)"
+          ],
+          ["দি আর্ট অব কন্টেন ক্রিয়েশন", "-", "-", "-", "৩০ (চলমান)"]
+        ],
+        "footer": {
+          "label": "মোট",
+          "values": ["১৭৫০ (চলমান)"]
+        }
+      }
+    },
+    "upcomingCourses": [
+      {
+        "title": "প্লাম্বিং ও পাইপ ফিটিং ট্রেনিং",
+        "icon": "PlumbingCourseIcon"
+      },
+      {
+        "title": "ইলেক্ট্রিক ট্রেনিং",
+        "icon": "ElectricCourseIcon"
+      },
+      {
+        "title": "রাজমিস্ত্রী ট্রেনিং",
+        "icon": "MasonCourseIcon"
+      },
+      {
+        "title": "রড বাইন্ডিং ট্রেনিং",
+        "icon": "RodBindingCourseIcon"
+      },
+      {
+        "title": "টাইলস মিস্ত্রী ট্রেনিং",
+        "icon": "TilesCourseIcon"
+      },
+      {
+        "title": "পেইন্টিং ট্রেনিং",
+        "icon": "PaintingCourseIcon"
+      },
+      {
+        "title": "গার্ডেনিং ট্রেনিং",
+        "icon": "GardeningCourseIcon"
+      },
+      {
+        "title": "স্ট্রিট ফুড ট্রেনিং",
+        "icon": "StreetFoodCourseIcon"
+      }
+    ],
+    "faq": [
+      {
+        "question": "আমি কীভাবে কোর্সে ভর্তি হতে পারি?",
+        "answer": "প্রত্যেক ব্যাচ শুরু হওয়ার আগে ফেইসবুক পেইজ এবং ওয়েবসাইটের নোটিশ বোর্ডে ঘোষণা দেয়া হয়। পেইজ এবং ওয়েবসাইটের নির্দেশনা অনুসরণ করুন।"
+      }
+    ]
+  },
+  "gallery": [
+    {
+      "src": "/assets/activities-gallery/skill-development-institute/skill-development-institute-1.webp",
+      "alt": "skill-based-entrepreneurship-1"
+    },
+    {
+      "src": "/assets/activities-gallery/skill-development-institute/skill-development-institute-2.webp",
+      "alt": "skill-based-entrepreneurship-2"
+    },
+    {
+      "src": "/assets/activities-gallery/skill-development-institute/skill-development-institute-3.webp",
+      "alt": "skill-based-entrepreneurship-3"
+    },
+    {
+      "src": "/assets/activities-gallery/skill-development-institute/skill-development-institute-4.webp",
+      "alt": "skill-based-entrepreneurship-4"
+    },
+    {
+      "src": "/assets/activities-gallery/skill-development-institute/skill-development-institute-5.webp",
+      "alt": "skill-based-entrepreneurship-5"
+    },
+    {
+      "src": "/assets/activities-gallery/skill-development-institute/skill-development-institute-6.webp",
+      "alt": "skill-based-entrepreneurship-6"
+    },
+    {
+      "src": "/assets/activities-gallery/skill-development-institute/skill-development-institute-7.webp",
+      "alt": "skill-based-entrepreneurship-7"
+    },
+    {
+      "src": "/assets/activities-gallery/skill-development-institute/skill-development-institute-8.webp",
+      "alt": "skill-based-entrepreneurship-8"
+    },
+    {
+      "src": "/assets/activities-gallery/skill-development-institute/skill-development-institute-9.webp",
+      "alt": "skill-based-entrepreneurship-9"
+    },
+    {
+      "src": "/assets/activities-gallery/skill-development-institute/skill-development-institute-10.webp",
+      "alt": "skill-based-entrepreneurship-10"
+    },
+    {
+      "src": "/assets/activities-gallery/skill-development-institute/skill-development-institute-11.webp",
+      "alt": "skill-based-entrepreneurship-11"
+    }
+  ]
+}

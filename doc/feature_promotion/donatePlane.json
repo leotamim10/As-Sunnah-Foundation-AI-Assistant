@@ -1,0 +1,148 @@
+{
+  "state": "success",
+  "message": "Product details",
+  "data": {
+    "created": {
+      "memberType": "SuperAdmin",
+      "dateTime": 1609417558209,
+      "member_id": "5fddc261b6ecb4150072ddc5",
+      "log_id": "5fedc35639c7ef31bbdb180d"
+    },
+    "bn": {
+      "name": "নিয়মিত অনুদান তহবিল",
+      "description": "নিয়মিত অনুদান ফাউন্ডেশনকে টিকিয়ে রাখতে সবচেয়ে বেশি সাহায্য করে। নিয়মিত দানের অর্থেই মূলত সকল কল্যাণমুখী কার্যক্রম পরিচালিত হয়।",
+      "content": "<div data-youtube-video=\"\"><iframe class=\"editor-youtube-video\" width=\"640\" height=\"480\" allowfullscreen=\"true\" autoplay=\"false\" disablekbcontrols=\"false\" enableiframeapi=\"false\" endtime=\"0\" ivloadpolicy=\"0\" loop=\"false\" modestbranding=\"true\" origin=\"\" playlist=\"\" src=\"https://www.youtube.com/embed/6iaWYbQ4Isg\" start=\"0\"></iframe></div><p class=\"editor-paragraph editor-empty\"></p><blockquote><p class=\"editor-paragraph\" style=\"text-align: center\">আল্লাহর কাছে সর্বাধিক প্রিয় আমল হলো, যা সদাসর্বদা নিয়মিত করা হয়, যদিও তা অল্প হয়। (সহীহ বুখারী, হাদীস ৬৪৬৪)</p></blockquote><p class=\"editor-paragraph editor-empty\"></p><p class=\"editor-paragraph\">নিয়মিত অনুদান ফাউন্ডেশনকে টিকিয়ে রাখতে সবচেয়ে বেশি সাহায্য করে। নিয়মিত দানের অর্থেই মূলত সকল কল্যাণমুখী কার্যক্রম পরিচালিত হয়। নিয়মিত দানের জন্য কোনো অংক নির্দিষ্ট নেই, যে কোনো পরিমাণ দান করা যায়। আর যে কোনো ভালো কাজ অনিয়মিতভাবে বেশি করার চেয়ে নিয়মিতভাবে অল্প করা উত্তম।<br><br>অনেকে নিয়মিত দান করতে চান, কিন্তু মনে থাকে না বলে দান করা হয়ে ওঠে না। এখন থেকে বিকাশ-নগদ এবং ভিসা-মাস্টারকার্ড ব্যবহারকারীরা আস-সুন্নাহ ফাউন্ডেশনের ওয়েবসাইট থেকে স্বয়ংক্রিয় পদ্ধতি চালু করে নিয়মিত দান করতে পারবেন। দৈনিক কিংবা মাসিক অপশন সিলেক্ট করে টাকার পরিমাণ সেট করে দিন। আপনি ভুলে গেলেও আপনার নির্ধারিত সময়ে নির্ধারিত পরিমাণ টাকা ফাউন্ডেশনের অ্যাকাউন্টে জমা হবে। চাইলে এই পদ্ধতিটি যেকোনো সময় বন্ধও করতে পারবেন।</p>",
+      "expenditureSector": "<h4>ব্যয়ের খাত</h4><p class=\"editor-paragraph editor-empty\"></p><ul class=\"editor-bullet-list\"><li class=\"editor-list-item\"><p class=\"editor-paragraph\">আস-সুন্নাহ ফাউন্ডেশনের সকল সেবামূলক কার্যক্রম</p></li><li class=\"editor-list-item\"><p class=\"editor-paragraph\">সকল নতুন কার্যক্রমের ব্যয় নির্বাহ</p></li><li class=\"editor-list-item\"><p class=\"editor-paragraph\">দাওয়াহ ও গবেষণা কার্যক্রম পরিচালনা</p></li><li class=\"editor-list-item\"><p class=\"editor-paragraph\">ফাউন্ডেশনের প্রাত্যহিক পরিচালনা ব্যয়</p></li><li class=\"editor-list-item\"><p class=\"editor-paragraph\"><button class=\"editor-button editor-text-button tiptap-button-editable\" text=\"ব্যবস্থাপনা ব্যয়\" classname=\"editor-text-button\" buttontype=\"text\" type=\"button\" data-text=\"ব্যবস্থাপনা ব্যয়\" data-classname=\"editor-text-button\" data-button-type=\"text\" onclick=\"event.preventDefault(); return false;\">ব্যবস্থাপনা ব্যয়</button></p></li></ul>",
+      "donationCardTitle": "অংশ নিন ফাউন্ডেশনের সকল কল্যাণমূলক কাজে",
+      "donationCardDescription": "এই খাতে দানের মাধ্যমে ফাউন্ডেশনের সকল কল্যাণমূলক কাজের অংশীদার হতে পারবেন। কারণ এই তহবিল ফাউন্ডেশন পরিচালিত সকল কল্যাণমূলক কার্যক্রমের জন্য উন্মুক্ত থাকে।",
+      "_id": "68f9a209f1a7f81ee9be0eb6"
+    },
+    "en": {
+      "name": "Regular Donation Fund",
+      "description": "The foundation is best supported by regular donations. Most welfare activities are primarily funded through these consistent contributions.",
+      "content": "<div data-youtube-video=\"\"><iframe class=\"editor-youtube-video\" width=\"640\" height=\"480\" allowfullscreen=\"true\" autoplay=\"false\" disablekbcontrols=\"false\" enableiframeapi=\"false\" endtime=\"0\" ivloadpolicy=\"0\" loop=\"false\" modestbranding=\"true\" origin=\"\" playlist=\"\" rel=\"1\" src=\"https://www.youtube.com/embed/6iaWYbQ4Isg\" start=\"0\"></iframe></div><br class=\"editor-empty\"/><blockquote class=\"editor-blockquote\"><p class=\"editor-paragraph\" style=\"text-align: center\">The most beloved deed to Allah is that which is done regularly, even if it is little.</p><p class=\"editor-paragraph\" style=\"text-align: center\">(Sahih al-Bukhari, Hadith 6464)</p></blockquote><br class=\"editor-empty\"/><p class=\"editor-paragraph\">Regular donations are the most vital support for sustaining the Foundation. Indeed, most of our welfare activities are funded by these consistent contributions. There is no fixed amount for regular giving; you can donate any amount you choose. It is better to do a good deed regularly in small amounts than to do it irregularly in large ones.<br class=\"editor-empty\"><br class=\"editor-empty\">Many wish to donate regularly but often forget to do so. Now, users of bKash, Nagad, and Visa/Mastercard can set up automated donations directly from the As-Sunnah Foundation website. Simply select a daily or monthly option and set your preferred amount. Even if you forget, your designated amount will be credited to the Foundation’s account at the scheduled time. You can also disable this feature whenever you wish.</p>",
+      "expenditureSector": "<h4>Expense Categories</h4><p class=\"editor-paragraph editor-empty\"></p><ul class=\"editor-bullet-list\"><li class=\"editor-list-item\"><p class=\"editor-paragraph\">All charitable activities of As-Sunnah Foundation</p></li><li class=\"editor-list-item\"><p class=\"editor-paragraph\">Funding new initiatives</p></li><li class=\"editor-list-item\"><p class=\"editor-paragraph\">Running Da’wah and research programs</p></li><li class=\"editor-list-item\"><p class=\"editor-paragraph\"><button class=\"editor-button editor-text-button tiptap-button-editable\" text=\"Administrative Expenses\" classname=\"editor-text-button\" buttontype=\"text\" type=\"button\" data-text=\"Administrative Expenses\" data-classname=\"editor-text-button\" data-button-type=\"text\" onclick=\"event.preventDefault(); return false;\">Administrative Expenses</button></p></li></ul>",
+      "donationCardTitle": "Participate in all of the foundation's welfare activities.",
+      "donationCardDescription": "By contributing to this fund, you can engage in all of the foundation's welfare projects, as this fund supports all welfare activities conducted by the foundation.",
+      "_id": "699d456221f013de3f43e152"
+    },
+    "description": "donation.product.monthly.desc",
+    "notifyIntervalDays": 30,
+    "amountIsFixed": true,
+    "active": true,
+    "is_receiving_donations": true,
+    "priority": 2,
+    "category": "REGULAR",
+    "subCategory": "GENERAL",
+    "amount": [10, 20, 30, 50, 100, 300, 500, 1000, 2000, 5000],
+    "metaKeywords": [],
+    "_id": "5fedc35639c7ef31bbdb180c",
+    "productConfig": [],
+    "updates": [
+      {
+        "memberType": "SuperAdmin",
+        "_id": "5ff0b02c2feb562ea433df69",
+        "dateTime": 1609609260687,
+        "member_id": "5fddc261b6ecb4150072ddc5",
+        "log_id": "5ff0b02c2feb562ea433df68"
+      },
+      {
+        "memberType": "SuperAdmin",
+        "_id": "664b74ddc44679192d82ff5d",
+        "dateTime": 1716221149166,
+        "member_id": "5fdf5688cf99b53ee1b562ed",
+        "log_id": "664b74ddc44679192d82ff5b"
+      },
+      {
+        "memberType": "SuperAdmin",
+        "_id": "6652bdbc5e0ed1cf7d65caa4",
+        "dateTime": 1716698556125,
+        "member_id": "5fdf5688cf99b53ee1b562ed",
+        "log_id": "6652bdbc5e0ed1cf7d65caa2"
+      },
+      {
+        "memberType": "SuperAdmin",
+        "_id": "6652bdf15e0ed1cf7d65caad",
+        "dateTime": 1716698609199,
+        "member_id": "5fdf5688cf99b53ee1b562ed",
+        "log_id": "6652bdf15e0ed1cf7d65caab"
+      },
+      {
+        "memberType": "SuperAdmin",
+        "_id": "6652c0105c2ac8d77206e65d",
+        "dateTime": 1716699152437,
+        "member_id": "5fdf5688cf99b53ee1b562ed",
+        "log_id": "6652c0105c2ac8d77206e65b"
+      },
+      {
+        "memberType": "SuperAdmin",
+        "_id": "6652c17e5c2ac8d77206e69e",
+        "dateTime": 1716699518083,
+        "member_id": "5fdf5688cf99b53ee1b562ed",
+        "log_id": "6652c17e5c2ac8d77206e69c"
+      },
+      {
+        "memberType": "SuperAdmin",
+        "_id": "665bf69674a34a75d9672ece",
+        "dateTime": 1717302934260,
+        "member_id": "5fdf5688cf99b53ee1b562ed",
+        "log_id": "665bf69674a34a75d9672ecc"
+      }
+    ],
+    "name": "donation.product.monthly.title",
+    "productType": "donation.product.regular",
+    "storeName": "Monthly",
+    "routeExtension": "/regular",
+    "primaryBanner": "https://cdn.assunnahfoundation.org/donation/regular.jpg",
+    "secondaryBanner": "https://cdn.assunnahfoundation.org/donation/regular.jpg",
+    "__v": 7,
+    "updatedAt": "2026-06-02T11:04:54.731Z",
+    "bankDetails": [],
+    "merchantNo": "",
+    "metaDescription": "",
+    "metaTitle": "",
+    "paymentMethod": [
+      {
+        "payment_processor": "bkash_recurring",
+        "payment_key": "bkash_recurring_regular_fund",
+        "_id": "6a1eb8d6918601f9881d9c37"
+      },
+      {
+        "payment_processor": "nagad_recurring",
+        "payment_key": "nagad_recurring_regular_fund",
+        "_id": "6a1eb8d6918601f9881d9c38"
+      },
+      {
+        "payment_processor": "ssl_recurring",
+        "payment_key": "ssl_recurring_regular_fund",
+        "_id": "6a1eb8d6918601f9881d9c39"
+      }
+    ],
+    "shortCode": "Regular Fund",
+    "amountInUSD": [1, 5, 10, 100, 0.3, 0.5, 50],
+    "paymentMethodUSD": [
+      {
+        "payment_processor": "ssl_recurring",
+        "payment_key": "ssl_recurring_regular_fund",
+        "_id": "6a1eb8d6918601f9881d9c36"
+      }
+    ],
+    "subscriptionPayConfig": {
+      "local": {
+        "dailyAmounts": [100, 50, 30, 20, 10],
+        "monthlyAmounts": [5000, 2000, 1000, 500, 300],
+        "paymentMethods": [],
+        "_id": "6a1eb8d6918601f9881d9c3d"
+      },
+      "foreign": {
+        "dailyAmountsInBDT": [150, 100, 70, 50, 40],
+        "dailyAmountsInUSD": [10, 5, 1, 0.5, 0.3],
+        "monthlyAmountsInBDT": [5000, 2000, 1000, 500, 300],
+        "monthlyAmountsInUSD": [100, 50, 25, 10, 5],
+        "paymentMethods": [],
+        "_id": "6a1eb8d6918601f9881d9c3e"
+      },
+      "_id": "6a1eb8d6918601f9881d9c3c"
+    }
+  }
+}
