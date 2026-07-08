@@ -5,6 +5,7 @@
 import Fastify from "fastify";
 import { RespondRequest, TtsRequest } from "./contracts.js";
 import { GeminiAdapter, type UnderstandingAdapter } from "./adapters/understanding.js";
+import { LocalUnderstandingAdapter } from "./adapters/local.js";
 import { AzureBnBDAdapter, FallbackTtsAdapter, type TtsAdapter } from "./adapters/tts.js";
 import { EdgeTtsAdapter } from "./adapters/edge.js";
 import { retrieve, getSuggestions } from "./rag/retrieve.js";
@@ -18,10 +19,21 @@ function env(name: string, fallback?: string): string {
 
 const PORT = Number(env("PORT", "8787"));
 
-const understanding: UnderstandingAdapter = new GeminiAdapter({
-  apiKey: env("GEMINI_API_KEY"),
-  model: env("GEMINI_MODEL", "gemini-2.5-flash"),
-});
+// Understanding backend: Gemini (default) or a fully-local Ollama+Whisper path (no rate limits).
+// GEMINI_API_KEY is only required when actually using Gemini.
+const understanding: UnderstandingAdapter =
+  (process.env.UNDERSTANDING_PROVIDER ?? "gemini").toLowerCase() === "ollama"
+    ? new LocalUnderstandingAdapter({
+        ollamaUrl: env("OLLAMA_URL", "http://localhost:11434"),
+        model: env("OLLAMA_MODEL", "qwen2.5:7b"),
+        whisperUrl: process.env.WHISPER_URL,
+        whisperModel: process.env.WHISPER_MODEL,
+      })
+    : new GeminiAdapter({
+        apiKey: env("GEMINI_API_KEY"),
+        model: env("GEMINI_MODEL", "gemini-2.5-flash"),
+      });
+console.log(`understanding backend: ${(process.env.UNDERSTANDING_PROVIDER ?? "gemini").toLowerCase()}`);
 
 // TTS chain: Edge (card-free demo path, same bn-BD voices) is primary; Azure (production path)
 // is appended only when its keys are present, so the gateway boots with zero paid dependencies.

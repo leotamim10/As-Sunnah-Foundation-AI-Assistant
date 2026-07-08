@@ -99,6 +99,33 @@ With both up, open http://localhost:8000.
 
 Schemas are enforced with zod in `ai-gateway/src/contracts.ts`.
 
+## Run fully local (no Gemini, no rate limits)
+
+Swap the cloud understanding step for local models — **generation via [Ollama](https://ollama.com)** and
+**voice via a local Whisper server** — so nothing hits Gemini. Retrieval (e5) and TTS (Edge) are already
+local. Enable with `UNDERSTANDING_PROVIDER=ollama`.
+
+```bash
+# 1) Ollama (generation)
+ollama pull qwen2.5:7b        # ~4.7GB; multilingual incl. Bengali. Use qwen2.5:3b for speed.
+ollama serve                  # http://localhost:11434
+
+# 2) Whisper (voice STT) — any OpenAI-compatible server, e.g. faster-whisper-server / speaches
+docker run -d -p 8001:8000 fedirz/faster-whisper-server:latest-cpu   # http://localhost:8001
+
+# 3) point the gateway at them (in .env)
+UNDERSTANDING_PROVIDER=ollama
+OLLAMA_URL=http://localhost:11434         # http://host.docker.internal:11434 from inside Docker
+OLLAMA_MODEL=qwen2.5:7b
+WHISPER_URL=http://localhost:8001         # omit to keep text-only (no voice)
+```
+
+Notes:
+- **Text works with just Ollama**; voice additionally needs `WHISPER_URL`.
+- From the Docker containers, `localhost` won't reach host servers — use `host.docker.internal`.
+- Local models are weaker than Gemini at natural bn-BD; `qwen2.5:7b` / `gemma2:9b` are the best bets.
+- Same `{transcription, response}` contract → `server.py`, the WS protocol, the frontend, and TTS are unchanged.
+
 ## Tests & dev tools
 
 All from `ai-gateway/`:
