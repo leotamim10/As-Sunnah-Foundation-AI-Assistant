@@ -27,16 +27,16 @@ The **WebSocket protocol between browser and `server.py` is unchanged**. All AI 
 Node gateway (`ai-gateway/`) — that's the graded core. See [`NAVIGATION.md`](NAVIGATION.md) for the
 file map, the frozen contracts, and the model-swap decision record.
 
-| Path | Role |
-|---|---|
-| `src/server.py` | FastAPI WS server; calls the gateway's `/respond` + `/tts`. Bengali sentence-streaming. |
-| `src/index.html` | Single-file UI + inline JS: mic VAD, camera, playback, and a `bn` i18n table. |
-| `ai-gateway/` | Node/TS gateway: Gemini + Azure adapters, zod contracts, Fastify server, tests. |
+| Path             | Role                                                                                    |
+| ---------------- | --------------------------------------------------------------------------------------- |
+| `src/server.py`  | FastAPI WS server; calls the gateway's `/respond` + `/tts`. Bengali sentence-streaming. |
+| `src/index.html` | Single-file UI + inline JS: mic VAD, camera, playback, and a `bn` i18n table.           |
+| `ai-gateway/`    | Node/TS gateway: Gemini + Azure adapters, zod contracts, Fastify server, tests.         |
 
 ## Prerequisites
 
-- A **Gemini API key** — https://aistudio.google.com/apikey (free tier). *(only paid-tier-free requirement)*
-- **TTS needs nothing** — Edge voices are card-free. *(Optional: Azure Speech key + region for a paid fallback.)*
+- A **Gemini API key** — https://aistudio.google.com/apikey (free tier). _(only paid-tier-free requirement)_
+- **TTS needs nothing** — Edge voices are card-free. _(Optional: Azure Speech key + region for a paid fallback.)_
 - Either **Docker** (recommended) or **Node ≥ 20** + **Python ≥ 3.12** for local dev.
 
 ## Setup
@@ -91,11 +91,11 @@ With both up, open http://localhost:8000.
 
 ## Gateway API (internal)
 
-| Endpoint | Request | Response |
-|---|---|---|
-| `POST /respond` | `{ audioB64?, imageB64?, text?, lang="bn" }` | `{ transcription, response }` |
-| `POST /tts` | `{ text, voice? }` | `{ audioB64, sampleRate }` (24 kHz 16-bit mono PCM) |
-| `GET /health` | — | `{ ok: true }` |
+| Endpoint        | Request                                      | Response                                            |
+| --------------- | -------------------------------------------- | --------------------------------------------------- |
+| `POST /respond` | `{ audioB64?, imageB64?, text?, lang="bn" }` | `{ transcription, response }`                       |
+| `POST /tts`     | `{ text, voice? }`                           | `{ audioB64, sampleRate }` (24 kHz 16-bit mono PCM) |
+| `GET /health`   | —                                            | `{ ok: true }`                                      |
 
 Schemas are enforced with zod in `ai-gateway/src/contracts.ts`.
 
@@ -122,7 +122,7 @@ to judge the register. **No keys needed** — but requires outbound WebSocket to
 
 ```bash
 npm run tts:sample                                # default female voice (Nabanita)
-TTS_VOICE=bn-BD-PradeepNeural npm run tts:sample  # male voice (Pradeep)
+TTS_VOICE=bn-BD-PradeepNeural npm run tts:sample  # male voice (Mohammad Ahmed)
 ```
 
 ## Knowledge base (As-Sunnah Foundation RAG)
@@ -141,8 +141,8 @@ Embeddings default to `Xenova/multilingual-e5-small` (100% top-3 on the eval set
 `EMBED_MODEL=Xenova/multilingual-e5-base` swaps in a bigger model — rebuild the KB with the same value.
 
 - **Docker** bakes the KB + embedding model into the gateway image at build time (no runtime download);
-  `docker compose up --build` just works. *(Build needs HTTPS egress for the foundation API + a one-time
-  Hugging Face model fetch.)*
+  `docker compose up --build` just works. _(Build needs HTTPS egress for the foundation API + a one-time
+  Hugging Face model fetch.)_
 - **Refresh** weekly to pick up new campaigns — re-ingests and restarts the gateway (model stays cached):
 
   ```bash
