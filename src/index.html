@@ -177,6 +177,10 @@
     flex-shrink: 0;
   }
 
+  .viewport-wrap.hidden { display: none; }
+
+  .ctrl-group { display: flex; gap: 8px; }
+
   /* Three glow layers */
   .viewport-wrap::before,
   .viewport-wrap::after,
@@ -513,7 +517,7 @@
 
 <div class="portal-stack">
   <!-- Webcam viewport with glow layers -->
-  <div id="viewportWrap" class="viewport-wrap loading">
+  <div id="viewportWrap" class="viewport-wrap loading hidden">
     <div class="viewport-glow"></div>
     <video id="video" autoplay muted playsinline></video>
   </div>
@@ -528,10 +532,13 @@
 
   <!-- Controls -->
   <div class="controls">
-    <button id="cameraToggle" class="ctrl-btn active">ক্যামেরা চালু</button>
+    <div class="ctrl-group">
+      <button id="listenToggle" class="ctrl-btn">শুনুন</button>
+      <button id="cameraToggle" class="ctrl-btn">ক্যামেরা বন্ধ</button>
+    </div>
     <div class="state-indicator">
-      <div id="stateDot" class="dot loading"></div>
-      <span id="stateText">লোড হচ্ছে…</span>
+      <div id="stateDot" class="dot idle"></div>
+      <span id="stateText">প্রস্তুত</span>
     </div>
     <span class="on-device-pill">
       <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 11.5a3 3 0 0 1-.4-5.97A4 4 0 0 1 12 6.5a2.5 2.5 0 0 1-.5 5z"/></svg>
@@ -551,7 +558,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@ricky0123/vad-web@0.0.29/dist/bundle.min.js"></script>
 <script>
 const $ = id => document.getElementById(id);
-const video = $('video'), cameraToggle = $('cameraToggle');
+const video = $('video'), cameraToggle = $('cameraToggle'), listenToggle = $('listenToggle');
 const messagesDiv = $('messages'), statusEl = $('status');
 const stateDot = $('stateDot'), stateText = $('stateText');
 const viewportWrap = $('viewportWrap');
@@ -569,11 +576,16 @@ const bn = {
   'status.disconnected': 'সংযোগ বিচ্ছিন্ন',
   'status.processing': 'প্রসেস হচ্ছে',
   'state.loading': 'লোড হচ্ছে…',
+  'state.idle': 'প্রস্তুত',
   'state.listening': 'শুনছি',
   'state.processing': 'ভাবছি…',
   'state.speaking': 'বলছি',
   'camera.on': 'ক্যামেরা চালু',
   'camera.off': 'ক্যামেরা বন্ধ',
+  'listen.on': 'শুনছি',
+  'listen.off': 'শুনুন',
+  'perm.camera': 'ক্যামেরা চালু করতে ব্রাউজারের অনুমতি দিন — অ্যাড্রেস বারের ক্যামেরা আইকনে ক্লিক করে "Allow" দিন।',
+  'perm.mic': 'ভয়েস কমান্ড ব্যবহার করতে মাইক্রোফোনের অনুমতি দিন — অ্যাড্রেস বারের মাইক আইকনে ক্লিক করে "Allow" দিন।',
   'meta.withCamera': 'ক্যামেরাসহ',
   'meta.llm': 'LLM {n}s',
   'meta.tts': 'TTS {n}s',
@@ -586,8 +598,9 @@ function t(key, params) {
   return s;
 }
 
-let ws, mediaStream, myvad;
-let cameraEnabled = true;
+let ws, micStream, cameraStream, myvad;
+let cameraEnabled = false;   // camera is opt-in (off by default)
+let voiceEnabled = false;    // voice/listening is opt-in (off by default)
 let audioCtx, currentSource;
 let state = 'loading';
 let ignoreIncomingAudio = false;
@@ -684,6 +697,9 @@ function updateSpeakingGlow() {
   requestAnimationFrame(updateSpeakingGlow);
 }
 
+// The "ready for input" state depends on whether voice is enabled.
+function readyState() { return voiceEnabled ? 'listening' : 'idle'; }
+
 // ── State Machine ──
 function setState(newState) {
   state = newState;
@@ -692,8 +708,8 @@ function setState(newState) {
   stateDot.className = `dot ${newState}`;
   stateText.textContent = t(`state.${newState}`);
 
-  // Update viewport glow class
-  viewportWrap.className = `viewport-wrap ${newState}`;
+  // Update viewport glow class — keep it hidden whenever the camera is off.
+  viewportWrap.className = `viewport-wrap ${newState}${cameraEnabled ? '' : ' hidden'}`;
 
   // Reset inline styles from speaking glow
   if (newState !== 'speaking') {
@@ -721,9 +737,9 @@ function setState(newState) {
   }
 
   // Connect/disconnect mic analyser based on state
-  if (newState === 'listening' && mediaStream && audioCtx && analyser) {
+  if (newState === 'listening' && micStream && audioCtx && analyser) {
     if (!micSource) {
-      micSource = audioCtx.createMediaStreamSource(mediaStream);
+      micSource = audioCtx.createMediaStreamSource(micStream);
     }
     try { micSource.connect(analyser); } catch {}
   } else if (micSource && newState !== 'listening') {
@@ -736,7 +752,7 @@ function connect() {
   ws = new WebSocket(`${location.protocol === 'https:' ? 'wss' : 'ws'}://${location.host}/ws`);
   ws.onopen = () => {
     setStatus('connected');
-    if (state !== 'loading') setState('listening');
+    if (state === 'loading') setState(readyState());
   };
   ws.onclose = () => {
     setStatus('disconnected');
@@ -757,7 +773,7 @@ function connect() {
       // If no audio follows (error reply / empty TTS), don't get stuck in 'processing'.
       clearTimeout(turnTimer);
       turnTimer = setTimeout(() => {
-        if (state === 'processing') { setState('listening'); setStatus('connected'); }
+        if (state === 'processing') { setState(readyState()); setStatus('connected'); }
       }, 2500);
     } else if (msg.type === 'audio_start') {
       if (ignoreIncomingAudio) return;
@@ -772,40 +788,106 @@ function connect() {
       if (ignoreIncomingAudio) {
         ignoreIncomingAudio = false;
         stopPlayback();
-        setState('listening');
+        setState(readyState());
         setStatus('connected');
         return;
       }
       streamTtsTime = msg.tts_time;
       const meta = messagesDiv.querySelector('.msg.assistant:last-child .meta');
       if (meta) meta.textContent += ` · ${t('meta.tts', { n: msg.tts_time })}`;
-      // Terminal safety net: if nothing is (still) playing, return to listening.
-      if (streamSources.length === 0 && state !== 'listening') { setState('listening'); setStatus('connected'); }
+      // Terminal safety net: if nothing is (still) playing, return to the ready state.
+      if (streamSources.length === 0 && state !== 'listening' && state !== 'idle') { setState(readyState()); setStatus('connected'); }
     }
   };
 }
 
 function setStatus(cls) { statusEl.className = `status-pill ${cls}`; statusEl.textContent = t(`status.${cls}`); }
 
-// ── Camera ──
-async function startCamera() {
+// ── Media permission helper ──
+// Pre-checks the Permissions API (where supported); on denial or getUserMedia failure it recommends
+// enabling the permission rather than silently doing nothing.
+async function getMedia(constraints, kind) { // kind: 'camera' | 'microphone'
   try {
-    mediaStream = await navigator.mediaDevices.getUserMedia({
-      video: { width: 640, height: 480, facingMode: 'user' },
-      audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true },
-    });
-    video.srcObject = mediaStream;
-    return;
-  } catch (e) { console.warn('Video+audio failed:', e.message); }
+    if (navigator.permissions && navigator.permissions.query) {
+      const st = await navigator.permissions.query({ name: kind }).catch(() => null);
+      if (st && st.state === 'denied') { recommend(kind); return null; }
+    }
+    return await navigator.mediaDevices.getUserMedia(constraints);
+  } catch (e) {
+    console.warn(`${kind} permission/getUserMedia failed:`, e && e.name);
+    recommend(kind);
+    return null;
+  }
+}
+function recommend(kind) {
+  addMessage('assistant', kind === 'camera' ? t('perm.camera') : t('perm.mic'));
+}
 
-  const streams = await Promise.allSettled([
-    navigator.mediaDevices.getUserMedia({ video: { width: 640, height: 480, facingMode: 'user' } }),
-    navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true } }),
-  ]);
-  mediaStream = new MediaStream();
-  streams.forEach(r => { if (r.status === 'fulfilled') r.value.getTracks().forEach(t => mediaStream.addTrack(t)); });
-  if (mediaStream.getVideoTracks().length) video.srcObject = mediaStream;
-  if (!mediaStream.getAudioTracks().length) { cameraEnabled = false; }
+// ── Camera (opt-in) ──
+async function enableCamera() {
+  const stream = await getMedia({ video: { width: 640, height: 480, facingMode: 'user' } }, 'camera');
+  if (!stream) return;
+  cameraStream = stream;
+  video.srcObject = stream;
+  video.style.opacity = 1;
+  cameraEnabled = true;
+  cameraToggle.classList.add('active');
+  cameraToggle.textContent = t('camera.on');
+  viewportWrap.classList.remove('hidden');
+}
+function disableCamera() {
+  if (cameraStream) { cameraStream.getTracks().forEach(t => t.stop()); cameraStream = null; }
+  video.srcObject = null;
+  cameraEnabled = false;
+  cameraToggle.classList.remove('active');
+  cameraToggle.textContent = t('camera.off');
+  viewportWrap.classList.add('hidden');
+}
+
+// ── Voice / listening (opt-in) ──
+async function enableListening() {
+  const stream = await getMedia({ audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true } }, 'microphone');
+  if (!stream) return;
+  micStream = stream;
+  micSource = null; // recreated for the analyser on setState('listening')
+  ensureAudioCtx();
+  if (audioCtx.state === 'suspended') { try { await audioCtx.resume(); } catch {} }
+  try {
+    if (!myvad) {
+      myvad = await vad.MicVAD.new({
+        getStream: async () => new MediaStream(micStream.getAudioTracks()),
+        positiveSpeechThreshold: 0.5,
+        negativeSpeechThreshold: 0.25,
+        redemptionMs: 600,
+        minSpeechMs: 300,
+        preSpeechPadMs: 300,
+        onSpeechStart: handleSpeechStart,
+        onSpeechEnd: handleSpeechEnd,
+        onVADMisfire: () => console.log('VAD misfire (too short)'),
+        onnxWASMBasePath: "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.22.0/dist/",
+        baseAssetPath: "https://cdn.jsdelivr.net/npm/@ricky0123/vad-web@0.0.29/dist/",
+      });
+    }
+    myvad.start();
+  } catch (e) {
+    console.warn('VAD init failed:', e);
+    disableListening();
+    recommend('microphone');
+    return;
+  }
+  voiceEnabled = true;
+  listenToggle.classList.add('active');
+  listenToggle.textContent = t('listen.on');
+  setState('listening');
+}
+function disableListening() {
+  if (myvad) { try { myvad.pause(); } catch {} myvad = null; }
+  if (micStream) { micStream.getTracks().forEach(t => t.stop()); micStream = null; }
+  if (micSource) { try { micSource.disconnect(); } catch {} micSource = null; }
+  voiceEnabled = false;
+  listenToggle.classList.remove('active');
+  listenToggle.textContent = t('listen.off');
+  if (state === 'listening') setState('idle');
 }
 
 function captureFrame() {
@@ -932,10 +1014,10 @@ function queueAudioChunk(base64Pcm) {
   source.onended = () => {
     const idx = streamSources.indexOf(source);
     if (idx !== -1) streamSources.splice(idx, 1);
-    // If this was the last chunk and no more are queued, return to listening
+    // If this was the last chunk and no more are queued, return to the ready state
     if (streamSources.length === 0 && state === 'speaking') {
       currentSource = null;
-      setState('listening');
+      setState(readyState());
       setStatus('connected');
     }
   };
@@ -950,12 +1032,8 @@ function addMessage(role, text, meta) {
   messagesDiv.scrollTop = messagesDiv.scrollHeight;
 }
 
-cameraToggle.addEventListener('click', () => {
-  cameraEnabled = !cameraEnabled;
-  cameraToggle.classList.toggle('active', cameraEnabled);
-  cameraToggle.textContent = cameraEnabled ? t('camera.on') : t('camera.off');
-  video.style.opacity = cameraEnabled ? 1 : 0.3;
-});
+cameraToggle.addEventListener('click', () => { cameraEnabled ? disableCamera() : enableCamera(); });
+listenToggle.addEventListener('click', () => { voiceEnabled ? disableListening() : enableListening(); });
 
 // ── Text composer ── type a question; same {text} WS path the gateway already handles.
 function escapeHtml(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
@@ -1021,49 +1099,21 @@ async function loadSuggestions() {
 loadSuggestions();
 
 // ── Init ──
-async function init() {
+function init() {
   initWaveformCanvas();
   window.addEventListener('resize', initWaveformCanvas);
 
-  await startCamera();
   connect();
 
-  // Initialize VAD with shared mic stream
-  myvad = await vad.MicVAD.new({
-    getStream: async () => new MediaStream(mediaStream.getAudioTracks()),
-    positiveSpeechThreshold: 0.5,
-    negativeSpeechThreshold: 0.25,
-    redemptionMs: 600,
-    minSpeechMs: 300,
-    preSpeechPadMs: 300,
-    onSpeechStart: handleSpeechStart,
-    onSpeechEnd: handleSpeechEnd,
-    onVADMisfire: () => { console.log('VAD misfire (too short)'); },
-    onnxWASMBasePath: "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.22.0/dist/",
-    baseAssetPath: "https://cdn.jsdelivr.net/npm/@ricky0123/vad-web@0.0.29/dist/",
-  });
+  // Camera + voice are opt-in via the buttons — nothing is acquired on load, so there is no
+  // camera/mic permission prompt until the user asks for it. Text input works without either.
+  cameraEnabled = false;
+  voiceEnabled = false;
+  viewportWrap.classList.add('hidden');
+  setState('idle');
 
-  myvad.start();
-
-  // Init audio context on first user gesture for mic visualizer
-  // (browsers require user interaction to create AudioContext)
-  const initAudio = () => {
-    ensureAudioCtx();
-    if (audioCtx.state === 'suspended') audioCtx.resume();
-    document.removeEventListener('click', initAudio);
-    document.removeEventListener('keydown', initAudio);
-  };
-  document.addEventListener('click', initAudio);
-  document.addEventListener('keydown', initAudio);
-  // Also try immediately (may work if page had prior interaction)
-  ensureAudioCtx();
-
-  setState('listening');
-
-  // Start waveform loop
   drawWaveform();
-
-  console.log('VAD initialized and listening');
+  console.log('Ready — camera and voice are opt-in.');
 }
 
 init();
