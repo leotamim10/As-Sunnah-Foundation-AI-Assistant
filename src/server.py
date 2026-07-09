@@ -64,6 +64,17 @@ async def suggestions():
         return {"questions": []}
 
 
+@app.get("/models")
+async def models():
+    """The failover model chain (names + limitations, no keys) for the UI selector."""
+    try:
+        r = await gateway.get("/models")
+        r.raise_for_status()
+        return r.json()
+    except httpx.HTTPError:
+        return {"models": [], "activeId": None}
+
+
 @app.post("/lead")
 async def lead(request: Request):
     """Free-usage lead capture: stamp the client IP (server-side) and forward to the gateway store."""
@@ -126,6 +137,8 @@ async def websocket_endpoint(ws: WebSocket):
                 payload["audioB64"] = msg["audio"]
             if msg.get("image"):
                 payload["imageB64"] = msg["image"]
+            if msg.get("model"):
+                payload["modelId"] = msg["model"]  # user's picked model → tried first in the chain
 
             # Understanding: audio(+image) -> {transcription, response} via the gateway.
             t0 = time.time()
@@ -162,6 +175,8 @@ async def websocket_endpoint(ws: WebSocket):
             reply = {"type": "text", "text": text_response, "llm_time": round(llm_time, 2)}
             if transcription:
                 reply["transcription"] = transcription
+            if data.get("model"):
+                reply["model"] = data["model"]  # which model actually answered (after any failover)
             await ws.send_text(json.dumps(reply))
 
             if interrupted.is_set():
