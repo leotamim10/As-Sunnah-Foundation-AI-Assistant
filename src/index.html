@@ -542,6 +542,40 @@
   .mi-badge.vision { color: var(--accent); border-color: #bbf7d0; background: var(--accent-bg); }
   .mi-check { margin-left: auto; color: var(--accent); font-weight: 700; }
   .mi-note { font-size: 11.5px; color: var(--muted); line-height: 1.45; margin-top: 3px; }
+  /* model menu opens upward when in the bottom controls row */
+  .model-select.up .model-menu { top: auto; bottom: calc(100% + 6px); }
+  .controls .model-btn { background: var(--surface-2); }
+
+  /* ── User profile (topbar) — details stored locally ── */
+  .profile-select { position: relative; }
+  .profile-btn {
+    display: inline-flex; align-items: center; gap: 7px; font-family: var(--font); font-size: 12px;
+    font-weight: 500; color: var(--fg); background: var(--bg); border: 1px solid var(--border);
+    border-radius: 999px; padding: 4px 10px 4px 4px; cursor: pointer; transition: all .15s; max-width: 190px;
+  }
+  .profile-btn:hover { border-color: var(--muted); }
+  .profile-btn #profileName { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .avatar { width: 22px; height: 22px; border-radius: 50%; background: var(--accent); color: #fff; flex-shrink: 0;
+    display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+  .profile-menu {
+    position: absolute; top: calc(100% + 6px); right: 0; z-index: 120; width: min(280px, calc(100vw - 24px));
+    background: var(--bg); border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 16px 44px rgba(0,0,0,0.18);
+    padding: 14px; display: none;
+  }
+  .profile-menu.open { display: block; animation: pop-in .18s ease-out; }
+  .profile-head { display: flex; align-items: center; gap: 10px; padding-bottom: 10px; border-bottom: 1px solid var(--border); margin-bottom: 10px; }
+  .profile-head .avatar { width: 38px; height: 38px; font-size: 15px; }
+  .profile-head .ph-name { font-size: 14px; font-weight: 700; }
+  .profile-head .ph-sub { font-size: 11.5px; color: var(--muted); }
+  .pf-row { display: flex; gap: 8px; font-size: 12.5px; padding: 4px 0; }
+  .pf-row .pf-k { color: var(--muted-2); min-width: 64px; flex-shrink: 0; }
+  .pf-row .pf-v { color: var(--fg); word-break: break-word; }
+  .profile-actions { display: flex; gap: 8px; margin-top: 12px; }
+  .pf-btn { flex: 1; font-family: var(--font); font-size: 12.5px; font-weight: 600; padding: 8px; border-radius: 8px; cursor: pointer; border: 1px solid var(--border); background: var(--bg); color: var(--fg); transition: all .15s; }
+  .pf-btn:hover { background: var(--surface-2); }
+  .pf-btn.danger { color: #dc2626; border-color: #fecaca; }
+  .pf-btn.danger:hover { background: #fef2f2; }
+  .pf-guide { font-size: 12.5px; color: var(--muted); line-height: 1.5; }
 </style>
 </head>
 <body>
@@ -552,11 +586,11 @@
     <span id="appName">As-Sunnah Foundation</span>
   </div>
   <div class="topbar-right">
-    <div class="model-select">
-      <button id="modelBtn" type="button" class="model-btn" aria-haspopup="listbox" aria-expanded="false">
-        <span class="model-dot"></span><span id="modelName">…</span><span class="model-caret">▾</span>
+    <div class="profile-select">
+      <button id="profileBtn" type="button" class="profile-btn" aria-haspopup="menu" aria-expanded="false">
+        <span id="profileAvatar" class="avatar">?</span><span id="profileName">Guest</span><span class="model-caret">▾</span>
       </button>
-      <div id="modelMenu" class="model-menu" role="listbox"></div>
+      <div id="profileMenu" class="profile-menu" role="menu"></div>
     </div>
     <button id="helpBtn" type="button" class="help-btn" aria-label="Guide" title="Guide">?</button>
     <div id="langSwitch" class="lang-switch">
@@ -612,10 +646,12 @@
         <button id="listenToggle" type="button" class="ctrl-btn">Listen</button>
         <button id="cameraToggle" type="button" class="ctrl-btn">Camera Off</button>
       </div>
-      <span class="on-device-pill">
-        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 11.5a3 3 0 0 1-.4-5.97A4 4 0 0 1 12 6.5a2.5 2.5 0 0 1-.5 5z"/></svg>
-        <span id="cloudPill">Cloud AI</span>
-      </span>
+      <div class="model-select up">
+        <button id="modelBtn" type="button" class="model-btn" aria-haspopup="listbox" aria-expanded="false">
+          <span class="model-dot"></span><span id="modelName">…</span><span class="model-caret">▾</span>
+        </button>
+        <div id="modelMenu" class="model-menu" role="listbox"></div>
+      </div>
     </div>
 
     <form id="composer" class="composer" autocomplete="off">
@@ -707,6 +743,9 @@ const bn = {
   'greet.title': 'স্বাগতম, {name}!', 'greet.body': 'আবার দেখা হয়ে ভালো লাগল। কীভাবে সাহায্য করতে পারি?',
   'model.pick': 'মডেল বেছে নিন', 'model.none': 'কোনো মডেল কনফিগার করা নেই',
   'model.vision': 'ছবি বোঝে', 'model.textonly': 'শুধু টেক্সট',
+  'profile.guest': 'অতিথি', 'profile.edit': 'এডিট করুন', 'profile.clear': 'মুছে ফেলুন',
+  'profile.badge': 'আপনার তথ্য', 'profile.title': 'আপনার তথ্য যোগ করুন',
+  'profile.sub': 'নাম, ইমেইল ও ফোন দিন—নতুন ফিচার বা আপডেট এলে আমরা জানাব। তথ্য এই ডিভাইসেই সংরক্ষিত থাকে।',
   'chat.title': 'এআই সহকারী',
   'voice.head': 'ভয়েস কমান্ড',
   'voice.sub': 'মাইক চালু করে এগুলো বলে দেখুন:',
@@ -769,6 +808,9 @@ const en = {
   'greet.title': 'Welcome back, {name}!', 'greet.body': 'Good to see you again. How can we help today?',
   'model.pick': 'Choose a model', 'model.none': 'No models configured',
   'model.vision': 'Vision', 'model.textonly': 'Text only',
+  'profile.guest': 'Guest', 'profile.edit': 'Edit', 'profile.clear': 'Clear',
+  'profile.badge': 'Your details', 'profile.title': 'Add your details',
+  'profile.sub': "Leave your name, email, and phone — we'll reach out with updates and new features. Saved on this device.",
   'chat.title': 'AI Assistant',
   'voice.head': 'Voice commands',
   'voice.sub': 'Turn on the mic and try saying:',
@@ -793,7 +835,6 @@ function applyLocale() {
   set('appName', t('app.name'));
   if (helpBtn) { helpBtn.title = t('help.title'); helpBtn.setAttribute('aria-label', t('help.title')); }
   set('chatTitle', t('chat.title'));
-  set('cloudPill', t('pill.cloud'));
   textInput.placeholder = t('composer.placeholder');
   textInput.setAttribute('aria-label', t('composer.placeholder'));
   sendBtn.textContent = t('composer.send');
@@ -815,6 +856,7 @@ function applyLocale() {
   renderPromo(); // re-render the feature-promotion panel in the active language
   renderVoiceCard(); // re-localize the voice-command card head/sub (questions stay as-is)
   if (typeof renderModelMenu === 'function') renderModelMenu(); // re-localize model badges/limitations
+  if (typeof renderProfile === 'function') renderProfile(); // re-localize the profile labels
 }
 
 function setLang(l) {
@@ -1640,15 +1682,16 @@ function buildLeadModal() {
   leadEls = { bd, body: bd.querySelector('#leadBody') };
   return leadEls;
 }
-function openLead() {
+function openLead(mode) {
+  const isProfile = mode === 'profile';   // profile "add/edit details" vs the rate-limit "free usage ended"
   const { bd, body } = buildLeadModal();
   if (bd.classList.contains('on')) return;   // already open
   const opts = ['voice', 'skill', 'donation', 'chat'].map(k => `<option value="${k}">${escapeHtml(t('lead.opt.' + k))}</option>`).join('');
   body.innerHTML =
     `<button type="button" class="modal-close" data-act="close">×</button>` +
-    `<span class="modal-badge">⚡ ${escapeHtml(t('lead.badge'))}</span>` +
-    `<h2>${escapeHtml(t('lead.title'))}</h2>` +
-    `<p class="m-sub">${escapeHtml(t('lead.sub'))}</p>` +
+    `<span class="modal-badge">${isProfile ? '👤' : '⚡'} ${escapeHtml(isProfile ? t('profile.badge') : t('lead.badge'))}</span>` +
+    `<h2>${escapeHtml(isProfile ? t('profile.title') : t('lead.title'))}</h2>` +
+    `<p class="m-sub">${escapeHtml(isProfile ? t('profile.sub') : t('lead.sub'))}</p>` +
     `<form class="lead-form" id="leadForm" novalidate>` +
     `<div><label>${escapeHtml(t('lead.name'))}</label><input name="name" autocomplete="name" required></div>` +
     `<div><label>${escapeHtml(t('lead.email'))}</label><input name="email" type="email" autocomplete="email" required></div>` +
@@ -1658,6 +1701,12 @@ function openLead() {
     `<button type="submit" class="m-submit">${escapeHtml(t('lead.submit'))}</button>` +
     `<div class="m-consent">${escapeHtml(t('lead.consent'))}</div></form>`;
   bd.classList.add('on');
+  // Prefill from the locally-stored profile (used by the profile "Edit" action).
+  let saved; try { saved = JSON.parse(localStorage.getItem(LS_LEAD) || 'null'); } catch {}
+  if (saved) {
+    const form = body.querySelector('#leadForm');
+    ['name', 'email', 'phone', 'interest'].forEach(k => { if (form[k] != null && saved[k] != null) form[k].value = saved[k]; });
+  }
   body.querySelector('.modal-close').addEventListener('click', closeLead);
   body.querySelector('#leadForm').addEventListener('submit', submitLead);
 }
@@ -1674,7 +1723,8 @@ async function submitLead(e) {
   try {
     const r = await fetch('/lead', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ id, name, email, phone, interest, lang }) });
     if (!r.ok) throw new Error('bad status');
-    try { localStorage.setItem(LS_LEAD, JSON.stringify({ id, name })); } catch {}
+    try { localStorage.setItem(LS_LEAD, JSON.stringify({ id, name, email, phone, interest })); } catch {}
+    if (typeof renderProfile === 'function') renderProfile();   // update the topbar profile immediately
     leadEls.body.innerHTML =
       `<button type="button" class="modal-close" data-act="close">×</button>` +
       `<div class="modal-ok"><div class="ok-ring">✓</div><h2>${escapeHtml(t('lead.ok.title'))}</h2><p class="m-sub">${escapeHtml(t('lead.ok.body'))}</p></div>`;
@@ -1756,6 +1806,48 @@ modelMenu.addEventListener('click', (e) => {
 });
 document.addEventListener('click', (e) => {
   if (!e.target.closest('.model-select')) { modelMenu.classList.remove('open'); modelBtn.setAttribute('aria-expanded', 'false'); }
+});
+
+// ═══════════ User profile (topbar) — details stored locally in asf_lead ═══════════
+const profileBtn = $('profileBtn'), profileMenu = $('profileMenu'), profileAvatar = $('profileAvatar'), profileNameEl = $('profileName');
+function getLocalProfile() { try { return JSON.parse(localStorage.getItem(LS_LEAD) || 'null'); } catch { return null; } }
+
+function renderProfile() {
+  const p = getLocalProfile();
+  if (p && p.name) {
+    const initial = p.name.trim()[0] || '?';
+    profileAvatar.textContent = initial;
+    profileNameEl.textContent = p.name;
+    const row = (k, v) => v ? `<div class="pf-row"><span class="pf-k">${escapeHtml(k)}</span><span class="pf-v">${escapeHtml(v)}</span></div>` : '';
+    profileMenu.innerHTML =
+      `<div class="profile-head"><span class="avatar">${escapeHtml(initial)}</span>` +
+      `<div><div class="ph-name">${escapeHtml(p.name)}</div><div class="ph-sub">${escapeHtml(p.email || '')}</div></div></div>` +
+      row(t('lead.phone'), p.phone) + row(t('lead.interest'), p.interest ? t('lead.opt.' + p.interest) : '') +
+      `<div class="profile-actions">` +
+      `<button type="button" class="pf-btn" data-act="edit">${escapeHtml(t('profile.edit'))}</button>` +
+      `<button type="button" class="pf-btn danger" data-act="clear">${escapeHtml(t('profile.clear'))}</button></div>`;
+  } else {
+    profileAvatar.textContent = '?';
+    profileNameEl.textContent = t('profile.guest');
+    profileMenu.innerHTML = '';
+  }
+}
+
+profileBtn.addEventListener('click', (e) => {
+  e.stopPropagation();
+  const p = getLocalProfile();
+  if (!p || !p.name) { openLead('profile'); return; }   // guest → straight to the details form
+  const open = profileMenu.classList.toggle('open');
+  profileBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+});
+profileMenu.addEventListener('click', (e) => {
+  const b = e.target.closest('[data-act]'); if (!b) return;
+  profileMenu.classList.remove('open'); profileBtn.setAttribute('aria-expanded', 'false');
+  if (b.dataset.act === 'edit') openLead('profile');
+  else if (b.dataset.act === 'clear') { try { localStorage.removeItem(LS_LEAD); } catch {} renderProfile(); }
+});
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.profile-select')) { profileMenu.classList.remove('open'); profileBtn.setAttribute('aria-expanded', 'false'); }
 });
 
 // ── Text composer ── type a question; same {text} WS path the gateway already handles.
@@ -1847,6 +1939,7 @@ function init() {
   drawWaveform();
 
   loadModels();       // populate the model selector + active-model indicator
+  renderProfile();    // topbar user profile from the locally-stored details
   maybeGreet();       // returning visitor → welcome-back toast
   maybeStartTour();   // first landing → auto-run the guided tour
   console.log('Ready — camera and voice are opt-in.');
