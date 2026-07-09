@@ -1,0 +1,15 @@
+# Keep the build context small + reproducible for the root (HF Spaces) Dockerfile.
+**/node_modules
+**/dist
+ai-gateway/models
+ai-gateway/knowledge/knowledge.json
+ai-gateway/scripts/samples
+.git
+.env
+.env.local
+data
+doc
+.vscode
+**/__pycache__
+*.log
+.DS_Store
