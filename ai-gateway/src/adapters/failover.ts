@@ -7,7 +7,7 @@
  */
 import type { RespondRequest, RespondResponse } from "../contracts.js";
 import type { UnderstandingAdapter } from "./understanding.js";
-import { isRateLimit } from "../ratelimit.js";
+import { isRateLimit, isRetryable } from "../ratelimit.js";
 
 export interface ChainEntry {
   id: string;
@@ -18,7 +18,8 @@ export interface ChainEntry {
 
 export class AllModelsExhaustedError extends Error {
   readonly allExhausted = true;
-  constructor() {
+  /** True when every failure was a rate-limit (→ show the free-usage form, not a generic error). */
+  constructor(readonly rateLimited: boolean) {
     super("all_models_exhausted");
     this.name = "AllModelsExhaustedError";
   }
@@ -34,22 +35,23 @@ export class FailoverUnderstandingAdapter implements UnderstandingAdapter {
 
   async respond(input: RespondRequest): Promise<RespondResponse> {
     const order = this.order(input.modelId);
-    if (!order.length) throw new AllModelsExhaustedError();
+    if (!order.length) throw new AllModelsExhaustedError(true);
 
     let lastErr: unknown;
+    let allRateLimited = true; // only show the free-usage form if EVERY failure was a rate-limit
     for (const entry of order) {
       try {
         const res = await entry.adapter.respond(input);
+        if (!res.response || !res.response.trim()) throw new Error("empty answer text"); // retryable
         return { ...res, model: entry.name, modelId: entry.id };
       } catch (err) {
-        if (isRateLimit(err)) {
-          lastErr = err; // rate-limited → try the next model
-          continue;
-        }
-        throw err; // non-retryable → surface as a normal error
+        lastErr = err;
+        if (!isRateLimit(err)) allRateLimited = false;
+        if (isRetryable(err)) continue; // rate-limit / 5xx / timeout / empty / network → next model
+        throw err; // genuine client error (e.g. 400) → surface as a normal error
       }
     }
-    const e = new AllModelsExhaustedError();
+    const e = new AllModelsExhaustedError(allRateLimited);
     (e as { cause?: unknown }).cause = lastErr;
     throw e;
   }

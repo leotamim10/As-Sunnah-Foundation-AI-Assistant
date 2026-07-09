@@ -98,10 +98,14 @@ app.post("/respond", async (req, reply) => {
     return await understanding.respond(parsed.data);
   } catch (err) {
     req.log.error(err);
-    // Every model exhausted (or a bare 429) → flag it so the UI shows the free-usage-ended form.
-    if (err instanceof AllModelsExhaustedError || isRateLimit(err)) {
-      return reply.code(429).send({ error: "rate_limited" });
+    // Every model rate-limited → free-usage-ended form. Exhausted by transient errors (5xx/empty/
+    // network) → a plain retryable error, not the lead form.
+    if (err instanceof AllModelsExhaustedError) {
+      return err.rateLimited
+        ? reply.code(429).send({ error: "rate_limited" })
+        : reply.code(502).send({ error: "understanding_failed" });
     }
+    if (isRateLimit(err)) return reply.code(429).send({ error: "rate_limited" });
     return reply.code(502).send({ error: "understanding_failed" });
   }
 });
