@@ -8,8 +8,11 @@ services:
     env_file: .env
     environment:
       PORT: 8787 # override .env's PORT (which is the web server's port)
+      LEADS_PATH: /app/data/leads.jsonl
     expose:
       - "8787" # internal to the compose network; not published to the host
+    volumes:
+      - ./data:/app/data # persist captured leads on the host (git-ignored)
     restart: unless-stopped
 
   web:

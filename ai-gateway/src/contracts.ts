@@ -49,6 +49,25 @@ export const TtsResponse = z.object({
 });
 export type TtsResponse = z.infer<typeof TtsResponse>;
 
+/* ---------- POST /lead : capture a contact when free usage ends ---------- */
+
+export const LeadRequest = z.object({
+  /** Client-generated UUID (also kept in the browser's localStorage for returning-visitor greeting). */
+  id: z.string().min(1).max(128),
+  name: z.string().min(1).max(200),
+  email: z.string().email().max(200),
+  phone: z.string().min(3).max(40),
+  /** Which feature the visitor is interested in (free text or a preset key). */
+  interest: z.string().max(200).default(""),
+  lang: z.string().max(10).default("bn"),
+  /** Filled server-side by server.py from the request; never trusted from the client. */
+  ip: z.string().max(64).default(""),
+});
+export type LeadRequest = z.infer<typeof LeadRequest>;
+
+export const LeadResponse = z.object({ ok: z.literal(true), returning: z.boolean() });
+export type LeadResponse = z.infer<typeof LeadResponse>;
+
 /* ---------- GET /health ---------- */
 
 export const HealthResponse = z.object({ ok: z.literal(true) });

@@ -25,5 +25,9 @@ __pycache__/
 .venv/
 venv/
 
+# Captured leads (PII from the free-usage form) — never commit
+/data/
+ai-gateway/data/
+
 # OS / editor
 .DS_Store

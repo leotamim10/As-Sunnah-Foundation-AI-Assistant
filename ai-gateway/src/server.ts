@@ -3,11 +3,22 @@
  * Wiring is complete; it will run once the two adapter TODOs are filled.
  */
 import Fastify from "fastify";
-import { RespondRequest, TtsRequest } from "./contracts.js";
+import { appendFile, mkdir, readFile } from "node:fs/promises";
+import { dirname } from "node:path";
+import { RespondRequest, TtsRequest, LeadRequest } from "./contracts.js";
 import { GeminiAdapter, type UnderstandingAdapter } from "./adapters/understanding.js";
 import { AzureBnBDAdapter, FallbackTtsAdapter, type TtsAdapter } from "./adapters/tts.js";
 import { EdgeTtsAdapter } from "./adapters/edge.js";
 import { retrieve, getSuggestions } from "./rag/retrieve.js";
+
+/** True when an error is a provider rate-limit / quota exhaustion (Gemini 429 / RESOURCE_EXHAUSTED). */
+function isRateLimit(err: unknown): boolean {
+  const e = err as { status?: number; code?: number; message?: string };
+  if (e?.status === 429 || e?.code === 429) return true;
+  return /RESOURCE_EXHAUSTED|"code"\s*:\s*429|\b429\b/.test(String(e?.message ?? err ?? ""));
+}
+
+const LEADS_PATH = process.env.LEADS_PATH ?? "data/leads.jsonl";
 
 /* ---------- config ---------- */
 function env(name: string, fallback?: string): string {
@@ -52,7 +63,32 @@ app.post("/respond", async (req, reply) => {
     return await understanding.respond(parsed.data);
   } catch (err) {
     req.log.error(err);
+    // Surface quota exhaustion distinctly so server.py can flag it to the UI (free-usage-ended form).
+    if (isRateLimit(err)) return reply.code(429).send({ error: "rate_limited" });
     return reply.code(502).send({ error: "understanding_failed" });
+  }
+});
+
+// Lead capture — appended to a git-ignored JSONL store when a visitor submits the free-usage form.
+// `returning` = we've already seen this client id (used by the UI's returning-visitor greeting).
+app.post("/lead", async (req, reply) => {
+  const parsed = LeadRequest.safeParse(req.body);
+  if (!parsed.success) return reply.code(400).send({ error: parsed.error.flatten() });
+  const lead = parsed.data;
+  try {
+    let returning = false;
+    try {
+      const existing = await readFile(LEADS_PATH, "utf8");
+      returning = existing.split("\n").some((l) => l.includes(`"id":"${lead.id}"`));
+    } catch {
+      /* no file yet */
+    }
+    await mkdir(dirname(LEADS_PATH), { recursive: true });
+    await appendFile(LEADS_PATH, JSON.stringify({ ...lead, ts: new Date().toISOString() }) + "\n", "utf8");
+    return { ok: true as const, returning };
+  } catch (err) {
+    req.log.error(err);
+    return reply.code(500).send({ error: "lead_store_failed" });
   }
 });
 
