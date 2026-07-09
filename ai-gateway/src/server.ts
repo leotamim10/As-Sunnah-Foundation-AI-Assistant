@@ -7,15 +7,18 @@ import { appendFile, mkdir, readFile } from "node:fs/promises";
 import { dirname } from "node:path";
 import { RespondRequest, TtsRequest, LeadRequest } from "./contracts.js";
 import { GeminiAdapter, type UnderstandingAdapter } from "./adapters/understanding.js";
+import { HfUnderstandingAdapter } from "./adapters/hf-understanding.js";
+import { HfWhisperAdapter } from "./adapters/stt.js";
+import { HfLlmAdapter } from "./adapters/llm.js";
 import { AzureBnBDAdapter, FallbackTtsAdapter, type TtsAdapter } from "./adapters/tts.js";
 import { EdgeTtsAdapter } from "./adapters/edge.js";
 import { retrieve, getSuggestions } from "./rag/retrieve.js";
 
 /** True when an error is a provider rate-limit / quota exhaustion (Gemini 429 / RESOURCE_EXHAUSTED). */
 function isRateLimit(err: unknown): boolean {
-  const e = err as { status?: number; code?: number; message?: string };
-  if (e?.status === 429 || e?.code === 429) return true;
-  return /RESOURCE_EXHAUSTED|"code"\s*:\s*429|\b429\b/.test(String(e?.message ?? err ?? ""));
+  const e = err as { status?: number; code?: number; httpResponse?: { status?: number }; message?: string };
+  if (e?.status === 429 || e?.code === 429 || e?.httpResponse?.status === 429) return true; // Gemini + HF
+  return /RESOURCE_EXHAUSTED|too many requests|rate.?limit|"code"\s*:\s*429|\b429\b/i.test(String(e?.message ?? err ?? ""));
 }
 
 const LEADS_PATH = process.env.LEADS_PATH ?? "data/leads.jsonl";
@@ -29,10 +32,25 @@ function env(name: string, fallback?: string): string {
 
 const PORT = Number(env("PORT", "8787"));
 
-const understanding: UnderstandingAdapter = new GeminiAdapter({
-  apiKey: env("GEMINI_API_KEY"),
-  model: env("GEMINI_MODEL", "gemini-2.5-flash"),
-});
+// Understanding path is swappable via env (default gemini). The relevant key is required only for
+// the chosen provider, so the gateway boots with just one of GEMINI_API_KEY / HF_TOKEN.
+//   gemini → one multimodal call (audio+image+grounded reply); has vision.
+//   hf     → Whisper STT → hosted Bengali LLM, same RAG grounding; text-only (drops the image).
+function makeUnderstanding(): UnderstandingAdapter {
+  if ((process.env.UNDERSTANDING_PROVIDER ?? "gemini").toLowerCase() === "hf") {
+    const token = env("HF_TOKEN");
+    return new HfUnderstandingAdapter(
+      new HfWhisperAdapter({ token, model: process.env.HF_STT_MODEL }),
+      new HfLlmAdapter({ token, model: process.env.HF_LLM_MODEL }),
+    );
+  }
+  return new GeminiAdapter({
+    apiKey: env("GEMINI_API_KEY"),
+    model: env("GEMINI_MODEL", "gemini-2.5-flash"),
+  });
+}
+const understanding: UnderstandingAdapter = makeUnderstanding();
+console.log(`understanding backend: ${(process.env.UNDERSTANDING_PROVIDER ?? "gemini").toLowerCase()}`);
 
 // TTS chain: Edge (card-free demo path, same bn-BD voices) is primary; Azure (production path)
 // is appended only when its keys are present, so the gateway boots with zero paid dependencies.
