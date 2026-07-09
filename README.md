@@ -30,7 +30,8 @@ Everything below is enabled and live in the app.
 | **Barge-in / interrupt** | Speaking or sending again interrupts the in-flight reply. |
 | **Text chat** | Type a question — same pipeline, no mic required. |
 | **Typewriter replies** | Assistant text types out grapheme-by-grapheme (Bengali-conjunct-safe), with a blinking caret. |
-| **Graceful rate-limit** | On Gemini free-tier exhaustion the app degrades cleanly and surfaces a lead form (below) instead of erroring. |
+| **Multi-model failover** | An ordered chain of models/keys (Gemini ×2 · HF Qwen3 · Groq · OpenRouter). On a **429 or a transient error** (5xx/empty/timeout/network) it auto-switches to the next model; only an all-rate-limited chain shows the lead form. |
+| **Graceful rate-limit** | On free-tier exhaustion across the whole chain the app degrades cleanly and surfaces a lead form (below) instead of erroring. |
 
 ### 📚 Knowledge base (RAG)
 
@@ -60,6 +61,7 @@ Everything below is enabled and live in the app.
 | **Voice-command flip card** | Focusing **Listen** flips the card to sample voice commands, with an animated right-angle **beam** that cycles the active command. |
 | **Animated backdrop** | Slow, drifting ambient glow behind the panels. |
 | **Glass theme** | Light shadcn-style theme — translucent cards, gradients, subtle borders. |
+| **Model selector** | A picker in the controls row shows the active model and lets you pin one; each entry carries a vision/text badge and its bilingual limitation note. The head updates to whichever model actually answered after a failover. |
 | **Hidden scrollbars** | Clean left/right panes (scrolling preserved). |
 
 ### 🚀 Onboarding & growth
@@ -70,6 +72,7 @@ Everything below is enabled and live in the app.
 | **Free-usage lead form** | When free usage ends, a professional modal collects **name / email / phone / interest** (with consent). |
 | **Lead store** | Submissions append to a **git-ignored** `data/leads.jsonl` with a client `id`, **server-captured IP**, and timestamp. |
 | **Returning-visitor greeting** | Recognizes returning visitors (localStorage id) with a welcome-back toast. |
+| **User profile** | A topbar profile shows the visitor's locally-stored details (name/email/phone/interest) with **Edit** (reopens the form prefilled) and **Clear**; a guest chip opens the form to add them. |
 
 ### 🌐 Localization
 
@@ -167,6 +170,7 @@ With both up, open http://localhost:8000.
 | `POST /respond` | `{ audioB64?, imageB64?, text?, lang="bn" }` | `{ transcription, response }` — `429 {rate_limited}` on quota exhaustion |
 | `POST /tts`     | `{ text, voice? }`                           | `{ audioB64, sampleRate }` (24 kHz 16-bit mono PCM) |
 | `POST /lead`    | `{ id, name, email, phone, interest, lang, ip }` | `{ ok, returning }` — appends to git-ignored `data/leads.jsonl` |
+| `GET /models`   | —                                            | `{ models: [{ id, name, provider, hasVision, limitations }], activeId }` (no keys) |
 | `GET /health`   | —                                            | `{ ok: true }`                                      |
 
 Schemas are enforced with zod in `ai-gateway/src/contracts.ts`.
