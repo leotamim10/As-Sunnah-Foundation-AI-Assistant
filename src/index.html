@@ -387,7 +387,12 @@
   <!-- LEFT: Feature promotion (65%) — rendered by renderPromo() -->
   <section class="promo">
     <div id="promoCard" class="promo-card"></div>
-    <div id="flowCard" class="flow-card"></div>
+    <div id="flipCard" class="flip">
+      <div class="flip-inner">
+        <div class="flip-face flip-front"><div id="flowCard" class="flow-card"></div></div>
+        <div class="flip-face flip-back"><div id="voiceCard" class="voice-card"></div></div>
+      </div>
+    </div>
   </section>
 
   <!-- RIGHT: Chat (35%) -->
@@ -437,6 +442,11 @@
     </form>
   </aside>
 </main>
+<!-- Beam overlay: an SVG line from the Listen button to the voice card, with a travelling green light. -->
+<svg id="beamSvg" class="beam-svg" aria-hidden="true">
+  <path id="beamPath" class="beam-path"></path>
+  <circle id="beamDot" class="beam-dot" r="4.5"></circle>
+</svg>
 <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.22.0/dist/ort.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@ricky0123/vad-web@0.0.29/dist/bundle.min.js"></script>
 <script>
@@ -448,6 +458,8 @@ const viewportWrap = $('viewportWrap');
 const waveformCanvas = $('waveform');
 const composer = $('composer'), textInput = $('textInput'), sendBtn = $('sendBtn');
 const suggestionsEl = $('suggestions'), langSwitch = $('langSwitch'), promoCard = $('promoCard'), flowCard = $('flowCard');
+const flipCard = $('flipCard'), voiceCard = $('voiceCard');
+let suggestionList = [];   // KB-derived recommended questions, shared by the composer chips + voice card
 const waveformCtx = waveformCanvas.getContext('2d');
 
 // ── i18n (bn-BD) ──
@@ -485,6 +497,8 @@ const bn = {
   'composer.send': 'পাঠান',
   'suggest.aria': 'প্রস্তাবিত প্রশ্ন',
   'chat.title': 'এআই সহকারী',
+  'voice.head': 'ভয়েস কমান্ড',
+  'voice.sub': 'মাইক চালু করে এগুলো বলে দেখুন:',
 };
 
 const en = {
@@ -518,6 +532,8 @@ const en = {
   'composer.send': 'Send',
   'suggest.aria': 'Recommended questions',
   'chat.title': 'AI Assistant',
+  'voice.head': 'Voice commands',
+  'voice.sub': 'Turn on the mic and try saying:',
 };
 
 const locales = { en, bn };
@@ -558,6 +574,7 @@ function applyLocale() {
   }
   for (const b of langSwitch.querySelectorAll('button')) b.classList.toggle('active', b.dataset.lang === lang);
   renderPromo(); // re-render the feature-promotion panel in the active language
+  renderVoiceCard(); // re-localize the voice-command card head/sub (questions stay as-is)
 }
 
 function setLang(l) {
@@ -649,19 +666,23 @@ function renderPromo(key) {
 // Separate course-flowchart component (its own card beside the promo). Shown only for the skill
 // feature; the root badge branches into course nodes.
 function renderCourseFlow() {
-  if (currentFeature !== 'skill') { flowCard.style.display = 'none'; flowCard.innerHTML = ''; return; }
-  flowCard.style.display = '';
+  // The flip (courses ⇄ voice commands) lives in the skill feature; hide the whole thing otherwise.
+  if (currentFeature !== 'skill') { flipCard.style.display = 'none'; flipCard.classList.remove('flipped'); return; }
+  flipCard.style.display = '';
   const badge = featureData.skill.badge[lang] || featureData.skill.badge.en;
+  
   const nodes = SKILL_COURSES.map(x =>
     `<div class="flow-item"><button type="button" class="flow-node" data-slug="${x.slug}" aria-expanded="false">${escapeHtml((x[lang] || x.en).t)}</button><div class="flow-child"></div></div>`
   ).join('');
   flowCard.innerHTML = `
-    <div class="flow-card-head">${lang === 'bn' ? 'কোর্সসমূহ' : 'Courses'}</div>
+    <div class="flow-card-head"><span class="badge"><span class="dot-badge"></span>${lang === 'bn' ? 'কোর্সসমূহ' : 'Courses'}</span></div>
     <div class="flow-card-sub">${lang === 'bn' ? 'যেকোনো কোর্সে ক্লিক করে বিস্তারিত দেখুন' : 'Click any course for details'}</div>
     <div class="flow">
       <div class="flow-root"><span class="badge"><span class="dot-badge"></span>${escapeHtml(badge)}</span></div>
       <div class="flow-branch">${nodes}</div>
     </div>`;
+
+
 }
 
 // Flowchart interaction (delegated on the flow card — survives re-renders): clicking a course node
@@ -676,6 +697,7 @@ flowCard.addEventListener('click', (e) => {
     child.innerHTML = '';
     return;
   }
+  
   const course = SKILL_COURSES.find(x => x.slug === node.dataset.slug);
   if (!course) return;
   const d = course[lang] || course.en;
@@ -685,6 +707,68 @@ flowCard.addEventListener('click', (e) => {
   child.classList.add('open');
   node.setAttribute('aria-expanded', 'true');
 });
+
+// Voice command recommendation card (back face of the flip) — reuses the composer's suggestion data.
+function renderVoiceCard(questions) {
+  const list = questions || suggestionList;
+  const items = list.map(q =>
+    `<li class="voice-item"><span class="voice-mic">🎙️</span><span class="voice-q">${escapeHtml(q)}</span></li>`
+  ).join('');
+  voiceCard.innerHTML =
+    `<div class="voice-card-head"><span class="badge"><span class="dot-badge"></span>${escapeHtml(t('voice.head'))}</span></div>` +
+    `<div class="voice-card-sub">${escapeHtml(t('voice.sub'))}</div>` +
+    `<ul class="voice-list">${items}</ul>`;
+}
+
+// Beam: a green light travels an SVG line from the Listen button to the voice card; each time it
+// arrives, the next recommended command lights up green (looping through the list).
+const beamSvg = $('beamSvg'), beamPath = $('beamPath'), beamDot = $('beamDot');
+let beamRAF = null, beamT = 0, beamLastTs = 0, beamActiveIdx = -1;
+const BEAM_TRAVEL_MS = 5200;
+
+function setActiveVoiceItem(i) {
+  voiceCard.querySelectorAll('.voice-item').forEach((el, idx) => el.classList.toggle('active', idx === i));
+}
+
+function beamFrame(ts) {
+  const dt = beamLastTs ? ts - beamLastTs : 0; beamLastTs = ts;
+  const W = window.innerWidth, H = window.innerHeight;
+  beamSvg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  const lt = listenToggle.getBoundingClientRect();
+  const vc = flipCard.getBoundingClientRect();                     // container (not the 3D-rotated face)
+  const sx = lt.left + 4, sy = lt.top + lt.height / 2;             // Listen button (left-center)
+  const ex = vc.right, ey = vc.top + Math.min(46, vc.height / 2);  // voice card slot (right edge, near top)
+  // Right-angle connector: left along the bottom, then up the left side (bottom + left "borders").
+  beamPath.setAttribute('d', `M ${sx} ${sy} L ${ex} ${sy} L ${ex} ${ey}`);
+  beamT += dt / BEAM_TRAVEL_MS;
+  if (beamT >= 1) {                                                // light reached the voice card
+    beamT = 0;
+    const n = voiceCard.querySelectorAll('.voice-item').length;
+    if (n) { beamActiveIdx = (beamActiveIdx + 1) % n; setActiveVoiceItem(beamActiveIdx); }
+  }
+  const p = beamPath.getPointAtLength(beamT * beamPath.getTotalLength());
+  beamDot.setAttribute('cx', p.x); beamDot.setAttribute('cy', p.y);
+  beamRAF = requestAnimationFrame(beamFrame);
+}
+
+function startBeam() {
+  if (flipCard.style.display === 'none') return;                  // only when the flip (skill) is visible
+  beamSvg.classList.add('on');
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { setActiveVoiceItem(0); return; }
+  beamT = 0; beamLastTs = 0; beamActiveIdx = -1;
+  cancelAnimationFrame(beamRAF);
+  beamRAF = requestAnimationFrame(beamFrame);
+}
+
+function stopBeam() {
+  cancelAnimationFrame(beamRAF); beamRAF = null;
+  beamSvg.classList.remove('on');
+  setActiveVoiceItem(-1);
+}
+
+// Focusing the Listen button flips the card (voice commands to the front) and starts the beam.
+listenToggle.addEventListener('focus', () => { flipCard.classList.add('flipped'); startBeam(); });
+listenToggle.addEventListener('blur', () => { flipCard.classList.remove('flipped'); stopBeam(); });
 
 let ws, micStream, cameraStream, myvad;
 let cameraEnabled = false;   // camera is opt-in (off by default)
@@ -857,7 +941,7 @@ function connect() {
           lastUserMsg.innerHTML = `${msg.transcription}${meta ? meta.outerHTML : ''}`;
         }
       }
-      addMessage('assistant', msg.text, t('meta.llm', { n: msg.llm_time }));
+      addMessage('assistant', msg.text, t('meta.llm', { n: msg.llm_time }), { typing: true });
       // If no audio follows (error reply / empty TTS), don't get stuck in 'processing'.
       clearTimeout(turnTimer);
       turnTimer = setTimeout(() => {
@@ -1176,12 +1260,45 @@ function queueAudioChunk(base64Pcm) {
 }
 
 // ── UI ──
-function addMessage(role, text, meta) {
+function addMessage(role, text, meta, opts = {}) {
   const div = document.createElement('div');
   div.className = `msg ${role}`;
-  div.innerHTML = `${text}${meta ? `<div class="meta">${meta}</div>` : ''}`;
-  messagesDiv.appendChild(div);
+  if (opts.typing) {
+    // Reveal plain model text grapheme-by-grapheme (typewriter). textContent keeps it safe + Bengali-conjunct-clean.
+    const body = document.createElement('span');
+    body.className = 'msg-text';
+    div.appendChild(body);
+    if (meta) { const m = document.createElement('div'); m.className = 'meta'; m.innerHTML = meta; div.appendChild(m); }
+    messagesDiv.appendChild(div);
+    typeInto(body, text);
+  } else {
+    div.innerHTML = `${text}${meta ? `<span class="badge meta"><span class="dot-badge"></span>${meta}</span>` : ''}`;
+    messagesDiv.appendChild(div);
+  }
   messagesDiv.scrollTop = messagesDiv.scrollHeight;
+}
+
+// Typewriter reveal for assistant replies. Splits on grapheme clusters so Bengali conjuncts/মাত্রা
+// never render half-formed; time-based so long answers still finish quickly (capped ~2.2s).
+function typeInto(el, text) {
+  const finish = () => { el.textContent = text; el.classList.remove('typing'); messagesDiv.scrollTop = messagesDiv.scrollHeight; };
+  if (!text) { finish(); return; }
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) { finish(); return; }
+  el.classList.add('typing');
+  let units;
+  try { units = [...new Intl.Segmenter(undefined, { granularity: 'grapheme' }).segment(text)].map(s => s.segment); }
+  catch { units = Array.from(text); }
+  const total = units.length;
+  const duration = Math.min(total * 22, 2200);
+  let start = 0;
+  function frame(ts) {
+    if (!start) start = ts;
+    const p = Math.min(1, (ts - start) / duration);
+    el.textContent = units.slice(0, Math.floor(p * total)).join('');
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    if (p < 1) requestAnimationFrame(frame); else finish();
+  }
+  requestAnimationFrame(frame);
 }
 
 cameraToggle.addEventListener('click', () => { cameraEnabled ? disableCamera() : enableCamera(); });
@@ -1248,7 +1365,9 @@ async function loadSuggestions() {
     const r = await fetch('/suggestions');
     if (r.ok) { const j = await r.json(); if (Array.isArray(j.questions) && j.questions.length) questions = j.questions; }
   } catch {}
+  suggestionList = questions;
   buildSuggestionChips(questions);
+  renderVoiceCard(questions);
 }
 loadSuggestions();
 
