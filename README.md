@@ -16,6 +16,77 @@ Originally an on-device demo (Gemma + Kokoro), ported to run **end-to-end on fre
 
 Result: **zero paid dependencies** — Gemini free tier + Edge for voice.
 
+## Features
+
+Everything below is enabled and live in the app.
+
+### 🗣️ Conversation & AI
+
+| Feature | What it does |
+| ------- | ------------ |
+| **Multimodal understanding** | Gemini takes **audio (+ optional camera image)** and returns `{transcription, response}` in one call. |
+| **Grounded answers (RAG)** | Replies are grounded in the foundation's own data — the model is instructed never to invent facts. |
+| **Streaming voice reply** | The answer is split into sentences and TTS-streamed back sentence-by-sentence for low latency. |
+| **Barge-in / interrupt** | Speaking or sending again interrupts the in-flight reply. |
+| **Text chat** | Type a question — same pipeline, no mic required. |
+| **Typewriter replies** | Assistant text types out grapheme-by-grapheme (Bengali-conjunct-safe), with a blinking caret. |
+| **Graceful rate-limit** | On Gemini free-tier exhaustion the app degrades cleanly and surfaces a lead form (below) instead of erroring. |
+
+### 📚 Knowledge base (RAG)
+
+| Feature | What it does |
+| ------- | ------------ |
+| **Local embeddings** | `Xenova/multilingual-e5-small` embeds questions + KB **locally** (no API, no key). |
+| **Retrieval grounding** | Top-k knowledge passages injected as context on every turn. |
+| **KB-derived suggestions** | Recommended questions generated from the KB — shown as input chips **and** voice commands. |
+| **Weekly refresh** | `scripts/refresh.sh` re-ingests the foundation API and restarts the gateway. |
+
+### 🎙️ Voice & vision
+
+| Feature | What it does |
+| ------- | ------------ |
+| **Voice input (VAD)** | Browser mic with voice-activity detection; autoplay-safe start. |
+| **Camera / vision** | Show the camera and ask about what's on screen. |
+| **bn-BD neural TTS** | Edge `bn-BD-NabanitaNeural` / `PradeepNeural` (Dhaka register, **card-free**); Azure paid fallback. |
+| **Permission indicators** | Live mic/camera permission dots + a one-click **Allow** button that opens the browser prompt. |
+| **Opt-in by default** | Nothing is acquired on load — no permission prompt until you click a button. |
+
+### 🎨 UI / UX
+
+| Feature | What it does |
+| ------- | ------------ |
+| **Feature-promotion panel** | Skill Development / Donation cards; suggestion chips switch the panel. |
+| **Course flowchart** | Interactive course tree; the **first course opens by default**; per-course deep links. |
+| **Voice-command flip card** | Focusing **Listen** flips the card to sample voice commands, with an animated right-angle **beam** that cycles the active command. |
+| **Animated backdrop** | Slow, drifting ambient glow behind the panels. |
+| **Glass theme** | Light shadcn-style theme — translucent cards, gradients, subtle borders. |
+| **Hidden scrollbars** | Clean left/right panes (scrolling preserved). |
+
+### 🚀 Onboarding & growth
+
+| Feature | What it does |
+| ------- | ------------ |
+| **Guided tour** | After-landing coach-marks spotlight each control (connection, status, Listen, Camera, input, cards). A **Help (?)** button reopens it anytime. |
+| **Free-usage lead form** | When free usage ends, a professional modal collects **name / email / phone / interest** (with consent). |
+| **Lead store** | Submissions append to a **git-ignored** `data/leads.jsonl` with a client `id`, **server-captured IP**, and timestamp. |
+| **Returning-visitor greeting** | Recognizes returning visitors (localStorage id) with a welcome-back toast. |
+
+### 🌐 Localization
+
+| Feature | What it does |
+| ------- | ------------ |
+| **EN / বাং toggle** | Full UI i18n; content (KB answers, suggestions) stays Bengali. |
+| **Natural bn-BD** | Prompts tuned for spoken Bangladeshi Bangla; currency ৳ and লাখ/কোটি. |
+
+### 🛠️ Ops & infra
+
+| Feature | What it does |
+| ------- | ------------ |
+| **Docker Compose** | One-command stack (web + gateway; optional Caddy HTTPS). |
+| **Local HTTPS** | Opt-in Caddy TLS proxy for camera/mic secure context. |
+| **Health + tests** | `/health`, zod contract tests, `npm run smoke`, TTS sample preview. |
+| **Zero paid deps** | Runs on the Gemini free tier + Edge TTS out of the box. |
+
 ## Architecture
 
 ```
@@ -93,8 +164,9 @@ With both up, open http://localhost:8000.
 
 | Endpoint        | Request                                      | Response                                            |
 | --------------- | -------------------------------------------- | --------------------------------------------------- |
-| `POST /respond` | `{ audioB64?, imageB64?, text?, lang="bn" }` | `{ transcription, response }`                       |
+| `POST /respond` | `{ audioB64?, imageB64?, text?, lang="bn" }` | `{ transcription, response }` — `429 {rate_limited}` on quota exhaustion |
 | `POST /tts`     | `{ text, voice? }`                           | `{ audioB64, sampleRate }` (24 kHz 16-bit mono PCM) |
+| `POST /lead`    | `{ id, name, email, phone, interest, lang, ip }` | `{ ok, returning }` — appends to git-ignored `data/leads.jsonl` |
 | `GET /health`   | —                                            | `{ ok: true }`                                      |
 
 Schemas are enforced with zod in `ai-gateway/src/contracts.ts`.
