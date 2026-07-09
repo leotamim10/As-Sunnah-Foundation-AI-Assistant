@@ -132,8 +132,8 @@
     gap: 20px;
     align-items: start;
   }
-  .promo-card, .flow-card {
-    background: var(--bg);
+  .promo-card, .flow-card, .voice-card {
+   background: transparent !important;
     border: 1px solid var(--border);
     border-radius: 14px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.04);
@@ -141,9 +141,51 @@
   }
   .promo-card { overflow: hidden; }
   /* Separate course-flowchart component (its own card, beside the promo) */
-  .flow-card { padding: 20px; align-self: start; }
-  .flow-card-head { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; margin-bottom: 4px; }
-  .flow-card-sub { font-size: 12.5px; color: var(--muted); margin-bottom: 14px; }
+  .flow-card { padding: 20px; background: transparent !important;}
+  .flow-card-head, .voice-card-head { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; margin-bottom: 4px; }
+  .flow-card-sub, .voice-card-sub { font-size: 12.5px; color: var(--muted); margin-bottom: 14px; }
+
+  /* ── 3D flip: courses (front) ⇄ voice commands (back), triggered by focusing the Listen button ── */
+  .flip { perspective: 1600px; align-self: start; min-width: 0; }
+  .flip-inner {
+    display: grid;                 /* both faces share one grid cell → container sizes to the taller face */
+    transform-style: preserve-3d;
+    transition: transform .7s cubic-bezier(.2, .7, .2, 1);
+  }
+  .flip-face { grid-area: 1 / 1; min-width: 0; -webkit-backface-visibility: hidden; backface-visibility: hidden; }
+  .flip-back { transform: rotateY(180deg); }
+  .flip.flipped .flip-inner { transform: rotateY(180deg); }
+  @media (prefers-reduced-motion: reduce) { .flip-inner { transition: none; } }
+
+  /* Voice command recommendation card (back face) */
+  .voice-card { padding: 20px; background: transparent !important;}
+  .voice-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .voice-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px;
+    background: var(--surface); font-size: 12.5px; line-height: 1.5; color: var(--fg);
+  }
+  .voice-item .voice-mic { flex-shrink: 0; filter: grayscale(0.1); }
+  .voice-item .voice-q { color: var(--fg); }
+  /* active recommendation (lit by the beam) */
+  .voice-item { transition: border-color 2.3s, background 3s, box-shadow 3s; }
+  .voice-item.active {
+    border-color: var(--accent); background: var(--accent-bg);
+    box-shadow: 0 0 0 1px var(--accent), 0 0 14px rgba(22,163,74,0.25);
+  }
+  .voice-item.active .voice-q { color: var(--accent); font-weight: 600; }
+  /* voice card highlights its border while it's the active (flipped-to-front) face */
+  .flip.flipped .voice-card {
+    background: transparent;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 1px var(--accent), 0 10px 30px rgba(22,163,74,0.14);
+  }
+
+  /* Beam overlay + travelling green light */
+  .beam-svg { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 60; opacity: 0; transition: opacity .35s; }
+  .beam-svg.on { opacity: 1; }
+  .beam-path { fill: none; stroke: var(--accent); stroke-width: 2; stroke-linecap: square; stroke-linejoin: miter; opacity: 0.55; }
+  .beam-dot { fill: #16a34a; filter: drop-shadow(0 0 5px #22c55e) drop-shadow(0 0 11px #16a34a); }
   .promo-hero {
     height: 240px;
     position: relative;
@@ -218,7 +260,7 @@
   .flow-node {
     font-family: var(--font); font-size: 12.5px; font-weight: 500; text-align: left;
     width: 100%; display: flex; align-items: center; gap: 8px;
-    padding: 8px 12px; border: 1px solid var(--border); border-radius: 8px;
+    padding: 8px 12px; border: 5px solid #fff; border-radius: 8px;
     background: var(--bg); color: var(--fg); cursor: pointer; transition: all .15s;
   }
   .flow-node::after { content: '+'; margin-left: auto; color: var(--muted-2); font-weight: 600; font-size: 14px; }
@@ -243,7 +285,8 @@
     min-height: 0;
     display: flex;
     flex-direction: column;
-    background: var(--bg);
+    background: transparent !important;
+    /* var(--bg); */
   }
   .chat-head {
     flex-shrink: 0;
@@ -252,6 +295,8 @@
     gap: 10px;
     padding: 0 16px;
     border-bottom: 1px solid var(--border);
+    background: linear-gradient(
+83deg, #d8d4d429 0%, #ffffff 55%, #F5F5F5 100%) !important;
   }
   .chat-title { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; letter-spacing: -0.01em; min-width: 0; }
   .chat-title svg { width: 17px; height: 17px; color: var(--primary); flex-shrink: 0; }
@@ -291,15 +336,19 @@
     flex: 1; min-height: 0; overflow-y: auto;
     padding: 16px; display: flex; flex-direction: column; gap: 10px;
     scrollbar-width: thin; scrollbar-color: var(--border) transparent;
+    border: solid 5px var(--bg) !important;
   }
   .transcript::-webkit-scrollbar { width: 6px; }
-  .transcript::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-  .msg { padding: 10px 14px; border-radius: 12px; font-size: 13.5px; line-height: 1.55; max-width: 88%; animation: msg-in .2s ease-out; }
+  .transcript::-webkit-scrollbar-thumb { background: transparent; border-radius: 3px; }
+  .msg { padding: 10px 14px; border-radius: 12px; font-size: 13.5px; line-height: 1.55; max-width: 88%; animation: msg-in .2s ease-out; border: solid 5px var(--bg) !important}
   @keyframes msg-in { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
   .msg.user { align-self: flex-end; background: var(--primary); color: var(--primary-fg); border-bottom-right-radius: 4px; }
-  .msg.assistant { align-self: flex-start; background: var(--surface-2); color: var(--fg); border: 1px solid var(--border); border-bottom-left-radius: 4px; }
+  .msg.assistant { align-self: flex-start; background: linear-gradient(135deg, #d8d4d429 0%, #ffffff 55%, #F5F5F5 100%); color: var(--fg); border: solid 5px var(--bg) !important; border-bottom-left-radius: 12px; }
   .msg .meta { font-size: 10.5px; color: var(--muted-2); margin-top: 5px; font-variant-numeric: tabular-nums; }
   .msg.user .meta { color: rgba(250,250,250,0.6); }
+  /* Typewriter caret while an assistant reply is being typed out */
+  .msg-text.typing::after { content: '▋'; margin-left: 1px; color: var(--accent); animation: caret-blink 1s steps(1) infinite; }
+  @keyframes caret-blink { 50% { opacity: 0; } }
   .loading-dots { display: inline-flex; gap: 4px; align-items: center; height: 1.4em; }
   .loading-dots span { width: 6px; height: 6px; border-radius: 50%; background: var(--muted-2); animation: dot-bounce 1.2s ease-in-out infinite; }
   .loading-dots span:nth-child(2) { animation-delay: .15s; }
@@ -363,7 +412,7 @@
     body { overflow: auto; height: auto; min-height: 100vh; }
     .app { grid-template-columns: 1fr; }
     .promo { border-right: none; border-bottom: 1px solid var(--border); overflow: visible; }
-    .chat { height: 78vh; min-height: 520px; }
+    .chat { height: 78vh; min-height: 520px; background: transparent; }
   }
 </style>
 </head>
@@ -1380,7 +1429,7 @@ function init() {
 
   // Camera + voice are opt-in via the buttons — nothing is acquired on load, so there is no
   // camera/mic permission prompt until the user asks for it. Text input works without either.
-  cameraEnabled = false;
+  cameraEnabled = true;
   voiceEnabled = false;
   viewportWrap.classList.add('hidden');
   setState('idle');
