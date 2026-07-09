@@ -10,7 +10,7 @@ from pathlib import Path
 
 import httpx
 import uvicorn
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect
 from fastapi.responses import HTMLResponse
 
 from dotenv import load_dotenv
@@ -62,6 +62,21 @@ async def suggestions():
         return r.json()
     except httpx.HTTPError:
         return {"questions": []}
+
+
+@app.post("/lead")
+async def lead(request: Request):
+    """Free-usage lead capture: stamp the client IP (server-side) and forward to the gateway store."""
+    body = await request.json()
+    fwd = request.headers.get("x-forwarded-for", "")
+    body["ip"] = (fwd.split(",")[0].strip() if fwd else (request.client.host if request.client else "")) or ""
+    try:
+        r = await gateway.post("/lead", json=body)
+        r.raise_for_status()
+        return r.json()
+    except httpx.HTTPError as e:
+        print(f"Gateway /lead failed: {e}")
+        return {"ok": False}
 
 
 @app.websocket("/ws")
@@ -118,12 +133,20 @@ async def websocket_endpoint(ws: WebSocket):
                 resp = await gateway.post("/respond", json=payload)
                 resp.raise_for_status()
             except httpx.HTTPError as e:
-                print(f"Gateway /respond failed: {e}")
-                await ws.send_text(json.dumps({
+                # 429 from the gateway = Gemini free-tier quota exhausted → flag it so the UI can
+                # show the "free usage ended" lead-capture form instead of a generic retry message.
+                rate_limited = isinstance(e, httpx.HTTPStatusError) and e.response.status_code == 429
+                print(f"Gateway /respond failed: {e}{' [rate_limited]' if rate_limited else ''}")
+                err_msg = ("বিনামূল্যের ব্যবহারসীমা আপাতত শেষ হয়েছে।"
+                           if rate_limited else "দুঃখিত, একটু সমস্যা হয়েছে। আরেকবার একটু বলবেন?")
+                reply = {
                     "type": "text",
-                    "text": "দুঃখিত, একটু সমস্যা হয়েছে। আরেকবার একটু বলবেন?",
+                    "text": err_msg,
                     "llm_time": round(time.time() - t0, 2),
-                }))
+                }
+                if rate_limited:
+                    reply["rate_limited"] = True
+                await ws.send_text(json.dumps(reply))
                 continue
             llm_time = time.time() - t0
 
