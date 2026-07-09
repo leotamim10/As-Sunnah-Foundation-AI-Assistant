@@ -295,6 +295,7 @@
     gap: 10px;
     padding: 0 16px;
     border-bottom: 1px solid var(--border);
+        box-shadow: 0 1px 1px 0 #25292e1a, 0 3px 6px 0 #25292e1f;
     background: linear-gradient(
 83deg, #d8d4d429 0%, #ffffff 55%, #F5F5F5 100%) !important;
   }
@@ -328,7 +329,7 @@
   .viewport-glow { display: none; }
   video { display: block; width: 100%; height: 100%; object-fit: cover; background: #0a0a10; transform: scaleX(-1); }
 
-  .waveform-wrap { height: 40px; margin: 10px 16px 0; flex-shrink: 0; }
+  .waveform-wrap { height: 40px; flex-shrink: 0; }
   #waveform { width: 100%; height: 100%; display: block; }
 
   /* Transcript */
@@ -360,7 +361,8 @@
   .allow-btn:disabled { opacity: .5; cursor: default; }
 
   /* Controls */
-  .controls { flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 16px 0; }
+  .controls { flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 16px 8px 18px;
+    box-shadow: 0 1px 1px 0 #25292e1a, 0 3px 6px 0 #25292e1f; }
   .ctrl-group { display: flex; gap: 8px; }
   .ctrl-btn {
     font-family: var(--font); font-size: 12px; font-weight: 600;
@@ -512,6 +514,34 @@
   @media (prefers-reduced-motion: reduce) {
     .tour-spot, .tour-pop, .modal, .modal-backdrop, .greet-toast { transition: none; animation: none; }
   }
+
+  /* ── Model selector (topbar) — shows the active model + failover chain with limitations ── */
+  .model-select { position: relative; }
+  .model-btn {
+    display: inline-flex; align-items: center; gap: 6px; font-family: var(--font); font-size: 12px;
+    font-weight: 500; color: var(--fg); background: var(--bg); border: 1px solid var(--border);
+    border-radius: 8px; padding: 5px 9px; cursor: pointer; transition: all .15s; max-width: 210px;
+  }
+  .model-btn:hover { border-color: var(--muted); }
+  .model-btn #modelName { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .model-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+  .model-caret { color: var(--muted-2); font-size: 10px; flex-shrink: 0; }
+  .model-menu {
+    position: absolute; top: calc(100% + 6px); right: 0; z-index: 120; width: min(320px, calc(100vw - 24px));
+    background: var(--bg); border: 1px solid var(--border); border-radius: 12px;
+    box-shadow: 0 16px 44px rgba(0,0,0,0.18); padding: 6px; display: none; max-height: 72vh; overflow-y: auto;
+  }
+  .model-menu.open { display: block; animation: pop-in .18s ease-out; }
+  .model-menu .mm-head { font-size: 10.5px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--muted-2); padding: 6px 8px 4px; }
+  .model-item { display: block; width: 100%; text-align: left; background: none; border: none; cursor: pointer; padding: 9px 10px; border-radius: 9px; transition: background .12s; }
+  .model-item:hover { background: var(--surface-2); }
+  .model-item.active { background: var(--accent-bg); }
+  .mi-top { display: flex; align-items: center; gap: 7px; }
+  .mi-name { font-size: 13px; font-weight: 600; color: var(--fg); }
+  .mi-badge { font-size: 9.5px; font-weight: 600; padding: 1px 6px; border-radius: 999px; border: 1px solid var(--border); color: var(--muted); white-space: nowrap; }
+  .mi-badge.vision { color: var(--accent); border-color: #bbf7d0; background: var(--accent-bg); }
+  .mi-check { margin-left: auto; color: var(--accent); font-weight: 700; }
+  .mi-note { font-size: 11.5px; color: var(--muted); line-height: 1.45; margin-top: 3px; }
 </style>
 </head>
 <body>
@@ -522,7 +552,12 @@
     <span id="appName">As-Sunnah Foundation</span>
   </div>
   <div class="topbar-right">
-    <span class="model-label">Gemini Flash · Edge bn-BD</span>
+    <div class="model-select">
+      <button id="modelBtn" type="button" class="model-btn" aria-haspopup="listbox" aria-expanded="false">
+        <span class="model-dot"></span><span id="modelName">…</span><span class="model-caret">▾</span>
+      </button>
+      <div id="modelMenu" class="model-menu" role="listbox"></div>
+    </div>
     <button id="helpBtn" type="button" class="help-btn" aria-label="Guide" title="Guide">?</button>
     <div id="langSwitch" class="lang-switch">
       <button type="button" data-lang="en">EN</button>
@@ -670,6 +705,8 @@ const bn = {
   'lead.err.required': 'নাম, ইমেইল ও ফোন নম্বর দিন।', 'lead.err.email': 'সঠিক ইমেইল দিন।', 'lead.err.net': 'জমা দেওয়া যায়নি, আবার চেষ্টা করুন।',
   'lead.ok.title': 'ধন্যবাদ!', 'lead.ok.body': 'আপনার তথ্য সংরক্ষিত হয়েছে। শীঘ্রই যোগাযোগ করব ইনশাআল্লাহ।',
   'greet.title': 'স্বাগতম, {name}!', 'greet.body': 'আবার দেখা হয়ে ভালো লাগল। কীভাবে সাহায্য করতে পারি?',
+  'model.pick': 'মডেল বেছে নিন', 'model.none': 'কোনো মডেল কনফিগার করা নেই',
+  'model.vision': 'ছবি বোঝে', 'model.textonly': 'শুধু টেক্সট',
   'chat.title': 'এআই সহকারী',
   'voice.head': 'ভয়েস কমান্ড',
   'voice.sub': 'মাইক চালু করে এগুলো বলে দেখুন:',
@@ -730,6 +767,8 @@ const en = {
   'lead.err.required': 'Please fill name, email, and phone.', 'lead.err.email': 'Enter a valid email.', 'lead.err.net': 'Could not submit — please try again.',
   'lead.ok.title': 'Thank you!', 'lead.ok.body': "We've saved your details and will be in touch soon.",
   'greet.title': 'Welcome back, {name}!', 'greet.body': 'Good to see you again. How can we help today?',
+  'model.pick': 'Choose a model', 'model.none': 'No models configured',
+  'model.vision': 'Vision', 'model.textonly': 'Text only',
   'chat.title': 'AI Assistant',
   'voice.head': 'Voice commands',
   'voice.sub': 'Turn on the mic and try saying:',
@@ -775,6 +814,7 @@ function applyLocale() {
   for (const b of langSwitch.querySelectorAll('button')) b.classList.toggle('active', b.dataset.lang === lang);
   renderPromo(); // re-render the feature-promotion panel in the active language
   renderVoiceCard(); // re-localize the voice-command card head/sub (questions stay as-is)
+  if (typeof renderModelMenu === 'function') renderModelMenu(); // re-localize model badges/limitations
 }
 
 function setLang(l) {
@@ -1150,7 +1190,8 @@ function connect() {
         }
       }
       addMessage('assistant', msg.text, t('meta.llm', { n: msg.llm_time }), { typing: true });
-      if (msg.rate_limited) openLead();   // free-tier quota exhausted → show the lead-capture form
+      if (msg.model) reflectActiveModel(msg.model);   // show which model answered (after any failover)
+      if (msg.rate_limited) openLead();   // all models exhausted → show the lead-capture form
       // If no audio follows (error reply / empty TTS), don't get stuck in 'processing'.
       clearTimeout(turnTimer);
       turnTimer = setTimeout(() => {
@@ -1378,6 +1419,7 @@ function handleSpeechEnd(audio) {
 
   const payload = { audio: wavBase64 };
   if (imageBase64) payload.image = imageBase64;
+  if (pinnedModelId) payload.model = pinnedModelId;   // failover chain tries this model first
   ws.send(JSON.stringify(payload));
 }
 
@@ -1660,6 +1702,62 @@ function maybeStartTour() {
   if (!seen) setTimeout(startTour, 900);
 }
 
+// ═══════════ Model selector + live active-model indicator (multi-model failover chain) ═══════════
+const modelBtn = $('modelBtn'), modelMenu = $('modelMenu'), modelNameEl = $('modelName');
+let modelList = [], pinnedModelId = null, activeModelName = null;
+try { pinnedModelId = localStorage.getItem('asf_model') || null; } catch {}
+
+function reflectActiveModel(name) { activeModelName = name; if (modelNameEl && name) modelNameEl.textContent = name; }
+
+function renderModelMenu() {
+  if (!modelList.length) { modelMenu.innerHTML = `<div class="mm-head">${escapeHtml(t('model.none'))}</div>`; return; }
+  const items = modelList.map(m => {
+    const lim = (m.limitations && (m.limitations[lang] || m.limitations.en)) || '';
+    const badge = m.hasVision
+      ? `<span class="mi-badge vision">${escapeHtml(t('model.vision'))}</span>`
+      : `<span class="mi-badge">${escapeHtml(t('model.textonly'))}</span>`;
+    const pinned = m.id === pinnedModelId;
+    return `<button type="button" class="model-item${pinned ? ' active' : ''}" data-id="${escapeHtml(m.id)}" role="option" aria-selected="${pinned}">` +
+      `<div class="mi-top"><span class="mi-name">${escapeHtml(m.name)}</span>${badge}${pinned ? '<span class="mi-check">✓</span>' : ''}</div>` +
+      `<div class="mi-note">${escapeHtml(lim)}</div></button>`;
+  }).join('');
+  modelMenu.innerHTML = `<div class="mm-head">${escapeHtml(t('model.pick'))}</div>${items}`;
+}
+
+async function loadModels() {
+  try {
+    const r = await fetch('/models');
+    if (r.ok) {
+      const j = await r.json();
+      modelList = Array.isArray(j.models) ? j.models : [];
+      if (pinnedModelId && !modelList.some(m => m.id === pinnedModelId)) { pinnedModelId = null; try { localStorage.removeItem('asf_model'); } catch {} }
+      if (!activeModelName) {
+        const def = modelList.find(m => m.id === (pinnedModelId || j.activeId)) || modelList[0];
+        if (def) reflectActiveModel(def.name);
+      }
+    }
+  } catch {}
+  renderModelMenu();
+}
+
+modelBtn.addEventListener('click', (e) => {
+  e.stopPropagation();
+  const open = modelMenu.classList.toggle('open');
+  modelBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  if (open) renderModelMenu();
+});
+modelMenu.addEventListener('click', (e) => {
+  const item = e.target.closest('.model-item'); if (!item) return;
+  pinnedModelId = item.dataset.id;
+  try { localStorage.setItem('asf_model', pinnedModelId); } catch {}
+  const m = modelList.find(x => x.id === pinnedModelId); if (m) reflectActiveModel(m.name);
+  modelMenu.classList.remove('open'); modelBtn.setAttribute('aria-expanded', 'false');
+  renderModelMenu();
+});
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.model-select')) { modelMenu.classList.remove('open'); modelBtn.setAttribute('aria-expanded', 'false'); }
+});
+
 // ── Text composer ── type a question; same {text} WS path the gateway already handles.
 function escapeHtml(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
 
@@ -1680,7 +1778,7 @@ function sendText() {
   setState('processing');
   setStatus('processing');
   addMessage('user', escapeHtml(text)); // escaped — user text goes through innerHTML in addMessage
-  ws.send(JSON.stringify({ text }));
+  ws.send(JSON.stringify(pinnedModelId ? { text, model: pinnedModelId } : { text }));
 }
 
 composer.addEventListener('submit', (e) => { e.preventDefault(); sendText(); });
@@ -1748,6 +1846,7 @@ function init() {
 
   drawWaveform();
 
+  loadModels();       // populate the model selector + active-model indicator
   maybeGreet();       // returning visitor → welcome-back toast
   maybeStartTour();   // first landing → auto-run the guided tour
   console.log('Ready — camera and voice are opt-in.');
