@@ -714,15 +714,26 @@ function renderPromo(key) {
 
 // Separate course-flowchart component (its own card beside the promo). Shown only for the skill
 // feature; the root badge branches into course nodes.
+// Detail block (description + course link) for a course node — shared by the default-open first
+// node and the click handler.
+function courseDetailHtml(course) {
+  const d = course[lang] || course.en;
+  const url = `https://assunnahfoundation.org/activities/skill-development-institute/courses/${course.slug}`;
+  return `<div class="flow-detail"><p class="flow-desc">${escapeHtml(d.d)}</p>` +
+    `<a class="flow-link" href="${url}" target="_blank" rel="noopener">${lang === 'bn' ? 'কোর্স দেখুন' : 'View course'} →</a></div>`;
+}
+
 function renderCourseFlow() {
   // The flip (courses ⇄ voice commands) lives in the skill feature; hide the whole thing otherwise.
   if (currentFeature !== 'skill') { flipCard.style.display = 'none'; flipCard.classList.remove('flipped'); return; }
   flipCard.style.display = '';
   const badge = featureData.skill.badge[lang] || featureData.skill.badge.en;
-  
-  const nodes = SKILL_COURSES.map(x =>
-    `<div class="flow-item"><button type="button" class="flow-node" data-slug="${x.slug}" aria-expanded="false">${escapeHtml((x[lang] || x.en).t)}</button><div class="flow-child"></div></div>`
-  ).join('');
+
+  const nodes = SKILL_COURSES.map((x, i) => {
+    const open = i === 0;   // the first course opens by default (aria-expanded true)
+    return `<div class="flow-item"><button type="button" class="flow-node" data-slug="${x.slug}" aria-expanded="${open}">${escapeHtml((x[lang] || x.en).t)}</button>` +
+      `<div class="flow-child${open ? ' open' : ''}">${open ? courseDetailHtml(x) : ''}</div></div>`;
+  }).join('');
   flowCard.innerHTML = `
     <div class="flow-card-head"><span class="badge"><span class="dot-badge"></span>${lang === 'bn' ? 'কোর্সসমূহ' : 'Courses'}</span></div>
     <div class="flow-card-sub">${lang === 'bn' ? 'যেকোনো কোর্সে ক্লিক করে বিস্তারিত দেখুন' : 'Click any course for details'}</div>
@@ -749,10 +760,7 @@ flowCard.addEventListener('click', (e) => {
   
   const course = SKILL_COURSES.find(x => x.slug === node.dataset.slug);
   if (!course) return;
-  const d = course[lang] || course.en;
-  const url = `https://assunnahfoundation.org/activities/skill-development-institute/courses/${course.slug}`;
-  child.innerHTML = `<div class="flow-detail"><p class="flow-desc">${escapeHtml(d.d)}</p>` +
-    `<a class="flow-link" href="${url}" target="_blank" rel="noopener">${lang === 'bn' ? 'কোর্স দেখুন' : 'View course'} →</a></div>`;
+  child.innerHTML = courseDetailHtml(course);
   child.classList.add('open');
   node.setAttribute('aria-expanded', 'true');
 });
