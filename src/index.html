@@ -731,6 +731,10 @@ const bn = {
   'guide.input.b': 'নিচে টাইপ করে পাঠান, অথবা ইনপুট বক্সে ক্লিক করলে প্রস্তাবিত প্রশ্ন দেখাবে—যেকোনোটিতে ট্যাপ করুন।',
   'guide.cards.t': 'কোর্স ও ভয়েস কমান্ড',
   'guide.cards.b': 'বাঁ পাশে কোর্সের তালিকা; শুনুন বাটনে ফোকাস করলে কার্ডটি ঘুরে ভয়েস কমান্ডের নমুনা দেখায়—এগুলো বলে দেখুন।',
+  'guide.model.t': 'মডেল নির্বাচন',
+  'guide.model.b': 'এখানে দেখুন কোন AI মডেল উত্তর দিচ্ছে; ক্লিক করে অন্য মডেল বেছে নিতে পারেন। একটির সীমা শেষ হলে স্বয়ংক্রিয়ভাবে পরেরটিতে চলে যায়—প্রতিটির সীমাবদ্ধতাও এখানে লেখা থাকে।',
+  'guide.profile.t': 'আপনার প্রোফাইল',
+  'guide.profile.b': 'নাম, ইমেইল ও ফোন যোগ করুন—নতুন ফিচার বা আপডেট এলে আমরা জানাব। তথ্য শুধু আপনার ডিভাইসেই থাকে; যেকোনো সময় এডিট বা মুছে ফেলতে পারবেন।',
   'lead.badge': 'বিনামূল্যের সীমা শেষ',
   'lead.title': 'আরও ব্যবহার করতে চান?',
   'lead.sub': 'আজকের বিনামূল্যের কোটা আপাতত শেষ। নিচে তথ্য দিন—সীমা রিসেট হলে বা নতুন ফিচার এলে আমরা জানাব।',
@@ -796,6 +800,10 @@ const en = {
   'guide.input.b': 'Type below and send, or click the box to see suggested questions — tap any to use it.',
   'guide.cards.t': 'Courses & voice commands',
   'guide.cards.b': 'On the left are the courses; focus the Listen button and the card flips to show sample voice commands — try saying them.',
+  'guide.model.t': 'Model selector',
+  'guide.model.b': 'See which AI model is answering; click to pick another. If one hits its limit it auto-switches to the next — each model’s limitations are listed here too.',
+  'guide.profile.t': 'Your profile',
+  'guide.profile.b': 'Add your name, email and phone — we’ll notify you of updates and new features. Details stay on your device; edit or clear them anytime.',
   'lead.badge': 'Free usage ended',
   'lead.title': 'Want to keep using it?',
   'lead.sub': "Today's free quota is used up for now. Leave your details and we'll reach out when it resets or new features arrive.",
@@ -1607,8 +1615,10 @@ const TOUR_STEPS = [
   { sel: '#stateText', key: 'ready', pad: 6 },
   { sel: '#listenToggle', key: 'listen', pad: 8 },
   { sel: '#cameraToggle', key: 'camera', pad: 8 },
+  { sel: '#modelBtn', key: 'model', pad: 8 },
   { sel: '#composer', key: 'input', pad: 8 },
   { sel: '#flipCard', key: 'cards', pad: 10 },
+  { sel: '#profileBtn', key: 'profile', pad: 8 },
 ];
 let tourIdx = -1, tourEls = null;
 
