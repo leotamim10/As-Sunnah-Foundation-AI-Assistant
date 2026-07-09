@@ -7,19 +7,15 @@ import { appendFile, mkdir, readFile } from "node:fs/promises";
 import { dirname } from "node:path";
 import { RespondRequest, TtsRequest, LeadRequest } from "./contracts.js";
 import { GeminiAdapter, type UnderstandingAdapter } from "./adapters/understanding.js";
-import { HfUnderstandingAdapter } from "./adapters/hf-understanding.js";
 import { HfWhisperAdapter } from "./adapters/stt.js";
-import { HfLlmAdapter } from "./adapters/llm.js";
+import { OpenAICompatLlmAdapter } from "./adapters/openai-compat-llm.js";
+import { ComposedUnderstandingAdapter } from "./adapters/composed-understanding.js";
+import { FailoverUnderstandingAdapter, AllModelsExhaustedError, type ChainEntry } from "./adapters/failover.js";
 import { AzureBnBDAdapter, FallbackTtsAdapter, type TtsAdapter } from "./adapters/tts.js";
 import { EdgeTtsAdapter } from "./adapters/edge.js";
 import { retrieve, getSuggestions } from "./rag/retrieve.js";
-
-/** True when an error is a provider rate-limit / quota exhaustion (Gemini 429 / RESOURCE_EXHAUSTED). */
-function isRateLimit(err: unknown): boolean {
-  const e = err as { status?: number; code?: number; httpResponse?: { status?: number }; message?: string };
-  if (e?.status === 429 || e?.code === 429 || e?.httpResponse?.status === 429) return true; // Gemini + HF
-  return /RESOURCE_EXHAUSTED|too many requests|rate.?limit|"code"\s*:\s*429|\b429\b/i.test(String(e?.message ?? err ?? ""));
-}
+import { isRateLimit } from "./ratelimit.js";
+import { buildChain, publicModels, type ModelEntry } from "./models.js";
 
 const LEADS_PATH = process.env.LEADS_PATH ?? "data/leads.jsonl";
 
@@ -32,25 +28,43 @@ function env(name: string, fallback?: string): string {
 
 const PORT = Number(env("PORT", "8787"));
 
-// Understanding path is swappable via env (default gemini). The relevant key is required only for
-// the chosen provider, so the gateway boots with just one of GEMINI_API_KEY / HF_TOKEN.
-//   gemini → one multimodal call (audio+image+grounded reply); has vision.
-//   hf     → Whisper STT → hosted Bengali LLM, same RAG grounding; text-only (drops the image).
-function makeUnderstanding(): UnderstandingAdapter {
-  if ((process.env.UNDERSTANDING_PROVIDER ?? "gemini").toLowerCase() === "hf") {
-    const token = env("HF_TOKEN");
-    return new HfUnderstandingAdapter(
-      new HfWhisperAdapter({ token, model: process.env.HF_STT_MODEL }),
-      new HfLlmAdapter({ token, model: process.env.HF_LLM_MODEL }),
-    );
-  }
-  return new GeminiAdapter({
-    apiKey: env("GEMINI_API_KEY"),
-    model: env("GEMINI_MODEL", "gemini-2.5-flash"),
+// ---------- multi-model failover chain ----------
+// One shared Whisper STT (for the text-LLM providers; Gemini does its own STT). null if no HF_TOKEN,
+// in which case text turns still work on those providers but voice fails over to Gemini.
+const sharedStt = process.env.HF_TOKEN
+  ? new HfWhisperAdapter({ token: process.env.HF_TOKEN, model: process.env.HF_STT_MODEL })
+  : null;
+
+function makeAdapter(entry: ModelEntry): UnderstandingAdapter {
+  const apiKey = process.env[entry.apiKeyEnv] as string;
+  if (entry.provider === "gemini") return new GeminiAdapter({ apiKey, model: entry.model });
+  // hf / groq / openrouter — all OpenAI-compatible, sharing the Whisper STT.
+  const llm = new OpenAICompatLlmAdapter({
+    baseURL: entry.baseURL as string,
+    apiKey,
+    model: entry.model,
+    headers:
+      entry.provider === "openrouter"
+        ? { "HTTP-Referer": "https://assunnahfoundation.org", "X-Title": "As-Sunnah Foundation AI" }
+        : undefined,
   });
+  return new ComposedUnderstandingAdapter(sharedStt, llm);
 }
-const understanding: UnderstandingAdapter = makeUnderstanding();
-console.log(`understanding backend: ${(process.env.UNDERSTANDING_PROVIDER ?? "gemini").toLowerCase()}`);
+
+const chain: ModelEntry[] = buildChain();
+if (chain.length === 0) {
+  throw new Error(
+    "No models available — set at least one provider key (GEMINI_API_KEY / HF_TOKEN / GROQ_API_KEY / OPENROUTER_API_KEY).",
+  );
+}
+const chainEntries: ChainEntry[] = chain.map((e) => ({
+  id: e.id,
+  name: e.name,
+  hasVision: e.hasVision,
+  adapter: makeAdapter(e),
+}));
+const understanding = new FailoverUnderstandingAdapter(chainEntries);
+console.log(`model chain: ${chain.map((e) => e.id).join(" → ")}`);
 
 // TTS chain: Edge (card-free demo path, same bn-BD voices) is primary; Azure (production path)
 // is appended only when its keys are present, so the gateway boots with zero paid dependencies.
@@ -74,6 +88,9 @@ app.get("/health", async () => ({ ok: true as const }));
 // Recommended questions, derived from the knowledge base (for the UI's input suggestions).
 app.get("/suggestions", async () => ({ questions: getSuggestions(8) }));
 
+// The failover chain (names + limitations, no keys) for the UI's model selector.
+app.get("/models", async () => ({ models: publicModels(chain), activeId: understanding.activeId() }));
+
 app.post("/respond", async (req, reply) => {
   const parsed = RespondRequest.safeParse(req.body);
   if (!parsed.success) return reply.code(400).send({ error: parsed.error.flatten() });
@@ -81,8 +98,10 @@ app.post("/respond", async (req, reply) => {
     return await understanding.respond(parsed.data);
   } catch (err) {
     req.log.error(err);
-    // Surface quota exhaustion distinctly so server.py can flag it to the UI (free-usage-ended form).
-    if (isRateLimit(err)) return reply.code(429).send({ error: "rate_limited" });
+    // Every model exhausted (or a bare 429) → flag it so the UI shows the free-usage-ended form.
+    if (err instanceof AllModelsExhaustedError || isRateLimit(err)) {
+      return reply.code(429).send({ error: "rate_limited" });
+    }
     return reply.code(502).send({ error: "understanding_failed" });
   }
 });

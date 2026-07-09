@@ -18,6 +18,8 @@ export const RespondRequest = z
     text: z.string().optional(),
     /** BCP-47-ish language hint. Bengali by default. */
     lang: z.string().default("bn"),
+    /** Preferred model id (from the UI selector); the failover chain tries it first. */
+    modelId: z.string().max(64).optional(),
   })
   .refine((v) => Boolean(v.audioB64 || v.text), {
     message: "Provide at least `audioB64` or `text`.",
@@ -29,8 +31,29 @@ export const RespondResponse = z.object({
   transcription: z.string(),
   /** The assistant's reply, in natural Bangladeshi Bangla. */
   response: z.string(),
+  /** Human name of the model that actually answered (after any failover). */
+  model: z.string().optional(),
+  /** Registry id of that model. */
+  modelId: z.string().optional(),
 });
 export type RespondResponse = z.infer<typeof RespondResponse>;
+
+/* ---------- GET /models : the failover chain (names + limitations, no keys) ---------- */
+
+export const ModelPublic = z.object({
+  id: z.string(),
+  name: z.string(),
+  provider: z.string(),
+  hasVision: z.boolean(),
+  limitations: z.object({ en: z.string(), bn: z.string() }),
+});
+export type ModelPublic = z.infer<typeof ModelPublic>;
+
+export const ModelsResponse = z.object({
+  models: z.array(ModelPublic),
+  activeId: z.string().optional(),
+});
+export type ModelsResponse = z.infer<typeof ModelsResponse>;
 
 /* ---------- POST /tts : text -> speech ---------- */
 
