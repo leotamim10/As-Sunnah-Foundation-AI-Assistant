@@ -414,6 +414,104 @@
     .promo { border-right: none; border-bottom: 1px solid var(--border); overflow: visible; }
     .chat { height: 78vh; min-height: 520px; background: transparent; }
   }
+
+  /* ── Hide the scrollbars on the two scrolling panes (keep scrolling) ── */
+  .promo, .transcript, .messages, #messages {
+    scrollbar-width: none;          /* Firefox */
+    -ms-overflow-style: none;       /* old Edge */
+  }
+  .promo::-webkit-scrollbar,
+  .transcript::-webkit-scrollbar,
+  .messages::-webkit-scrollbar,
+  #messages::-webkit-scrollbar { width: 0; height: 0; display: none; }  /* WebKit */
+
+  /* ── Help (?) button ── */
+  .help-btn {
+    width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0;
+    border: 1px solid var(--border); background: var(--bg); color: var(--muted);
+    font-family: var(--font); font-weight: 700; font-size: 13px; cursor: pointer;
+    display: inline-flex; align-items: center; justify-content: center; transition: all .15s;
+  }
+  .help-btn:hover { color: var(--accent); border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-bg); }
+
+  /* ── Guided tour (spotlight coach-marks) ── */
+  .tour-overlay { position: fixed; inset: 0; z-index: 200; pointer-events: none; opacity: 0; transition: opacity .25s; }
+  .tour-overlay.on { opacity: 1; pointer-events: auto; }
+  .tour-spot {
+    position: fixed; border-radius: 12px; pointer-events: none;
+    box-shadow: 0 0 0 9999px rgba(15, 23, 20, 0.62), 0 0 0 2px var(--accent);
+    transition: all .35s cubic-bezier(.4, 0, .2, 1);
+  }
+  .tour-pop {
+    position: fixed; z-index: 201; width: min(320px, calc(100vw - 32px));
+    background: var(--bg); border: 1px solid var(--border); border-radius: 14px;
+    box-shadow: 0 18px 50px rgba(0,0,0,0.22); padding: 16px 16px 14px;
+    transition: top .35s cubic-bezier(.4,0,.2,1), left .35s cubic-bezier(.4,0,.2,1);
+    animation: pop-in .25s ease-out;
+  }
+  @keyframes pop-in { from { opacity: 0; transform: translateY(6px) scale(.98); } to { opacity: 1; transform: none; } }
+  .tour-pop .tp-step { font-size: 11px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--accent); }
+  .tour-pop .tp-title { font-size: 15px; font-weight: 700; margin: 4px 0 6px; letter-spacing: -0.01em; }
+  .tour-pop .tp-body { font-size: 13px; line-height: 1.55; color: var(--muted); }
+  .tour-pop .tp-dots { display: flex; gap: 5px; margin-top: 12px; }
+  .tour-pop .tp-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--border); transition: all .2s; }
+  .tour-pop .tp-dot.on { background: var(--accent); width: 18px; border-radius: 3px; }
+  .tour-pop .tp-actions { display: flex; align-items: center; gap: 8px; margin-top: 12px; }
+  .tour-pop .tp-actions .spacer { flex: 1; }
+  .tp-btn { font-family: var(--font); font-size: 12.5px; font-weight: 600; padding: 7px 14px; border-radius: 8px; cursor: pointer; border: 1px solid var(--border); background: var(--bg); color: var(--fg); transition: all .15s; }
+  .tp-btn:hover { background: var(--surface-2); }
+  .tp-btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .tp-btn.primary:hover { filter: brightness(1.05); }
+  .tp-skip { background: none; border: none; color: var(--muted); font-size: 12px; cursor: pointer; padding: 4px; }
+  .tp-skip:hover { color: var(--fg); }
+
+  /* ── Modal (free-usage lead capture) ── */
+  .modal-backdrop {
+    position: fixed; inset: 0; z-index: 210; display: none;
+    align-items: center; justify-content: center; padding: 20px;
+    background: rgba(15, 23, 20, 0.55); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
+    opacity: 0; transition: opacity .25s;
+  }
+  .modal-backdrop.on { display: flex; opacity: 1; }
+  .modal {
+    width: min(440px, 100%); max-height: calc(100vh - 40px); overflow-y: auto;
+    background: var(--bg); border: 1px solid var(--border); border-radius: 18px;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.3); padding: 26px 24px 22px;
+    animation: modal-in .3s cubic-bezier(.2,.7,.2,1);
+  }
+  @keyframes modal-in { from { opacity: 0; transform: translateY(14px) scale(.97); } to { opacity: 1; transform: none; } }
+  .modal-badge { display: inline-flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 600; color: var(--warn); background: #fffbeb; border: 1px solid #fde68a; padding: 5px 11px; border-radius: 999px; }
+  .modal h2 { font-size: 20px; font-weight: 700; letter-spacing: -0.02em; margin: 14px 0 6px; }
+  .modal .m-sub { font-size: 13.5px; line-height: 1.6; color: var(--muted); margin-bottom: 18px; }
+  .lead-form { display: flex; flex-direction: column; gap: 11px; }
+  .lead-form label { font-size: 12px; font-weight: 600; color: var(--fg); margin-bottom: 4px; display: block; }
+  .lead-form input, .lead-form select {
+    width: 100%; font-family: var(--font); font-size: 13.5px; padding: 10px 12px;
+    border: 1px solid var(--border); border-radius: 9px; background: var(--bg); color: var(--fg); transition: border-color .15s, box-shadow .15s;
+  }
+  .lead-form input:focus, .lead-form select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-bg); }
+  .lead-form .m-consent { font-size: 11px; color: var(--muted-2); line-height: 1.5; margin-top: 2px; }
+  .lead-form .m-submit { margin-top: 6px; background: var(--accent); color: #fff; border: none; border-radius: 10px; padding: 12px; font-family: var(--font); font-size: 14px; font-weight: 600; cursor: pointer; transition: filter .15s; }
+  .lead-form .m-submit:hover { filter: brightness(1.05); }
+  .lead-form .m-submit:disabled { opacity: .6; cursor: default; }
+  .m-error { color: #dc2626; font-size: 12px; min-height: 14px; }
+  .modal-close { position: sticky; top: 0; float: right; background: none; border: none; font-size: 20px; line-height: 1; color: var(--muted-2); cursor: pointer; }
+  .modal-ok { text-align: center; padding: 6px 0; }
+  .modal-ok .ok-ring { width: 56px; height: 56px; border-radius: 50%; background: var(--accent-bg); color: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 28px; margin: 4px auto 14px; animation: pop-in .35s ease-out; }
+
+  /* ── Returning-visitor greeting toast ── */
+  .greet-toast {
+    position: fixed; top: 64px; right: 18px; z-index: 190; max-width: 320px;
+    background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent);
+    border-radius: 12px; box-shadow: 0 14px 40px rgba(0,0,0,0.16); padding: 13px 15px;
+    transform: translateX(120%); transition: transform .5s cubic-bezier(.2,.8,.2,1);
+  }
+  .greet-toast.on { transform: none; }
+  .greet-toast .gt-title { font-size: 13.5px; font-weight: 700; }
+  .greet-toast .gt-body { font-size: 12.5px; color: var(--muted); margin-top: 2px; }
+  @media (prefers-reduced-motion: reduce) {
+    .tour-spot, .tour-pop, .modal, .modal-backdrop, .greet-toast { transition: none; animation: none; }
+  }
 </style>
 </head>
 <body>
@@ -425,6 +523,7 @@
   </div>
   <div class="topbar-right">
     <span class="model-label">Gemini Flash · Edge bn-BD</span>
+    <button id="helpBtn" type="button" class="help-btn" aria-label="Guide" title="Guide">?</button>
     <div id="langSwitch" class="lang-switch">
       <button type="button" data-lang="en">EN</button>
       <button type="button" data-lang="bn">বাং</button>
@@ -501,6 +600,7 @@
 <script>
 const $ = id => document.getElementById(id);
 const video = $('video'), cameraToggle = $('cameraToggle'), listenToggle = $('listenToggle');
+const helpBtn = $('helpBtn');
 const messagesDiv = $('messages'), statusEl = $('status');
 const stateDot = $('stateDot'), stateText = $('stateText');
 const viewportWrap = $('viewportWrap');
@@ -545,6 +645,31 @@ const bn = {
   'composer.placeholder': 'প্রশ্ন লিখুন…',
   'composer.send': 'পাঠান',
   'suggest.aria': 'প্রস্তাবিত প্রশ্ন',
+  'help.title': 'ব্যবহার নির্দেশিকা',
+  'guide.step': 'ধাপ {i}/{n}',
+  'guide.next': 'পরবর্তী', 'guide.back': 'পূর্ববর্তী', 'guide.finish': 'শেষ', 'guide.skip': 'এড়িয়ে যান',
+  'guide.connected.t': 'সংযোগ স্ট্যাটাস',
+  'guide.connected.b': 'উপরের ডান কোণে "Connected" মানে অ্যাসিস্ট্যান্ট প্রস্তুত ও সার্ভারের সাথে যুক্ত। "Disconnected" দেখালে পেজটি রিফ্রেশ করুন।',
+  'guide.ready.t': 'অবস্থা নির্দেশক',
+  'guide.ready.b': '"Ready" মানে আপনি এখন কথা বা টাইপ করতে পারেন। উত্তর দেওয়ার সময় এটি "Thinking…" ও "Speaking" দেখাবে।',
+  'guide.listen.t': 'শুনুন বাটন',
+  'guide.listen.b': 'সবুজ/সক্রিয় হলে মাইক চালু—কথা বলুন। ধূসর হলে বন্ধ; ক্লিক করে অনুমতি দিন। ব্লক করা (লাল) থাকলে ব্রাউজারের অ্যাড্রেস বার থেকে মাইকের অনুমতি দিন।',
+  'guide.camera.t': 'ক্যামেরা বাটন',
+  'guide.camera.b': 'ছবি দেখিয়ে প্রশ্ন করতে ক্যামেরা চালু করুন। ডিফল্টে বন্ধ; ক্লিক করলে ব্রাউজার অনুমতি চাইবে। ব্লক (লাল) থাকলে অ্যাড্রেস বার থেকে অনুমতি দিন।',
+  'guide.input.t': 'প্রশ্ন ও প্রস্তাবিত কমান্ড',
+  'guide.input.b': 'নিচে টাইপ করে পাঠান, অথবা ইনপুট বক্সে ক্লিক করলে প্রস্তাবিত প্রশ্ন দেখাবে—যেকোনোটিতে ট্যাপ করুন।',
+  'guide.cards.t': 'কোর্স ও ভয়েস কমান্ড',
+  'guide.cards.b': 'বাঁ পাশে কোর্সের তালিকা; শুনুন বাটনে ফোকাস করলে কার্ডটি ঘুরে ভয়েস কমান্ডের নমুনা দেখায়—এগুলো বলে দেখুন।',
+  'lead.badge': 'বিনামূল্যের সীমা শেষ',
+  'lead.title': 'আরও ব্যবহার করতে চান?',
+  'lead.sub': 'আজকের বিনামূল্যের কোটা আপাতত শেষ। নিচে তথ্য দিন—সীমা রিসেট হলে বা নতুন ফিচার এলে আমরা জানাব।',
+  'lead.name': 'নাম', 'lead.email': 'ইমেইল', 'lead.phone': 'ফোন নম্বর', 'lead.interest': 'কোন ফিচারে আগ্রহী?',
+  'lead.opt.voice': 'ভয়েস অ্যাসিস্ট্যান্ট', 'lead.opt.skill': 'স্কিল কোর্স', 'lead.opt.donation': 'দান ও তহবিল', 'lead.opt.chat': 'চ্যাট সহকারী',
+  'lead.consent': 'আপনার তথ্য শুধু যোগাযোগের জন্য ব্যবহৃত হবে; কারও সাথে শেয়ার করা হবে না।',
+  'lead.submit': 'জমা দিন', 'lead.submitting': 'জমা হচ্ছে…',
+  'lead.err.required': 'নাম, ইমেইল ও ফোন নম্বর দিন।', 'lead.err.email': 'সঠিক ইমেইল দিন।', 'lead.err.net': 'জমা দেওয়া যায়নি, আবার চেষ্টা করুন।',
+  'lead.ok.title': 'ধন্যবাদ!', 'lead.ok.body': 'আপনার তথ্য সংরক্ষিত হয়েছে। শীঘ্রই যোগাযোগ করব ইনশাআল্লাহ।',
+  'greet.title': 'স্বাগতম, {name}!', 'greet.body': 'আবার দেখা হয়ে ভালো লাগল। কীভাবে সাহায্য করতে পারি?',
   'chat.title': 'এআই সহকারী',
   'voice.head': 'ভয়েস কমান্ড',
   'voice.sub': 'মাইক চালু করে এগুলো বলে দেখুন:',
@@ -580,6 +705,31 @@ const en = {
   'composer.placeholder': 'Type a question…',
   'composer.send': 'Send',
   'suggest.aria': 'Recommended questions',
+  'help.title': 'How to use',
+  'guide.step': 'Step {i}/{n}',
+  'guide.next': 'Next', 'guide.back': 'Back', 'guide.finish': 'Done', 'guide.skip': 'Skip tour',
+  'guide.connected.t': 'Connection status',
+  'guide.connected.b': 'Top-right "Connected" means the assistant is live and linked to the server. If it shows "Disconnected", refresh the page.',
+  'guide.ready.t': 'Status indicator',
+  'guide.ready.b': '"Ready" means you can speak or type now. While answering it shows "Thinking…" then "Speaking".',
+  'guide.listen.t': 'Listen button',
+  'guide.listen.b': 'Green/active = mic on, just speak. Grey = off; click to allow. If blocked (red), enable the mic from the browser address bar.',
+  'guide.camera.t': 'Camera button',
+  'guide.camera.b': 'Turn the camera on to ask about what you show. Off by default; clicking asks for permission. If blocked (red), allow it from the address bar.',
+  'guide.input.t': 'Ask + suggestions',
+  'guide.input.b': 'Type below and send, or click the box to see suggested questions — tap any to use it.',
+  'guide.cards.t': 'Courses & voice commands',
+  'guide.cards.b': 'On the left are the courses; focus the Listen button and the card flips to show sample voice commands — try saying them.',
+  'lead.badge': 'Free usage ended',
+  'lead.title': 'Want to keep using it?',
+  'lead.sub': "Today's free quota is used up for now. Leave your details and we'll reach out when it resets or new features arrive.",
+  'lead.name': 'Name', 'lead.email': 'Email', 'lead.phone': 'Phone', 'lead.interest': 'Which feature interests you?',
+  'lead.opt.voice': 'Voice assistant', 'lead.opt.skill': 'Skill courses', 'lead.opt.donation': 'Donation & funds', 'lead.opt.chat': 'Chat assistant',
+  'lead.consent': 'Your info is used only to contact you and is never shared.',
+  'lead.submit': 'Submit', 'lead.submitting': 'Submitting…',
+  'lead.err.required': 'Please fill name, email, and phone.', 'lead.err.email': 'Enter a valid email.', 'lead.err.net': 'Could not submit — please try again.',
+  'lead.ok.title': 'Thank you!', 'lead.ok.body': "We've saved your details and will be in touch soon.",
+  'greet.title': 'Welcome back, {name}!', 'greet.body': 'Good to see you again. How can we help today?',
   'chat.title': 'AI Assistant',
   'voice.head': 'Voice commands',
   'voice.sub': 'Turn on the mic and try saying:',
@@ -602,6 +752,7 @@ function applyLocale() {
   document.title = t('app.title');
   const set = (id, txt) => { const el = document.getElementById(id); if (el) el.textContent = txt; };
   set('appName', t('app.name'));
+  if (helpBtn) { helpBtn.title = t('help.title'); helpBtn.setAttribute('aria-label', t('help.title')); }
   set('chatTitle', t('chat.title'));
   set('cloudPill', t('pill.cloud'));
   textInput.placeholder = t('composer.placeholder');
@@ -999,6 +1150,7 @@ function connect() {
         }
       }
       addMessage('assistant', msg.text, t('meta.llm', { n: msg.llm_time }), { typing: true });
+      if (msg.rate_limited) openLead();   // free-tier quota exhausted → show the lead-capture form
       // If no audio follows (error reply / empty TTS), don't get stuck in 'processing'.
       clearTimeout(turnTimer);
       turnTimer = setTimeout(() => {
@@ -1362,6 +1514,152 @@ cameraToggle.addEventListener('click', () => { cameraEnabled ? disableCamera() :
 listenToggle.addEventListener('click', () => { voiceEnabled ? disableListening() : enableListening(); });
 langSwitch.addEventListener('click', (e) => { const b = e.target.closest('button'); if (b && b.dataset.lang) setLang(b.dataset.lang); });
 
+// ═══════════ User guide (coach-marks) · free-usage lead capture · returning-visitor greeting ═══════════
+const LS_SEEN = 'asf_guide_seen', LS_LEAD = 'asf_lead', LS_CID = 'asf_cid';
+
+/* ---- Guided tour: spotlight each real UI element, step by step ---- */
+const TOUR_STEPS = [
+  { sel: '#status', key: 'connected', pad: 6 },
+  { sel: '#stateText', key: 'ready', pad: 6 },
+  { sel: '#listenToggle', key: 'listen', pad: 8 },
+  { sel: '#cameraToggle', key: 'camera', pad: 8 },
+  { sel: '#composer', key: 'input', pad: 8 },
+  { sel: '#flipCard', key: 'cards', pad: 10 },
+];
+let tourIdx = -1, tourEls = null;
+
+function ensureTourEls() {
+  if (tourEls) return tourEls;
+  const overlay = document.createElement('div'); overlay.className = 'tour-overlay';
+  const spot = document.createElement('div'); spot.className = 'tour-spot';
+  const pop = document.createElement('div'); pop.className = 'tour-pop';
+  overlay.append(spot, pop);
+  document.body.appendChild(overlay);
+  tourEls = { overlay, spot, pop };
+  return tourEls;
+}
+function positionTour() {
+  const step = TOUR_STEPS[tourIdx];
+  const target = document.querySelector(step.sel);
+  if (!target) return showTourStep(tourIdx + 1);   // element missing → skip
+  const { spot, pop } = tourEls, r = target.getBoundingClientRect(), pad = step.pad;
+  Object.assign(spot.style, { left: (r.left - pad) + 'px', top: (r.top - pad) + 'px', width: (r.width + pad * 2) + 'px', height: (r.height + pad * 2) + 'px' });
+  const popH = pop.offsetHeight || 190, popW = pop.offsetWidth || 320;
+  let top = r.bottom + 14;
+  if (top + popH > window.innerHeight - 12) top = Math.max(12, r.top - popH - 14);
+  const left = Math.min(Math.max(12, r.left), window.innerWidth - popW - 12);
+  Object.assign(pop.style, { top: top + 'px', left: left + 'px' });
+}
+function showTourStep(i) {
+  if (i >= TOUR_STEPS.length) return endTour();
+  tourIdx = Math.max(0, i);
+  const step = TOUR_STEPS[tourIdx], last = tourIdx === TOUR_STEPS.length - 1;
+  const dots = TOUR_STEPS.map((_, k) => `<span class="tp-dot${k === tourIdx ? ' on' : ''}"></span>`).join('');
+  tourEls.pop.innerHTML =
+    `<div class="tp-step">${escapeHtml(t('guide.step', { i: tourIdx + 1, n: TOUR_STEPS.length }))}</div>` +
+    `<div class="tp-title">${escapeHtml(t('guide.' + step.key + '.t'))}</div>` +
+    `<div class="tp-body">${escapeHtml(t('guide.' + step.key + '.b'))}</div>` +
+    `<div class="tp-dots">${dots}</div>` +
+    `<div class="tp-actions"><button type="button" class="tp-skip" data-act="skip">${escapeHtml(t('guide.skip'))}</button><span class="spacer"></span>` +
+    (tourIdx > 0 ? `<button type="button" class="tp-btn" data-act="back">${escapeHtml(t('guide.back'))}</button>` : '') +
+    `<button type="button" class="tp-btn primary" data-act="next">${escapeHtml(last ? t('guide.finish') : t('guide.next'))}</button></div>`;
+  positionTour();
+}
+function startTour() { ensureTourEls(); tourEls.overlay.classList.add('on'); showTourStep(0); }
+function endTour() { if (tourEls) tourEls.overlay.classList.remove('on'); try { localStorage.setItem(LS_SEEN, '1'); } catch {} }
+
+document.addEventListener('click', (e) => {
+  const b = e.target.closest('.tour-pop [data-act]'); if (!b || !tourEls) return;
+  const act = b.dataset.act;
+  if (act === 'skip') endTour();
+  else if (act === 'back') showTourStep(tourIdx - 1);
+  else showTourStep(tourIdx + 1);
+});
+window.addEventListener('resize', () => { if (tourEls && tourEls.overlay.classList.contains('on')) positionTour(); });
+helpBtn.addEventListener('click', startTour);
+
+/* ---- Stable client id (localStorage) — identifies returning visitors ---- */
+function clientId() {
+  try {
+    let id = localStorage.getItem(LS_CID);
+    if (!id) { id = (crypto.randomUUID ? crypto.randomUUID() : 'c-' + Date.now() + '-' + Math.round(performance.now())); localStorage.setItem(LS_CID, id); }
+    return id;
+  } catch { return 'c-' + Date.now(); }
+}
+
+/* ---- Free-usage lead capture modal (shown when the gateway signals rate_limited) ---- */
+let leadEls = null;
+function buildLeadModal() {
+  if (leadEls) return leadEls;
+  const bd = document.createElement('div'); bd.className = 'modal-backdrop';
+  bd.innerHTML = `<div class="modal" role="dialog" aria-modal="true"><div id="leadBody"></div></div>`;
+  document.body.appendChild(bd);
+  bd.addEventListener('click', (e) => { if (e.target === bd) closeLead(); });
+  leadEls = { bd, body: bd.querySelector('#leadBody') };
+  return leadEls;
+}
+function openLead() {
+  const { bd, body } = buildLeadModal();
+  if (bd.classList.contains('on')) return;   // already open
+  const opts = ['voice', 'skill', 'donation', 'chat'].map(k => `<option value="${k}">${escapeHtml(t('lead.opt.' + k))}</option>`).join('');
+  body.innerHTML =
+    `<button type="button" class="modal-close" data-act="close">×</button>` +
+    `<span class="modal-badge">⚡ ${escapeHtml(t('lead.badge'))}</span>` +
+    `<h2>${escapeHtml(t('lead.title'))}</h2>` +
+    `<p class="m-sub">${escapeHtml(t('lead.sub'))}</p>` +
+    `<form class="lead-form" id="leadForm" novalidate>` +
+    `<div><label>${escapeHtml(t('lead.name'))}</label><input name="name" autocomplete="name" required></div>` +
+    `<div><label>${escapeHtml(t('lead.email'))}</label><input name="email" type="email" autocomplete="email" required></div>` +
+    `<div><label>${escapeHtml(t('lead.phone'))}</label><input name="phone" type="tel" autocomplete="tel" required></div>` +
+    `<div><label>${escapeHtml(t('lead.interest'))}</label><select name="interest">${opts}</select></div>` +
+    `<div class="m-error" id="leadErr"></div>` +
+    `<button type="submit" class="m-submit">${escapeHtml(t('lead.submit'))}</button>` +
+    `<div class="m-consent">${escapeHtml(t('lead.consent'))}</div></form>`;
+  bd.classList.add('on');
+  body.querySelector('.modal-close').addEventListener('click', closeLead);
+  body.querySelector('#leadForm').addEventListener('submit', submitLead);
+}
+function closeLead() { if (leadEls) leadEls.bd.classList.remove('on'); }
+async function submitLead(e) {
+  e.preventDefault();
+  const f = e.target, err = f.querySelector('#leadErr'), btn = f.querySelector('.m-submit');
+  const name = f.name.value.trim(), email = f.email.value.trim(), phone = f.phone.value.trim(), interest = f.interest.value;
+  err.textContent = '';
+  if (!name || !email || !phone) { err.textContent = t('lead.err.required'); return; }
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { err.textContent = t('lead.err.email'); return; }
+  btn.disabled = true; btn.textContent = t('lead.submitting');
+  const id = clientId();
+  try {
+    const r = await fetch('/lead', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ id, name, email, phone, interest, lang }) });
+    if (!r.ok) throw new Error('bad status');
+    try { localStorage.setItem(LS_LEAD, JSON.stringify({ id, name })); } catch {}
+    leadEls.body.innerHTML =
+      `<button type="button" class="modal-close" data-act="close">×</button>` +
+      `<div class="modal-ok"><div class="ok-ring">✓</div><h2>${escapeHtml(t('lead.ok.title'))}</h2><p class="m-sub">${escapeHtml(t('lead.ok.body'))}</p></div>`;
+    leadEls.body.querySelector('.modal-close').addEventListener('click', closeLead);
+    setTimeout(closeLead, 3400);
+  } catch {
+    err.textContent = t('lead.err.net'); btn.disabled = false; btn.textContent = t('lead.submit');
+  }
+}
+
+/* ---- Returning-visitor greeting toast ---- */
+function maybeGreet() {
+  let saved; try { saved = JSON.parse(localStorage.getItem(LS_LEAD) || 'null'); } catch {}
+  if (!saved || !saved.name) return;
+  const toast = document.createElement('div'); toast.className = 'greet-toast';
+  toast.innerHTML = `<div class="gt-title">${escapeHtml(t('greet.title', { name: saved.name }))}</div><div class="gt-body">${escapeHtml(t('greet.body'))}</div>`;
+  document.body.appendChild(toast);
+  requestAnimationFrame(() => toast.classList.add('on'));
+  setTimeout(() => { toast.classList.remove('on'); setTimeout(() => toast.remove(), 600); }, 6000);
+}
+
+/* ---- Auto-run the guide once on first landing ---- */
+function maybeStartTour() {
+  let seen; try { seen = localStorage.getItem(LS_SEEN); } catch {}
+  if (!seen) setTimeout(startTour, 900);
+}
+
 // ── Text composer ── type a question; same {text} WS path the gateway already handles.
 function escapeHtml(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
 
@@ -1449,6 +1747,9 @@ function init() {
   bindPerm(cameraToggle, 'camera', enableCamera, () => cameraEnabled);
 
   drawWaveform();
+
+  maybeGreet();       // returning visitor → welcome-back toast
+  maybeStartTour();   // first landing → auto-run the guided tour
   console.log('Ready — camera and voice are opt-in.');
 }
 
