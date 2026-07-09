@@ -1437,7 +1437,7 @@ function init() {
 
   // Camera + voice are opt-in via the buttons — nothing is acquired on load, so there is no
   // camera/mic permission prompt until the user asks for it. Text input works without either.
-  cameraEnabled = true;
+  cameraEnabled = false;
   voiceEnabled = false;
   viewportWrap.classList.add('hidden');
   setState('idle');
