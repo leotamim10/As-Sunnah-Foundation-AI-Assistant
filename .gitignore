@@ -31,3 +31,6 @@ ai-gateway/data/
 
 # OS / editor
 .DS_Store
+
+# Generated demo bundle (contains .env keys)
+as-sunnah-ai-demo.zip

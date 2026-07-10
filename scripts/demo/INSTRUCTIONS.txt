@@ -1,0 +1,32 @@
+As-Sunnah Foundation AI Assistant — run it on your computer
+============================================================
+
+WHAT YOU NEED
+  Docker Desktop (free). Install from:
+      https://www.docker.com/products/docker-desktop
+  Install it, open it once, and make sure it's running
+  (you'll see the Docker whale icon in your menu bar / system tray).
+
+HOW TO RUN
+  Windows : double-click  run.bat
+  Mac     : double-click  run.command
+  Linux   : open a terminal here and run  ./run.sh
+
+  The FIRST run builds the app and downloads the AI model
+  (about 5-10 minutes, needs an internet connection). Later runs are quick.
+
+  When it's ready, your browser opens  http://localhost:8000
+  Type your question in Bengali, or click the mic (allow the microphone) to speak.
+  Optionally allow the camera to ask about what you show.
+
+TO STOP
+  Windows : double-click  stop.bat
+  Mac/Linux: run  ./stop.sh      (or:  docker compose down)
+
+TROUBLESHOOTING
+  - "Docker isn't running": open Docker Desktop first, wait until it says Running.
+  - Page not loading yet: give it a minute on the first run, then refresh
+    http://localhost:8000
+
+NOTE
+  This package includes working demo API keys — please don't share it publicly.
