@@ -1,0 +1,118 @@
+{
+  "colorScheme": "light",
+  "fonts": [
+    {
+      "family": "Geist",
+      "role": "unknown"
+    }
+  ],
+  "colors": {
+    "primary": "#000000",
+    "accent": "#171717",
+    "background": "#FFFFFF",
+    "textPrimary": "#0A0A0A",
+    "link": "#000000"
+  },
+  "typography": {
+    "fontFamilies": {
+      "primary": "Geist",
+      "heading": "Geist"
+    },
+    "fontStacks": {
+      "heading": ["Geist"],
+      "body": ["Geist"],
+      "paragraph": ["Geist"]
+    },
+    "fontSizes": {
+      "h1": "60px",
+      "h2": "20px",
+      "body": "14px"
+    }
+  },
+  "spacing": {
+    "baseUnit": 8,
+    "borderRadius": "4px"
+  },
+  "components": {
+    "buttonPrimary": {
+      "background": "#171717",
+      "textColor": "#FAFAFA",
+      "borderRadius": "10px",
+      "borderRadiusCorners": {
+        "topLeft": "10px",
+        "topRight": "10px",
+        "bottomRight": "10px",
+        "bottomLeft": "10px"
+      },
+      "shadow": "none"
+    },
+    "buttonSecondary": {
+      "background": "#FFFFFF",
+      "textColor": "#0A0A0A",
+      "borderColor": "#E5E5E5",
+      "borderRadius": "10px",
+      "borderRadiusCorners": {
+        "topLeft": "10px",
+        "topRight": "10px",
+        "bottomRight": "10px",
+        "bottomLeft": "10px"
+      },
+      "shadow": "none"
+    }
+  },
+  "images": {
+    "logo": "data:image/svg+xml;utf8,%3Csvg%20width%3D%22119%22%20height%3D%22115%22%20viewBox%3D%220%200%20119%20115%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20class%3D%22text-primary%20size-8%20transition-all%20ease-snappy%20lg%3Asize-9%20lg%3Agroup-data-%5Bscrolled%3Dtrue%5D%2Fheader%3Asize-8%22%20data-fc-idx%3D%220%22%3E%3Cpath%20d%3D%22M118.521%204.3256V35.5564H45.0468L25.149%2069.0019C24.3704%2070.3169%2022.9603%2071.1128%2021.429%2071.1128H4.3256C1.93787%2071.1128%200%2069.175%200%2066.7872V35.5564H41.8718L59.2434%206.34133C61.5792%202.40503%2065.8183%200%2070.3948%200H114.196C116.584%200%20118.521%201.93787%20118.521%204.3256Z%22%20fill%3D%22currentColor%22%20style%3D%22fill%3A%20lab(7.78201%20-0.0000149012%200)%20!important%3B%22%2F%3E%3Cpath%20d%3D%22M0%20110.674V79.4436H73.4746L93.3724%2045.9981C94.151%2044.6831%2095.5611%2043.8872%2097.0924%2043.8872H114.204C116.592%2043.8872%20118.53%2045.8251%20118.53%2048.2128V79.4436H76.6582L59.2866%20108.659C56.9508%20112.595%2052.7117%20115%2048.1353%20115H4.3256C1.93787%20115%200%20113.062%200%20110.674Z%22%20fill%3D%22currentColor%22%20style%3D%22fill%3A%20lab(7.78201%20-0.0000149012%200)%20!important%3B%22%2F%3E%3C%2Fsvg%3E",
+    "favicon": "https://shadcncraft.com/favicon.ico?favicon.ea91f4b6.ico",
+    "ogImage": "https://shadcncraft.com/opengraph-image.png",
+    "logoHref": "/"
+  },
+  "__llm_logo_reasoning": {
+    "selectedIndex": 0,
+    "reasoning": "Selected #0 because it is located in the header, is visible, and links to the homepage, which are strong indicators of a primary brand logo.",
+    "confidence": 0.85,
+    "source": "llm"
+  },
+  "__llm_button_reasoning": {
+    "primary": {
+      "index": 0,
+      "text": "Get the design system",
+      "reasoning": "Button #0 ('Get the design system') is the primary CTA due to its distinct dark background color (#171717), which stands out against the light theme of the page, making it more prominent and action-oriented."
+    },
+    "secondary": {
+      "index": 5,
+      "text": "View in Figma",
+      "reasoning": "Button #5 ('View in Figma') is chosen as the secondary CTA because it has a different background color (#FFFFFF) from the primary button and is relevant to the site's focus on design systems."
+    },
+    "confidence": 0.95
+  },
+  "personality": {
+    "tone": "modern",
+    "energy": "medium",
+    "targetAudience": "designers and developers"
+  },
+  "designSystem": {
+    "framework": "tailwind",
+    "componentLibrary": "shadcn"
+  },
+  "confidence": {
+    "buttons": 0.95,
+    "colors": 0.9,
+    "overall": 0.925
+  },
+  "__llm_metadata": {
+    "logoSelection": {
+      "llmCalled": true,
+      "llmSucceeded": true,
+      "finalSource": "llm",
+      "rawLogoSelection": {
+        "selectedLogoIndex": 0,
+        "selectedLogoReasoning": "Selected #0 because it is located in the header, is visible, and links to the homepage, which are strong indicators of a primary brand logo.",
+        "confidence": 0.85
+      }
+    },
+    "buttonClassification": {
+      "llmCalled": true,
+      "llmSucceeded": true
+    }
+  }
+}

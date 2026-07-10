@@ -34,3 +34,6 @@ ai-gateway/data/
 
 # Generated demo bundle (contains .env keys)
 as-sunnah-ai-demo.zip
+
+# Editor
+.vscode/
