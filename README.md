@@ -1,3 +1,16 @@
+---
+title: As-Sunnah Foundation AI Assistant
+emoji: 🕌
+colorFrom: green
+colorTo: gray
+sdk: docker
+app_port: 7860
+pinned: false
+---
+
+<!-- The YAML block above configures a Hugging Face Spaces (Docker) deployment; GitHub ignores it.
+     Deploy guide + free-tier analysis: doc/deployment/PLAN.md -->
+
 # As-Sunnah Foundation AI Assistant
 
 [![Repository](https://img.shields.io/badge/GitHub-As--Sunnah--Foundation--AI--Assistant-181717?logo=github&logoColor=white)](https://github.com/leotamim10/As-Sunnah-Foundation-AI-Assistant)
